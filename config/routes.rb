@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   root :to => 'home#index'
-  require 'sidekiq/web'
-  require 'sidekiq/cron/web'
-  mount Sidekiq::Web => '/sidekiq'
+  # require 'sidekiq/web'
+  # require 'sidekiq/cron/web'
+  # mount Sidekiq::Web => '/sidekiq'
   get '/products', :to => 'products#index'
   get '/products', :to => 'products#show'
   get '/orders/should_show', :to => "orders#should_show"
