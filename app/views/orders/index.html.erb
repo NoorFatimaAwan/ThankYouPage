@@ -1,0 +1,36 @@
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+	  <span class="navbar-text">
+		  List of all Orders
+	  </span>
+  </div>
+</nav>    
+  <table class="table table-hover">
+    <thead>
+	    <tr>
+				<th  scope="col">Order #</th>
+				<th  scope="col">Title</th>
+				<th  scope="col">Asset Type</th>
+				<th  scope="col">Asset</th>
+				<th  scope="col">Action</th>
+	    </tr>
+    </thead>
+    <tbody>
+	    <% @orders.each_with_index do |order,index| %>
+		    <tr>
+				  <th scope="row"><%= index %></th>
+			    <td> <%= index %> </td>
+			    <td> <%= order.product_title %> </td>
+			    <td> <%= order.file_type %> </td>
+			    <% if order.images.attached? %>
+				    <td ><%= image_tag(order.images.first.blob, size: "100x100")%></td>
+			    <% elsif order.video.attached? %>
+				    <td ><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+			    <% end %>
+			    <td><button type="button" class="btn btn-outline-secondary"  onclick: "show_details()">Show Details</button></td>
+		    </tr>
+	    <% end %>
+   </tbody>
+  </table>
+
+	<%= will_paginate @orders %>

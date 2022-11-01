@@ -1,0 +1,20 @@
+<div class="box">
+  <div id="divTitle" ></div>
+  <%= form_with scope: :order, url: orders_path, local: true, class: "shadow p-3 mb-3 bg-light" do |f| %>
+    <div class="form-group row"> 
+      <%= f.label :files, id: "file_label" %>  
+      <%= f.file_field :files, multiple: true, direct_upload: true %>
+    </div>
+
+    <% @order.files.each do |image| %>
+      <%= image_tag(@order.files[image]) %>
+    <% end %>
+    <%= f.hidden_field :shop_id , value: Shop.find_by(shopify_domain: params[:domain])&.id %>
+    <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
+    <%= f.hidden_field :file_type , value: "image" %>
+
+    <div class="form-group row">
+      <%= f.submit "Submit", class: "btn btn-primary"%>
+    </div>
+  <% end %>
+</div>

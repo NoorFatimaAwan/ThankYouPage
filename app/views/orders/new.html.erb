@@ -1,0 +1,95 @@
+<div class="main-page">
+  <div class="container">
+    <div class="product-component">
+      <div class="product-list">
+        <div class="pr-item d-flex justify-content-between align-items-center">
+          <div class="pr-item-left d-flex">
+            <div class="pr-small-img">
+              <% if  @product_image_url %>
+                <%= image_tag (@product_image_url) %>
+              <% end %>
+            </div>
+            <div class: "product-name">
+              <%= @product_title %>
+              <h6 class="product-detail">Variable details</h6>
+            </div>
+          </div>
+          <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
+            <div class="pr-item-right d-flex">
+              <div class="up-images mr-5">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                  </div>
+                  <div class="custom-file">
+                    <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
+                    <%= f.file_field :images, multiple: true, id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
+                  </div>
+                </div>
+                <div class="img-inner text-center">
+                  <div class="icon-top-border">
+                    <img src="" alt="" class="inner-icon">
+                  </div>
+                  <p class="up-image-text">Upload Images</p>
+                  <p class="uplaod-upto-text">up to 1896 Photos </p>
+                  <p class="image-cal-text">960 x 540,270 kb each</p>
+                </div>
+              </div>
+              <div class="up-btns" id="extra_btns">
+                <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more-image hide"%>  
+                <%= f.file_field :images, multiple: true, id: "more_image_file",class: "up-more-image hide", onchange: "loadImages(event)" %>
+                <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "up-more-video hide" %>  
+                <%= f.file_field :video, id: "video_file", class: "up-more-video hide" ,onchange: "loadVideo()" %>
+                <a href='#' class='remove-btn hide'>Remove all</a>
+                <%= f.submit "Submit", class: "submit-btn hide", onclick: "submit_form()"%>
+                <br>
+                <%= f.hidden_field :shop_id , value: @shop_id %>
+                <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
+                <%= f.hidden_field :file_type , value: "image" %>
+                <%= f.hidden_field :order_no , value: params[:order_no].to_i %>
+                <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
+                <%= f.hidden_field :product_title , value: params[:product_title] %>
+						  </div>
+              <% if params[:product_no].to_i != 0 %>
+                <div class="custom-check hide">
+                  <%= f.label "Fill in the info same as above" %> <br />
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, onchange: "info_checkbox(#{params[:parent_product_id]}, #{params[:product_id]})" %>
+                </div>
+              <% end %>
+              <div class="up-images up-video">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                  </div>
+                  <div class="custom-file">
+                    <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
+                    <%= f.file_field :video, id: "video_file", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
+                  </div>
+                </div>
+                <div class="img-inner text-center">
+                  <div class="icon-top-border light-border">
+                    <img src="" alt="" class="inner-icon">
+                  </div>
+                  <p class="up-image-text">Upload video</p>
+                  <p class="uplaod-upto-text">up to 1896 Photos </p>
+                  <p class="image-cal-text">960 x 540,270 kb each</p>
+                </div>
+              </div>
+            </div>
+            <div id="images_gallery", class="gallery-right px-4 g-scrol-bar g-righth-scroll hide">
+              <div id="preview", class="pr-main-img" ></div>
+            </div>
+            <div class="gallery-right px-4 ">
+							<div>
+                <span id='remove' class='close hide' onclick="remove_video();">&times;</span>
+                <div id="preview_video"></div>	
+							</div>
+            </div>
+          <% end %>
+          <div class="separater"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

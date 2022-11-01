@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@shopify/polaris@4.25.0/styles.min.css"
+      />
+    <script>
+      document.addEventListener("DOMContentLoaded", async function() {
+        var SessionToken = window["app-bridge"].actions.SessionToken
+        var app = window.app;
+
+        app.dispatch(
+          SessionToken.request(),
+        );
+
+        // Save a session token for future requests
+        window.sessionToken = await new Promise((resolve) => {
+          app.subscribe(SessionToken.Action.RESPOND, (data) => {
+            resolve(data.sessionToken || "");
+          });
+        });
+
+        var fetchProducts = function() {
+          var headers = new Headers({ "Authorization": "Bearer " + window.sessionToken });
+          return fetch("/orders", { headers })
+            .then(response => response.json())
+            .then(data => {
+              var orders = data.orders;
+
+              if (orders === undefined || orders.length == 0) {
+                document.getElementById("orders").innerHTML = "<br>No orders to display.";
+              } else {
+                var list = "";
+                orders.forEach((order) => {
+                  const tableRow = document.querySelectorAll('.js-tr');
+                  
+                });
+              }
+            });
+        }();
+      });
+    </script>
+  </head>
+  <body>
+  <div id="orders"><br></div>
+    <nav class="navbar bg-light">
+      <div class="container-fluid">
+	      <span class="navbar-text">
+		      List of all Orders
+	      </span>
+      </div>
+    </nav>   
+    <div class="datail-table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th  scope="col">Order #</th>
+            <th  scope="col">Title</th>
+            <th  scope="col">Asset Type</th>
+            <th  scope="col">Asset</th>
+            <th  scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each_with_index do |order,index| %>
+            <tr class="js-tr">
+              <th scope="row"><%= order.order_no %></th>
+              <td> <%= order.product_title %> </td>
+              <td> <%= order.file_type %> </td>
+              <% if order.images.attached? %>
+                <td class="product-img"><%= image_tag(order.images.first.blob, size: "100x100")%></td>
+              <% elsif order.video.attached? %>
+                <td class="product-img"><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+              <% end %>
+              <td class="text-center"><a target="_top" class="link-tag" href="https://<%= @shop_origin %>/admin/apps/image-video-app/orders/<%= order.id %>">Show Details</a></td>
+            </tr>
+          <% end %>
+        </tbody>
+    </table>
+    </div> 
+    
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<div class="container", style="max-width:1050px;">
+  <nav class="navbar bg-light">
+    <span class="navbar-brand mb-0 h1"><%= @order_no %></span>
+  </nav>
+  <div class: "product-name">
+    <%= @product_title %>
+    <h6 class="product-detail">Variable details</h6>
+  </div>
+  <div class="image-gallery-block">
+    <h1 class="g-header text-center py-5">
+      Assets
+    </h1>
+      <div class="row gallery-scroll px-4 g-scrol-bar g-righth-scroll">
+          <% if @images.present? %>
+              <% (0...@images&.count).each do |image| %>
+                  <div class="col-md-3">
+          
+                   <%= image_tag(@images[image], style: "width: 100%;height: 150px;", class: "pr-main-img")%>
+                  </div>
+              <% end %>
+          <% elsif @video.present? %>
+            <%= video_tag(url_for(@video), controls: '', style: "width: 350px;height: 350px;margin-left:312px;") %>
+          <% end %>  
+        </div>
+  </div>
+</div>
