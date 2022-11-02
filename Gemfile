@@ -77,5 +77,3 @@ gem 'sidekiq'
 gem 'redis-rails'
 
 gem 'will_paginate', '~> 3.3'
-
-gem "sidekiq-cron"

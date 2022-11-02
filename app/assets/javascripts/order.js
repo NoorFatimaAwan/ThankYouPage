@@ -3,6 +3,7 @@ var loadImages = function(event,product_size) {
   var max_size = 0;
   var single_max_size = 0;
   var sum = 0;
+  var myList = new Array();
   total_images = document.getElementById("image_file").files.length + document.getElementById("more_image_file").files.length
   if (product_size == 6)
   {
@@ -20,6 +21,8 @@ var loadImages = function(event,product_size) {
     single_max_size = 200 * 1024;
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
+      document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
+      $("#alert_message").addClass('alert-message').removeClass('success-message');
       alert("Total images cannot be greater than 640.");
       return false;
     }
@@ -27,10 +30,12 @@ var loadImages = function(event,product_size) {
   if (document.getElementById("more_image_file").files.length == 0)
   {
     total_file = document.getElementById("image_file").files.length;
+    $('.gallery-right').addClass('show').removeClass('hide');
   } 
   else
   {
     total_file = document.getElementById("more_image_file").files.length;
+    $('.gallery-right').addClass('show').removeClass('hide');
   }
   for(var i=0; i<total_file; i++)
   {
@@ -42,28 +47,35 @@ var loadImages = function(event,product_size) {
     // element.src = URL.createObjectURL(event.target.files[i]);
     // preview_images.appendChild(element);
     sum = sum + event.target.files[i].size;
+    debugger
     if(event.target.files[i].size > single_max_size )
     {
-      alert(event.target.files[i].name +" is too big");
+      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" is too big";
+      $("#alert_message").addClass('alert-message').removeClass('success-message');
     }
     else if (sum > max_size)
     {
-      alert("Total images size cannot be greater than 512MB.");
+      document.getElementById("alert_message").innerHTML = "Total images size cannot be greater than 512MB.";
+      $("#alert_message").addClass('alert-message').removeClass('success-message');
       return false;
     }
     else
     {
-      $('#preview').append("<img id='file_images'src='"+URL.createObjectURL(event.target.files[i])+"'  width='100px' height='100px' margin-right='500px'>");
+      myList.push($('#preview').append("<img class='file_images'src='"+URL.createObjectURL(event.target.files[i])+"' width='50px' height='50px' object-fit='cover'>"));
+      $('.file_images').addClass('right-color-image');
       // $('#preview').append('<span id="remove" class="close" onclick="remove_images()">&times;</span>');  
     }
   }  
   $('.gallery-right').addClass('show').removeClass('hide');
+  $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
   document.getElementById("video_file").disabled = true;
   $('.up-images').addClass('hide').removeClass('show');
-  $('.up-more-image').addClass('show').removeClass('hide');
+  $('.up-more').addClass('show').removeClass('hide');
+  $('.upload-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('show').removeClass('hide');
   $('.custom-check').addClass('show').removeClass('hide');
   $('.submit-btn').addClass('show').removeClass('hide');
+  $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
 };
 
 function loadVideo(product_size){
@@ -80,7 +92,8 @@ function loadVideo(product_size){
   }
   if (input.files[0].size > MaxSize)
   {
-    alert(input.files[0].name + " is too big. Maximum size should be 512MB.")
+    document.getElementById("alert_message").innerHTML = input.files[0].name + " is too big. Maximum size should be 512MB.";
+    $("#alert_message").addClass('alert-message').removeClass('success-message');
     return false;
   }
   reader.readAsDataURL(input.files[0]);
@@ -96,11 +109,12 @@ function loadVideo(product_size){
       video.autoplay = false;
       video.controls = true;
       video.muted = false;
-      video.height = 100;
-      video.width = 100;
+      video.height = 200;
+      video.width = 200;
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
+    $("#uploaded_video").addClass('right-color-image');
     $(".delete").addClass('delete_vid');
     document.getElementById("image_file").disabled = true;
     $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
@@ -152,6 +166,9 @@ function loadVideo(product_size){
 
  function submit_form()
  {
+  debugger
+  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+  $("#alert_message").addClass('success-message').removeClass('alert-message');
   var form = $('#uploadForm')[0];
   var formData = new FormData(form);
   if (document.getElementById("more_image_file")!= undefined && document.getElementById("more_image_file").files.length != 0)

@@ -11,6 +11,7 @@ class OrdersController < ApplicationController
     @shop_id = Shop.find_by(shopify_domain: params[:domain])&.id
     @product_title = params[:product_title]
     @product_image_url = params[:product_image_url]
+    @existing_order = Order.where("order_no =?  and product_id = ?",params[:order_no], params[:product_id])
   end
 
   def create

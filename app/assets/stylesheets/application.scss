@@ -74,13 +74,13 @@ input[type=file]{
 
 .product-component {
 	border: 1px solid #D9D9D9;
-	border-radius: 8px;
 	padding: 10px 0;
 	margin-top: 20px !important;
 	max-width: 660px;
 	margin: 0 auto;
 	position: relative;
-	max-height: 500px;	
+	border-bottom: 0;
+  padding-bottom: 0;
 }
 .product-list {
 	border-bottom: 1px solid #ccc;
@@ -225,11 +225,8 @@ input[type=file]{
   
   /* Create a custom checkbox */
   .checkmark {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 22px;
-	width: 22px;
+	height: 18px;
+	width: 14px;
 	background-color: #fff;
 	border: 1px solid #7A5E46;
 	border-radius: 6px;
@@ -281,17 +278,33 @@ input[type=file]{
 	padding: 0 25px;
 	border-right: 1px solid #7a5e462c;
   }
+	.up-more{
+		height: 37px;
+		width: 100%;
+		text-decoration: none !important;
+		background-color: #7A5E4630;
+		text-align: center;
+		padding-top: 6px;
+		font-size: 16px;
+		color: #7A5E46;
+		margin: 10px 0;
+		border-radius: 8px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
   .up-more-image {
 	height: 37px;
-    width: 100%;
-    text-decoration: none !important;
-    background-color: #7A5E4630;
-    text-align: center;
-    padding-top: 6px;
-    font-size: 16px;
-    color: #7A5E46;
-    margin: 10px 0;
-    border-radius: 8px;
+	width: 100%;
+	text-decoration: none !important;
+	background-color: #7A5E4630;
+	text-align: center;
+	padding-top: 6px;
+	font-size: 16px;
+	color: #7A5E46;
+	margin: 10px 0;
+	border-radius: 8px;
+	padding-left: 10px;
+	padding-right: 10px;
   }
 	.up-more-video {
 		height: 37px;
@@ -315,9 +328,10 @@ input[type=file]{
 
 	}
   .submit-btn {
-	background-color: #B8DEB96E;
+	  background-color: #B8DEB96E;
     width: 100%;
-    display: flex;
+    // display: flex !important;
+		display: none;
     text-align: center;
     height: 37px;
     justify-content: center;
@@ -326,7 +340,11 @@ input[type=file]{
     color: #2C642E;
     text-decoration: none !important;
     font-size: 16px;
+		border: 0;
   }
+	.submit-btn:hover {
+		color: #2C642E;
+	}
   .image-item {
 	background-color: #A1652F29;
 	width: 54px;
@@ -387,7 +405,7 @@ input[type=file]{
   }
   .remove-btn {
 	background-color: #9F4A4A30;
-	color: #9F4A4A;
+	color: #9F4A4A !important;
 	height: 37px;
 	width: 100%;
 	text-decoration: none !important;
@@ -419,9 +437,9 @@ input[type=file]{
   .g-scrol-bar::-webkit-scrollbar-thumb:hover {
 	background: #7A5E4633; 
   }
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 765px) {
 	.pr-item-left {
-		margin-bottom: 20px;
+		// margin-bottom: 20px;
 	}
 	.up-images {
 		width: 100px;
@@ -485,7 +503,7 @@ input[type=file]{
 .datail-table {
 	padding: 20px;
 	thead {
-		background: cadetblue;
+		background: #ccc;
 		th {
 			padding: 1.75rem;
 		}
@@ -499,6 +517,7 @@ input[type=file]{
 		}
 		td {
 			vertical-align: middle;
+			padding: 1rem 1.75rem;
 		}
 	}
 }
@@ -513,10 +532,17 @@ input[type=file]{
 	
 }
 .link-tag:hover{
-	color: cadetblue;
+	color: black;
+	text-decoration: none;
 }
 .link-tag {
-	color: cadetblue;
+	background: #7a5e4617;
+	padding: 10px;
+	border-radius: 6px;
+	color: black;
+	text-decoration: none;
+	font-size: 14px;
+	text-decoration: none;
 }
 .gallery-item {
 	background: black;
@@ -541,4 +567,37 @@ input[type=file]{
 	width: 100%;
 	height: 400px;
 	overflow-y: auto;
+}
+
+.right-color-image{
+	margin-right: 10px;
+	margin-bottom: 10px;
+	border: 1px solid black;
+	border-radius: 5px;
+	height: 50px;
+	width: 50px;
+
+}
+.datail-table .table-hover tbody tr:hover {
+	background-color: #cccccc1f;
+}
+
+.alert-message {
+  padding: 0px;
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 15px;
+	margin-left: 10px;
+	margin-right: 10px;
+	font-size: 13px;
+}
+
+.success-message {
+  padding: 0px;
+  background-color: green; /* Red */
+  color: white;
+  margin-bottom: 15px;
+	margin-left: 10px;
+	margin-right: 10px;
+	font-size: 13px;
 }
