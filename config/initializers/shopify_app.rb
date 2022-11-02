@@ -13,8 +13,8 @@ ShopifyApp.configure do |config|
   config.allow_jwt_authentication = true
   config.allow_cookie_authentication = false
 
-  config.api_key = ENV.fetch('SHOPIFY_API_KEY', '96226674c58fa096109780606972bba4').presence
-  config.secret = ENV.fetch('SHOPIFY_API_SECRET', '845e6176152e6abe2d75eb1977645b7c').presence
+  config.api_key = ENV.fetch('SHOPIFY_API_KEY', ENV['SHOPIFY_API_KEY']).presence
+  config.secret = ENV.fetch('SHOPIFY_API_SECRET', ENV['SHOPIFY_API_SECRET']).presence
   if defined? Rails::Server
     raise('Missing SHOPIFY_API_KEY. See https://github.com/Shopify/shopify_app#requirements') unless config.api_key
     raise('Missing SHOPIFY_API_SECRET. See https://github.com/Shopify/shopify_app#requirements') unless config.secret

@@ -39,7 +39,7 @@ else{
 var loadPlugin = function() {
    $.ajax({
     method: "GET",
-    url: "https://417b-202-166-171-14.ngrok.io/orders/should_show",
+    url: "https://mcacao.phaedrasolutions.com/orders/should_show",
     data: {product_title: Shopify.checkout.line_items[0].title},
     dataType: "jsonp",
     responseType:'application/json', 

@@ -1,11 +1,12 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'dotenv'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
+Dotenv::Railtie.load
 module ImageVideoApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -18,7 +19,7 @@ module ImageVideoApp
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'https://417b-202-166-171-14.ngrok.io'
+        origins 'https://acd5-103-152-101-235.ngrok.io'
     
         resource '*',
                  headers: :any,
