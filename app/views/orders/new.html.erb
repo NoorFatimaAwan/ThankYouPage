@@ -15,108 +15,107 @@
 
 <body>
 	<div class="main-page">
-		<div class="container">
-			<div class="product-component">
-        <div class="product-list">
-          <div id="alert_message", class="">
-          </div>
-					<div class="pr-item d-flex justify-content-between align-items-center">
-						<div class="pr-item-left ">
-							<div class="d-flex">
-								<div class="pr-small-img">
-                  <% if  @product_image_url %>
-                    <%= image_tag (@product_image_url) %>
-                  <% end %>
-								</div>
-								<div>
-									<h4 class="product-name"><%= @product_title %></h4>
-									<h6 class="product-detail">Variable details</h6>
-								</div>
-							</div>
-              <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
-                <div class="up-btns">
-                  <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
-                  <%= f.file_field :images, multiple: true, id: "more_image_file",class: "up-more hide", onchange: "loadImages(event)" %>
-								  <a href="" class="up-more remove-btn hide">Remove all</a>
-							  </div>
-                <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
-                <%= f.file_field :video, id: "video_file" ,onchange: "loadVideo()" %>
-                <%= f.submit "Submit", class: "submit-btn", onclick: "submit_form()"%>
-                <%= f.hidden_field :shop_id , value: @shop_id %>
-                <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
-                <%= f.hidden_field :file_type , value: "image" %>
-                <%= f.hidden_field :order_no , value: params[:order_no].to_i %>
-                <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
-                <%= f.hidden_field :product_title , value: params[:product_title] %>
-					</div>
-              <% if !@existing_order&.last&.present? %>
-                <div class="pr-item-right d-flex">
-                  <div class="up-images mr-5">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                      <div class="custom-file">
-                        <%= f.file_field :images, multiple: true, id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
-                        <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
-                      </div>
+    <div class="product-component">
+      <div class="product-list">
+        <div id="alert_message", class="">
+        </div>
+        <div class="pr-item d-flex justify-content-between align-items-center">
+          <div class="pr-item-left ">
+            <div class="d-flex">
+              <div class="pr-small-img">
+                <% if  @product_image_url %>
+                  <%= image_tag (@product_image_url) %>
+                <% end %>
+              </div>
+              <div>
+                <h4 class="product-name"><%= @product_title %></h4>
+                <h6 class="product-detail">Variable details</h6>
+              </div>
+            </div>
+            <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
+              <div class="up-btns">
+                <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
+                <%= f.file_field :images, multiple: true, id: "more_image_file",class: "up-more hide", onchange: "loadImages(event)" %>
+                <a href="" class="up-more remove-btn hide">Remove all</a>
+              </div>
+              <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
+              <%= f.file_field :video, id: "video_file" ,onchange: "loadVideo()" %>
+              <%= f.submit "Submit", class: "submit-btn", onclick: "submit_form()"%>
+              <%= f.hidden_field :shop_id , value: @shop_id %>
+              <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
+              <%= f.hidden_field :file_type , value: "image" %>
+              <%= f.hidden_field :order_no , value: params[:order_no].to_i %>
+              <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
+              <%= f.hidden_field :product_title , value: params[:product_title] %>
+        </div>
+            <% if !@existing_order&.last&.present? %>
+              <div class="pr-item-right d-flex justify-content-end flex-1">
+                <div class="up-images mr-5">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
                     </div>
-                    <div class="img-inner text-center">
-                      <div class="icon-top-border">
-                        <img src="images/Icon feather-image.svg" alt="" class="inner-icon">
-                      </div>
-                      <p class="up-image-text">Upload Images</p>
-                      <p class="uplaod-upto-text">up to 1896 Photos </p>
-                      <p class="image-cal-text">960 x 540,270 kb each</p>
+                    <div class="custom-file">
+                      <%= f.file_field :images, multiple: true, id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
+                      <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
                     </div>
                   </div>
-                  <div class="up-images up-video">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                      <div class="custom-file">
-                        <%= f.file_field :video, id: "video_file", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
-                        <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
-                      </div>
+                  <div class="img-inner text-center">
+                    <div class="icon-top-border">
+                      <%= image_tag('image_logo.svg', class: "inner-icon")%>
                     </div>
-                    <div class="img-inner text-center">
-                      <div class="icon-top-border light-border">
-                        <img src="images/Icon feather-image.svg" alt="" class="inner-icon">
-                      </div>
-                      <p class="up-image-text">Upload video</p>
-                      <p class="uplaod-upto-text">up to 1896 Photos </p>
-                      <p class="image-cal-text">960 x 540,270 kb each</p>
-                    </div>
+                    <p class="up-image-text">Upload Images</p>
+                    <p class="uplaod-upto-text">up to 1896 Photos </p>
+                    <p class="image-cal-text">960 x 540,270 kb each</p>
                   </div>
                 </div>
-              <% end %>
-              <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
-                <div class="gallery-right px-4 g-scrol-bar g-righth-scroll">
-							    <ul class="gallery-list">
-                    <% (0...@existing_order.last.images&.count).each do |image| %>
-                      <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image")%>
-                    <% end %>
-                  </ul>
+                <div class="up-images up-video">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                      <%= f.file_field :video, id: "video_file", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
+                      <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
+                    </div>
+                  </div>
+                  <div class="img-inner text-center">
+                    <div class="icon-top-border light-border">
+                      <%= image_tag('image_logo.svg', class: "inner-icon")%>
+                    </div>
+                    <p class="up-image-text">Upload video</p>
+                    <p class="uplaod-upto-text">up to 1896 Photos </p>
+                    <p class="image-cal-text">960 x 540,270 kb each</p>
+                  </div>
                 </div>
-              <% end %>
-              <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
-                <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 150px;height: 150px;") %>
-              <% end %>
-              <div class="gallery-right px-4 g-scrol-bar g-righth-scroll hide">
-							  <ul class="gallery-list">
-                  <div id="preview"></div>
-							  </ul>
-						  </div>
-							<div>
-                <div id="preview_video"></div>
-							</div>
+              </div>
             <% end %>
-						<div class="separater"></div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
+              <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
+                <ul class="gallery-list">
+                  <% (0...@existing_order.last.images&.count).each do |image| %>
+                    <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image")%>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
+              <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 150px;height: 150px;") %>
+            <% end %>
+            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
+              <ul class="gallery-list">
+                <div id="preview"></div>
+                <%= image_tag('loader.gif', class: "loader hide")%>
+              </ul>
+            </div>
+            <div>
+              <div id="preview_video"></div>
+            </div>
+          <% end %>
+          <div class="separater"></div>
+        </div>
+      </div>
+    </div>
 	</div>
 
 

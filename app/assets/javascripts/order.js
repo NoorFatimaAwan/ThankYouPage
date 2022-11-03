@@ -11,7 +11,8 @@ var loadImages = function(event,product_size) {
     single_max_size = 270 * 1024; 
     if(document.getElementById("image_file").files.length > 1896 || total_images > 1896)
     {
-      alert("Total images cannot be greater than 1896.");
+      document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
+      $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
       return false;
     }
   }
@@ -22,8 +23,7 @@ var loadImages = function(event,product_size) {
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
-      $("#alert_message").addClass('alert-message').removeClass('success-message');
-      alert("Total images cannot be greater than 640.");
+      $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
       return false;
     }
   }
@@ -47,25 +47,26 @@ var loadImages = function(event,product_size) {
     // element.src = URL.createObjectURL(event.target.files[i]);
     // preview_images.appendChild(element);
     sum = sum + event.target.files[i].size;
-    debugger
     if(event.target.files[i].size > single_max_size )
     {
       document.getElementById("alert_message").innerHTML = event.target.files[i].name +" is too big";
-      $("#alert_message").addClass('alert-message').removeClass('success-message');
+      $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
     }
     else if (sum > max_size)
     {
       document.getElementById("alert_message").innerHTML = "Total images size cannot be greater than 512MB.";
-      $("#alert_message").addClass('alert-message').removeClass('success-message');
+      $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
       return false;
     }
     else
     {
-      myList.push($('#preview').append("<img class='file_images'src='"+URL.createObjectURL(event.target.files[i])+"' width='50px' height='50px' object-fit='cover'>"));
+      myList.push($('#preview').append("<img class='file_images'src='"+URL.createObjectURL(event.target.files[i])+"' width='54px' height='54px' object-fit='cover'>"));
       $('.file_images').addClass('right-color-image');
       // $('#preview').append('<span id="remove" class="close" onclick="remove_images()">&times;</span>');  
     }
   }  
+  $(".pr-item-left").addClass('next-page-left');
+  $('.pr-item-right').removeClass('flex-1');
   $('.gallery-right').addClass('show').removeClass('hide');
   $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
   document.getElementById("video_file").disabled = true;
@@ -93,7 +94,7 @@ function loadVideo(product_size){
   if (input.files[0].size > MaxSize)
   {
     document.getElementById("alert_message").innerHTML = input.files[0].name + " is too big. Maximum size should be 512MB.";
-    $("#alert_message").addClass('alert-message').removeClass('success-message');
+    $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
     return false;
   }
   reader.readAsDataURL(input.files[0]);
@@ -129,7 +130,7 @@ function loadVideo(product_size){
  function info_checkbox(parent_product_id, product_id){
   $.ajax({
     method: "GET",
-    url: "https://417b-202-166-171-14.ngrok.io/orders/preview_files",
+    url: "https://90f9-182-179-155-6.ngrok.io/orders/preview_files",
     data: {checkbox_value: $("#prev_checkbox").is(':checked'), parent_product_id: parent_product_id, product_id: product_id},
     dataType: "json",
     success: function(response){
@@ -166,9 +167,6 @@ function loadVideo(product_size){
 
  function submit_form()
  {
-  debugger
-  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
-  $("#alert_message").addClass('success-message').removeClass('alert-message');
   var form = $('#uploadForm')[0];
   var formData = new FormData(form);
   if (document.getElementById("more_image_file")!= undefined && document.getElementById("more_image_file").files.length != 0)
@@ -180,6 +178,8 @@ function loadVideo(product_size){
       formData.append('order[images][]', image_files[i])
     }
   }
+  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+  $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
  }
 
  function remove_images(){

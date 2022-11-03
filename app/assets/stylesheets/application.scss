@@ -73,18 +73,14 @@ input[type=file]{
 
 
 .product-component {
-	border: 1px solid #D9D9D9;
 	padding: 10px 0;
 	margin-top: 20px !important;
 	max-width: 660px;
 	margin: 0 auto;
 	position: relative;
-	border-bottom: 0;
   padding-bottom: 0;
 }
-.product-list {
-	border-bottom: 1px solid #ccc;
-}
+
 .pr-item {
 	padding: 10px;
 }
@@ -93,8 +89,10 @@ input[type=file]{
 	width: 63px;
 	height: 63px;
 	border-radius: 8px;
-	overflow: hidden;
 	margin-right: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	overflow: hidden;
 }
 .pr-small-img img {
 	width: 100%;
@@ -279,6 +277,19 @@ input[type=file]{
 	border-right: 1px solid #7a5e462c;
   }
 	.up-more{
+		width: 100%;
+		text-decoration: none !important;
+		background-color: #7A5E4630;
+		text-align: center;
+		padding: 8px;
+		font-size: 14px;
+		color: #7A5E46;
+		margin: 10px 0;
+		border-radius: 8px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+  .up-more-image {
 		height: 37px;
 		width: 100%;
 		text-decoration: none !important;
@@ -291,35 +302,21 @@ input[type=file]{
 		border-radius: 8px;
 		padding-left: 10px;
 		padding-right: 10px;
-	}
-  .up-more-image {
-	height: 37px;
-	width: 100%;
-	text-decoration: none !important;
-	background-color: #7A5E4630;
-	text-align: center;
-	padding-top: 6px;
-	font-size: 16px;
-	color: #7A5E46;
-	margin: 10px 0;
-	border-radius: 8px;
-	padding-left: 10px;
-	padding-right: 10px;
   }
 	.up-more-video {
 		height: 37px;
-			width: 100%;
-			text-decoration: none !important;
-			background-color: #7A5E4630;
-			text-align: center;
-			padding-top: 6px;
-			font-size: 16px;
-			color: #7A5E46;
-			margin: 10px 0;
-			border-radius: 8px;
+		width: 100%;
+		text-decoration: none !important;
+		background-color: #7A5E4630;
+		text-align: center;
+		padding-top: 6px;
+		font-size: 16px;
+		color: #7A5E46;
+		margin: 10px 0;
+		border-radius: 8px;
 		}
   .up-btns {
-	display: grid;
+		display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
@@ -333,30 +330,30 @@ input[type=file]{
     // display: flex !important;
 		display: none;
     text-align: center;
-    height: 37px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     color: #2C642E;
     text-decoration: none !important;
-    font-size: 16px;
+    font-size: 14px;
+		padding: 8px;
 		border: 0;
   }
 	.submit-btn:hover {
 		color: #2C642E;
 	}
   .image-item {
-	background-color: #A1652F29;
-	width: 54px;
-	height: 52px;
-	border-radius: 7px;
-	overflow: hidden;
-	position: relative;
-	margin-bottom: 10px;
+		background-color: #A1652F29;
+		width: 54px;
+		height: 52px;
+		border-radius: 7px;
+		overflow: hidden;
+		position: relative;
+		margin-bottom: 10px;
   }
   .image-item .cross {
-	position: absolute;
-	right: 3px;
+		position: absolute;
+		right: 3px;
     top: 3px;
   }
   .gallery-right {
@@ -364,29 +361,31 @@ input[type=file]{
    
   }
   .gallery-list {
-	display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: 323px;
-    margin-right: 0;
+		// display: flex;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // max-width: 323px;
+    // margin-right: 0;
+		padding-left: 0px;
+
   }
   .submit-btn.upload-btn {
-	background-color: #7A5E4630 ;
-	color: #7A5E46;
+		background-color: #7A5E4630 ;
+		color: #7A5E46;
   }
   .gallery-left.right-padding {
-	padding-right: 40px !important;
+		padding-right: 40px !important;
   }
   .single-image {
-	background-color: #A1652F29;
+		background-color: #A1652F29;
     max-width: 210px;
     height: 120px;
     margin: 15px auto;
     border-radius: 8px;
   }
   .g-righth-scroll {
-	width: 100%;
-    height: 155px;
+		width: 100%;
+    height: 227px;
     overflow-y: auto;
   }
 
@@ -406,12 +405,11 @@ input[type=file]{
   .remove-btn {
 	background-color: #9F4A4A30;
 	color: #9F4A4A !important;
-	height: 37px;
 	width: 100%;
 	text-decoration: none !important;
 	text-align: center;
-	padding-top: 6px;
-	font-size: 16px;
+	padding: 8px;
+	font-size: 14px;
 	margin: 10px 0;
 	border-radius: 8px;
   }
@@ -574,8 +572,8 @@ input[type=file]{
 	margin-bottom: 10px;
 	border: 1px solid black;
 	border-radius: 5px;
-	height: 50px;
-	width: 50px;
+	height: 54px;
+	width: 54px;
 
 }
 .datail-table .table-hover tbody tr:hover {
@@ -591,7 +589,15 @@ input[type=file]{
 	margin-right: 10px;
 	font-size: 13px;
 }
-
+.alert {
+	position: relative;
+	padding: 4px 10px;
+	margin-bottom: 1rem;
+	border: 1px solid transparent;
+	border-radius: 0.25rem;
+	font-size: 12px;
+	margin: 0 20px 0 40px;
+}
 .success-message {
   padding: 0px;
   background-color: green; /* Red */
@@ -600,4 +606,23 @@ input[type=file]{
 	margin-left: 10px;
 	margin-right: 10px;
 	font-size: 13px;
+}
+.flex-1 {
+	flex: 1;
+}
+#preview {
+	display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+		// justify-content: space-between;
+}
+
+.next-page-left{
+	padding-left: 20px;
+	padding-right: 20px;
+	border-right: 1px dotted #7a5e4679;
+}
+
+.loader{
+	height: 150px
 }
