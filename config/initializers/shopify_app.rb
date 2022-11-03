@@ -20,9 +20,10 @@ ShopifyApp.configure do |config|
     raise('Missing SHOPIFY_API_SECRET. See https://github.com/Shopify/shopify_app#requirements') unless config.secret
   end
   config.scripttags = [
-    { event: 'onload', src: "#{ENV['SHOPIFY_APP_HOST']}'/returns/img_vid.js?version='#{Time.now.to_i.to_s}" }
+    { event: 'onload', src: "#{ENV['SHOPIFY_APP_HOST']}/returns/img_vid.js?version='#{Time.now.to_i.to_s}" }
   ]
 end
+
 
 # ShopifyApp::Utils.fetch_known_api_versions                        # Uncomment to fetch known api versions from shopify servers on boot
 # ShopifyAPI::ApiVersion.version_lookup_mode = :raise_on_unknown    # Uncomment to raise an error if attempting to use an api version that was not previously known
