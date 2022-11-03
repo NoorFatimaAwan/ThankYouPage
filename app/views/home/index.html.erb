@@ -75,7 +75,9 @@
               <% elsif order.video.attached? %>
                 <td class="product-img"><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
               <% end %>
-              <td class="text-center"><a class="link-tag" href="/admin/apps/image-video-app/orders/<%= order.id %>">Show Details</a></td>
+              <td class="text-center">
+                <%= link_to "Show Details", order_path(order.id), class: "link-tag" %>    
+              </td>
             </tr>
           <% end %>
         </tbody>
