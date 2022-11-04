@@ -53,7 +53,7 @@ var loadPlugin = function() {
             let container = document.createElement("object")
             body.setAttribute("id", "assistalong-reminder-body");
             body.append(container)
-            container.setAttribute("id","container_id")    
+            container.setAttribute("id","thank_you_container")    
             container.setAttribute("style","min-height: 330px;");
             body.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
             container.setAttribute("type", "text/html")
