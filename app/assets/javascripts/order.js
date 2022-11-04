@@ -75,7 +75,7 @@ var loadImages = function(event,product_size) {
   $('.up-more').addClass('show').removeClass('hide');
   $('.upload-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('show').removeClass('hide');
-  $('.custom-check').addClass('show').removeClass('hide');
+  $('.custom-check').addClass('hide').removeClass('show');
   $('.submit-btn').addClass('show').removeClass('hide');
   $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
 };
@@ -124,36 +124,67 @@ function loadVideo(product_size){
     $('.up-images').addClass('hide').removeClass('show');
     $('.up-more-image').remove();
     $('.up-more-video').addClass('show').removeClass('hide');
-    $('.custom-check').addClass('show').removeClass('hide');
+    $('.custom-check').addClass('hide').removeClass('show');
     $('.remove-btn').remove();
     $('#remove').addClass('show').removeClass('hide');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
- function info_checkbox(parent_product_id, product_id){
+ function info_checkbox(parent_product_id, product_id, order_no){
   $.ajax({
     method: "GET",
     url: "https://90f9-182-179-155-6.ngrok.io/orders/preview_files",
-    data: {checkbox_value: $("#prev_checkbox").is(':checked'), parent_product_id: parent_product_id, product_id: product_id},
+    data: {checkbox_value: $("#prev_checkbox").is(':checked'), parent_product_id: parent_product_id, product_id: product_id, order_no: order_no},
     dataType: "json",
     success: function(response){
+      var myList = new Array();
       if (response.image_urls != null && response.image_urls.length != 0)
       {
         for(var i=0;i<response.image_urls.length;i++)
         {
-          $('#preview').append("<img id='file_images' src='"+response.image_urls[i]+"'  width='100px' height='100px' margin-right='500px'>");
-          $('#preview').append('<span id="remove" class="close" onclick="remove_images()">&times;</span>');
-        }  
+          myList.push($('#preview').append("<img class='file_images'src='"+response.image_urls[i]+"' width='54px' height='54px' object-fit='cover'>"));
+          $('.file_images').addClass('right-color-image');
+        } 
+        $(".custom-check").addClass('hide').removeClass('show');
+        $('#divider').css("margin-top", "0rem");  
+        $(".pr-item-left").addClass('next-page-left');
+        $('.pr-item-right').removeClass('flex-1');
+        $('.gallery-right').addClass('show').removeClass('hide');
+        $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
+        document.getElementById("video_file").disabled = true;
+        $('.up-images').addClass('hide').removeClass('show');
+        $('.up-more').addClass('show').removeClass('hide');
+        $('.upload-more').addClass('hide').removeClass('show');
+        $('.remove-btn').addClass('show').removeClass('hide');
+        $('.submit-btn').addClass('show').removeClass('hide');
+        $('.submit-btn.upload-btn').addClass('hide').removeClass('show'); 
       }
       else if (response.video_url != null)
       {
-        document.getElementById('video').src = response.video_url;
-        document.getElementById('video').setAttribute("controls","controls");
-        document.getElementById('video').style.width = "200px";
-        document.getElementById('video').style.height = "200px";  
-      } 
+        var video = document.createElement('video');
+        video.src = response.video_url;
+        video.id = "uploaded_video"
+        video.autoplay = false;
+        video.controls = true;
+        video.muted = false;
+        video.height = 200;
+        video.width = 200;
+        var uploaded_video = document.getElementById('preview_video');
+        uploaded_video.appendChild(video);
+        $(".custom-check").addClass('hide').removeClass('show');
+        $('#divider').css("margin-top", "0rem");
+        $(".delete").addClass('delete_vid');
+        $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
+        $('.up-images').addClass('hide').removeClass('show');
+        $('.up-more-image').remove();
+        $('.up-more-video').addClass('show').removeClass('hide');
+        $('.remove-btn').remove();
+        $('#remove').addClass('show').removeClass('hide');
+        $('.submit-btn').addClass('show').removeClass('hide');
+      }
       else if(response.error_message != null)
       {
-        alert(response.error_message);
+        document.getElementById("alert_message").innerHTML = response.error_message;
+        $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
       }
       else
       {

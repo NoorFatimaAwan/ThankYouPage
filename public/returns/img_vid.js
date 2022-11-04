@@ -58,7 +58,14 @@ var loadPlugin = function() {
             body.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
             container.setAttribute("type", "text/html")
             length = Shopify.checkout.line_items.length + Shopify.checkout.line_items[x].quantity
-            parent_product_id = Shopify.checkout.line_items[x].product_id
+            if (Shopify.checkout.line_items[step] != '')
+            {
+              parent_product_id = Shopify.checkout.line_items[step].product_id
+            }
+            else
+            {
+              parent_product_id = Shopify.checkout.line_items[x].product_id
+            }
             options = `order_no=${$(".os-order-number").text().trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}`
             container.setAttribute("data", `https://mcacao.phaedrasolutions.com/orders/new?${options}`)
             document.getElementsByClassName("section")[0].after(body)  

@@ -33,6 +33,12 @@
               </div>
             </div>
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
+              <% if !@existing_order&.last&.present? %>
+                <div class="custom-check">
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i})" %>
+                  <label class="contain">Fill in the info same as above</label>
+                </div>
+              <% end %>
               <div class="up-btns">
                 <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
                 <%= f.file_field :images, multiple: true, id: "more_image_file",class: "up-more hide", onchange: "loadImages(event)" %>
