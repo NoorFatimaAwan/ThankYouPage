@@ -58,7 +58,7 @@ var loadPlugin = function() {
             body.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
             container.setAttribute("type", "text/html")
             length = Shopify.checkout.line_items.length + Shopify.checkout.line_items[x].quantity
-            if (Shopify.checkout.line_items[step] != '')
+            if (Shopify.checkout.line_items[step] != undefined)
             {
               parent_product_id = Shopify.checkout.line_items[step].product_id
             }

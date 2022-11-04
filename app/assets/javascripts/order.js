@@ -132,7 +132,7 @@ function loadVideo(product_size){
  function info_checkbox(parent_product_id, product_id, order_no){
   $.ajax({
     method: "GET",
-    url: "https://90f9-182-179-155-6.ngrok.io/orders/preview_files",
+    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
     data: {checkbox_value: $("#prev_checkbox").is(':checked'), parent_product_id: parent_product_id, product_id: product_id, order_no: order_no},
     dataType: "json",
     success: function(response){
