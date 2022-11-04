@@ -47,14 +47,15 @@ var loadPlugin = function() {
       if (response)
       {
         let body = document.createElement("body")
-        let container = document.createElement("object")
         for(let x = 0; x < Shopify.checkout.line_items.length; x++)
         {
           for (let step = 0; step < Shopify.checkout.line_items[x].quantity; step++){
+            let container = document.createElement("object")
             body.setAttribute("id", "assistalong-reminder-body");
             body.append(container)
             container.setAttribute("id","container_id")    
-            container.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
+            container.setAttribute("style","min-height: 330px;");
+            body.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
             container.setAttribute("type", "text/html")
             length = Shopify.checkout.line_items.length + Shopify.checkout.line_items[x].quantity
             parent_product_id = Shopify.checkout.line_items[x].product_id

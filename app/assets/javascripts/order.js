@@ -64,7 +64,8 @@ var loadImages = function(event,product_size) {
       $('.file_images').addClass('right-color-image');
       // $('#preview').append('<span id="remove" class="close" onclick="remove_images()">&times;</span>');  
     }
-  }  
+  }
+  $('#divider').css("margin-top", "0rem");  
   $(".pr-item-left").addClass('next-page-left');
   $('.pr-item-right').removeClass('flex-1');
   $('.gallery-right').addClass('show').removeClass('hide');
@@ -115,6 +116,7 @@ function loadVideo(product_size){
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
+    $('#divider').css("margin-top", "0rem");
     $("#uploaded_video").addClass('right-color-image');
     $(".delete").addClass('delete_vid');
     document.getElementById("image_file").disabled = true;
