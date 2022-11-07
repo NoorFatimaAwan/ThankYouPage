@@ -3,10 +3,6 @@ $(document).ready(function () {
   {
     $('#divider').css("margin-top", "0rem");
   } 
-  if (!($('.up-images').hasClass('up-video')))
-  {
-    $('#divider').css("margin-top", "7rem");
-  }
   $(".pr-item-left").addClass('next-page-left');
   $('.pr-item-right').removeClass('flex-1');
 });
@@ -119,6 +115,7 @@ function loadVideo(product_size){
       {
         document.getElementById('uploaded_video').remove();
       }
+      document.getElementById("preview_video").style.marginRight = "55px";
       var video = document.createElement('video');
       video.src = reader.result;
       video.id = "uploaded_video"
@@ -130,8 +127,7 @@ function loadVideo(product_size){
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
-    $('#divider').css("margin-top", "0rem");
-    $("#uploaded_video").addClass('right-color-image');
+    $('#divider').css("margin-top", "4rem");
     $(".delete").addClass('delete_vid');
     document.getElementById("image_file").disabled = true;
     $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
@@ -159,7 +155,7 @@ function loadVideo(product_size){
           $('.file_images').addClass('right-color-image');
         } 
         $(".custom-check").addClass('hide').removeClass('show');
-        $('#divider').css("margin-top", "0rem");  
+        $('#divider').css("margin-top", "2rem");  
         $(".pr-item-left").addClass('next-page-left');
         $('.pr-item-right').removeClass('flex-1');
         $('.gallery-right').addClass('show').removeClass('hide');
@@ -174,18 +170,19 @@ function loadVideo(product_size){
       }
       else if (response.video_url != null)
       {
+        document.getElementById("preview_video").style.marginRight = "80px";
         var video = document.createElement('video');
         video.src = response.video_url;
         video.id = "uploaded_video"
         video.autoplay = false;
         video.controls = true;
         video.muted = false;
-        video.height = 200;
-        video.width = 200;
+        video.height = 150;
+        video.width = 150;
         var uploaded_video = document.getElementById('preview_video');
         uploaded_video.appendChild(video);
+        $('#divider').css("margin-top", "4rem");
         $(".custom-check").addClass('hide').removeClass('show');
-        $('#divider').css("margin-top", "0rem");
         $(".delete").addClass('delete_vid');
         $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
         $('.up-images').addClass('hide').removeClass('show');

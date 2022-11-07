@@ -76,7 +76,7 @@
                     <p class="image-cal-text">960 x 540,270 kb each</p>
                   </div>
                 </div>
-                <div class="up-images up-video">
+                <div id="video_tab", class="up-images up-video">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Upload</span>
@@ -107,7 +107,7 @@
               </div>
             <% end %>
             <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
-              <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 150px;height: 150px;") %>
+              <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 150px;height: 150px;margin-bottom: 65px;") %>
             <% end %>
             <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
               <ul class="gallery-list">
