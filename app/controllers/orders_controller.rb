@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
     @shop_id = Shop.find_by(shopify_domain: params[:domain])&.id
     @product_title = params[:product_title]
     @product_image_url = params[:product_image_url]
-    @existing_order = Order.where("order_no =?  and product_id = ?",params[:order_no], params[:product_id])
+    @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
   end
 
   def create
@@ -27,7 +27,9 @@ class OrdersController < ApplicationController
         @order&.video&.attach(@parent_product_files)
       end
     end
-    @order.save
+    @order.save!
+    rescue ActiveRecord::RecordInvalid
+    raise Errors::Invalid.new(@order.errors)
   end
 
   def should_show
@@ -65,7 +67,7 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no, :video, images: [])
+    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no, :video, images: [])
   end
 
 end

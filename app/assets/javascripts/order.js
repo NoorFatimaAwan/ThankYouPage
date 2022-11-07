@@ -1,3 +1,17 @@
+$(document).ready(function () {
+  if (!($('#img_tab').hasClass('up-images')))
+  {
+    $('#divider').css("margin-top", "0rem");
+  } 
+  if (!($('.up-images').hasClass('up-video')))
+  {
+    $('#divider').css("margin-top", "7rem");
+  }
+  $(".pr-item-left").addClass('next-page-left');
+  $('.pr-item-right').removeClass('flex-1');
+});
+
+
 var loadImages = function(event,product_size) {
   var total_file = 0;
   var max_size = 0;
@@ -111,8 +125,8 @@ function loadVideo(product_size){
       video.autoplay = false;
       video.controls = true;
       video.muted = false;
-      video.height = 200;
-      video.width = 200;
+      video.height = 150;
+      video.width = 150;
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
