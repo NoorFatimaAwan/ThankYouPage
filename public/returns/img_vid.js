@@ -66,7 +66,7 @@ var loadPlugin = function() {
             {
               parent_product_id = Shopify.checkout.line_items[x].product_id
             }
-            options = `product_no=${step}&order_no=${$(".os-order-number").text().trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}`
+            options = `first_product_title=${Shopify.checkout.line_items[0].title}&product_no=${step}&order_no=${$(".os-order-number").text().trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}`
             container.setAttribute("data", `https://mcacao.phaedrasolutions.com/orders/new?${options}`)
             document.getElementsByClassName("section")[0].after(body)  
           }   

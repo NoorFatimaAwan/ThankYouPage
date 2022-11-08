@@ -33,7 +33,7 @@
               </div>
             </div>
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
-              <% if !@existing_order&.last&.present? %>
+              <% if @first_product.present? %>
                 <div class="custom-check">
                   <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i})" %>
                   <label class="contain">Fill in the info same as above</label>
@@ -41,12 +41,13 @@
               <% end %>
               <div class="up-btns">
                 <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
-                <%= f.file_field :images, multiple: true, id: "more_image_file",class: "up-more hide", onchange: "loadImages(event)" %>
+                <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event)" %>
                 <a href="" class="up-more remove-btn hide">Remove all</a>
               </div>
               <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
-              <%= f.file_field :video, id: "video_file" ,onchange: "loadVideo()" %>
+              <%= f.file_field :video, accept: "video/*", id: "video_file" ,onchange: "loadVideo()" %>
               <%= f.submit "Submit", class: "submit-btn", onclick: "submit_form()"%>
+              <%= image_tag('loader.gif', class: "loader hide")%>
               <%= f.hidden_field :shop_id , value: @shop_id %>
               <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
               <%= f.hidden_field :file_type , value: "" %>
@@ -63,7 +64,7 @@
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :images, multiple: true, id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
+                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
                       <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
                     </div>
                   </div>
@@ -82,7 +83,7 @@
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :video, id: "video_file", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
+                      <%= f.file_field :video, id: "video_file", accept: "video/*", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
                       <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
                     </div>
                   </div>
@@ -101,7 +102,7 @@
               <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
                 <ul class="gallery-list">
                   <% (0...@existing_order.last.images&.count).each do |image| %>
-                    <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image")%>
+                    <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image", id: "uploaded_images")%>
                   <% end %>
                 </ul>
               </div>
@@ -112,7 +113,6 @@
             <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
               <ul class="gallery-list">
                 <div id="preview"></div>
-                <%= image_tag('loader.gif', class: "loader hide")%>
               </ul>
             </div>
             <div>

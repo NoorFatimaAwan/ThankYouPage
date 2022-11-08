@@ -12,6 +12,7 @@ class OrdersController < ApplicationController
     @product_title = params[:product_title]
     @product_image_url = params[:product_image_url]
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
+    @first_product = params[:product_no] == "0" ? params[:product_title] == params[:first_product_title] ? false : true : true
   end
 
   def create
@@ -19,6 +20,7 @@ class OrdersController < ApplicationController
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
       @parent_product = Order.where(product_id:  params[:order][:parent_product_id]&.to_i) 
+      @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
         @order&.images&.attach(@parent_product_files)
@@ -27,7 +29,19 @@ class OrdersController < ApplicationController
         @order&.video&.attach(@parent_product_files)
       end
     end
-    @order.save!
+    total_image_size = 0 
+    if params[:order][:images].present?
+      params[:order][:images].each do |image|
+        total_image_size = total_image_size + image.size
+      end
+    elsif params[:order][:video].present?
+      total_video_size = params[:order][:video].size > 4 * 1024 * 1024
+    end
+    if total_image_size > 4 * 1024 * 1024 || total_video_size
+      AssetUploadJob.perform_now(@order)
+    else
+      @order.save!
+    end
     rescue ActiveRecord::RecordInvalid
     raise Errors::Invalid.new(@order.errors)
   end

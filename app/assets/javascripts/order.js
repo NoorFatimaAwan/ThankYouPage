@@ -2,6 +2,8 @@ $(document).ready(function () {
   if (!($('#img_tab').hasClass('up-images')))
   {
     $('#divider').css("margin-top", "0rem");
+    document.getElementById('prev_checkbox').remove();
+    $('.contain').text("");
   } 
   $(".pr-item-left").addClass('next-page-left');
   $('.pr-item-right').removeClass('flex-1');
@@ -21,7 +23,7 @@ var loadImages = function(event,product_size) {
     single_max_size = 270 * 1024; 
     if(document.getElementById("image_file").files.length > 1896 || total_images > 1896)
     {
-      document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
+      document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 1896.";
       $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
       return false;
     }
@@ -59,7 +61,7 @@ var loadImages = function(event,product_size) {
     sum = sum + event.target.files[i].size;
     if(event.target.files[i].size > single_max_size )
     {
-      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" is too big";
+      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
       $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
     }
     else if (sum > max_size)
@@ -155,7 +157,7 @@ function loadVideo(product_size){
           $('.file_images').addClass('right-color-image');
         } 
         $(".custom-check").addClass('hide').removeClass('show');
-        $('#divider').css("margin-top", "2rem");  
+        $('#divider').css("margin-top", "0rem");  
         $(".pr-item-left").addClass('next-page-left');
         $('.pr-item-right').removeClass('flex-1');
         $('.gallery-right').addClass('show').removeClass('hide');
