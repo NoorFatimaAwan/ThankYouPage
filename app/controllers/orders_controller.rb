@@ -47,7 +47,11 @@ class OrdersController < ApplicationController
   end
 
   def should_show
-    @product_required = params[:product_title].include? 'expressio'
+    product_title_array = []
+    (0...params[:product_amount].to_i).each do |index|
+      product_title_array.push(params[:product_title]["#{index}"][:title].include? 'expressio')
+    end
+    @product_required = product_title_array.include?(false) ? false : true
     render json: @product_required ,:callback => params[:callback]
   end
 

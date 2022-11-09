@@ -40,7 +40,7 @@ var loadPlugin = function() {
    $.ajax({
     method: "GET",
     url: "https://mcacao.phaedrasolutions.com/orders/should_show",
-    data: {product_title: Shopify.checkout.line_items[0].title},
+    data: {product_title: Shopify.checkout.line_items,product_amount: Shopify.checkout.line_items.length},
     dataType: "jsonp",
     responseType:'application/json', 
     success: function(response){
