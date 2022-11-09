@@ -2,8 +2,11 @@ $(document).ready(function () {
   if (!($('#img_tab').hasClass('up-images')))
   {
     $('#divider').css("margin-top", "0rem");
-    document.getElementById('prev_checkbox').remove();
-    $('.contain').text("");
+    if (document.getElementById('prev_checkbox') != null)
+    {
+      document.getElementById('prev_checkbox').remove();
+      $('.contain').text("");
+    }
   } 
   $(".pr-item-left").addClass('next-page-left');
   $('.pr-item-right').removeClass('flex-1');
@@ -25,6 +28,7 @@ var loadImages = function(event,product_size) {
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 1896.";
       $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+      hide_notice('error');
       return false;
     }
   }
@@ -36,6 +40,7 @@ var loadImages = function(event,product_size) {
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
       $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+      hide_notice('error');
       return false;
     }
   }
@@ -63,11 +68,13 @@ var loadImages = function(event,product_size) {
     {
       document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
       $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
+      hide_notice('error');
     }
     else if (sum > max_size)
     {
       document.getElementById("alert_message").innerHTML = "Total images size cannot be greater than 512MB.";
       $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
+      hide_notice('error');
       return false;
     }
     else
@@ -108,6 +115,7 @@ function loadVideo(product_size){
   {
     document.getElementById("alert_message").innerHTML = input.files[0].name + " is too big. Maximum size should be 512MB.";
     $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+    hide_notice('error');
     return false;
   }
   reader.readAsDataURL(input.files[0]);
@@ -231,6 +239,7 @@ function loadVideo(product_size){
   }
   document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
   $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
+  hide_notice('success');
  }
 
  function remove_images(){
@@ -255,4 +264,20 @@ function remove_video()
   $('#remove').remove();
   $('.up-images').addClass('show').removeClass('hide');
   $('.video-up-btns').addClass('hide').removeClass('show');
+}
+
+function hide_notice(type)
+{
+  if (type == 'error')
+  {
+    setTimeout(function() { 
+      $("#alert_message").addClass('hide').removeClass('alert alert-danger');
+    }, 5000);
+  }
+  else if (type == 'success')
+  {
+    setTimeout(function() { 
+      $("#alert_message").addClass('hide').removeClass('alert alert-success');
+    }, 5000);
+  }
 }
