@@ -19,7 +19,7 @@ module ImageVideoApp
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'https://0827-202-166-171-14.ngrok.io'
+        origins 'https://e4fa-110-39-190-158.ngrok.io'
     
         resource '*',
                  headers: :any,

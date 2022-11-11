@@ -13,7 +13,7 @@ $(document).ready(function () {
 });
 
 
-var loadImages = function(event,product_size) {
+var loadImages = function(event,product_size,image_upload_type) {
   var total_file = 0;
   var max_size = 0;
   var single_max_size = 0;
@@ -56,13 +56,6 @@ var loadImages = function(event,product_size) {
   }
   for(var i=0; i<total_file; i++)
   {
-    // var preview_images = document.getElementById('preview');
-    // var element = document.createElement( 'img' );
-    // element.id = 'file_images_' + i;
-    // element.width = 100; 
-    // element.height=100;
-    // element.src = URL.createObjectURL(event.target.files[i]);
-    // preview_images.appendChild(element);
     sum = sum + event.target.files[i].size;
     if(event.target.files[i].size > single_max_size )
     {
@@ -79,10 +72,43 @@ var loadImages = function(event,product_size) {
     }
     else
     {
-      myList.push($('#preview').append("<img class='file_images'src='"+URL.createObjectURL(event.target.files[i])+"' width='54px' height='54px' object-fit='cover'>"));
-      $('.file_images').addClass('right-color-image');
-      // $('#preview').append('<span id="remove" class="close" onclick="remove_images()">&times;</span>');  
-    }
+      var imgCont = document.getElementById("preview");
+      var divElm = document.createElement('div');
+      divElm.id = "rowdiv" + i;
+      var spanElm = document.createElement('span');
+      var image = document.createElement('img');
+      image.src = URL.createObjectURL(event.target.files[i]);
+      image.id = "output" + i;
+      image.width = "54";
+      image.height = "54";
+      image.className = 'right-color-image'
+      spanElm.appendChild(image);
+      var deleteImg = document.createElement('p');
+      deleteImg.className = 'image-cross'
+      imgp = document.createElement("IMG")
+      imgp.src = '/assets/cross_icon.svg'
+      imgp.setAttribute("class", "cross")
+      deleteImg.appendChild(imgp)
+      deleteImg.onclick = function() {
+        index = this.parentNode.id.replace('rowdiv','');
+        index = Number(index);
+        const dt = new DataTransfer()
+        const input = document.getElementById('image_file')
+        const { files } = input
+        for (let j = 0; j < files.length; j++) {
+          const file = files[j]
+          if (index !== j)
+          {
+            dt.items.add(file)
+          }
+        }
+        input.files = dt.files
+        this.parentNode.remove() 
+      };
+      divElm.appendChild(spanElm);
+      divElm.appendChild(deleteImg);
+      imgCont.appendChild(divElm);
+      }
   }
   $('#divider').css("margin-top", "0rem");  
   $(".pr-item-left").addClass('next-page-left');
@@ -92,7 +118,6 @@ var loadImages = function(event,product_size) {
   document.getElementById("video_file").disabled = true;
   $('.up-images').addClass('hide').removeClass('show');
   $('.up-more').addClass('show').removeClass('hide');
-  $('.upload-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('show').removeClass('hide');
   $('.custom-check').addClass('hide').removeClass('show');
   $('.submit-btn').addClass('show').removeClass('hide');
@@ -137,16 +162,12 @@ function loadVideo(product_size){
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
+    $('.cross-single').addClass('show').removeClass('hide')
     $('#divider').css("margin-top", "4rem");
-    $(".delete").addClass('delete_vid');
     document.getElementById("image_file").disabled = true;
-    $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
     $('.up-images').addClass('hide').removeClass('show');
-    $('.up-more-image').remove();
-    $('.up-more-video').addClass('show').removeClass('hide');
     $('.custom-check').addClass('hide').removeClass('show');
-    $('.remove-btn').remove();
-    $('#remove').addClass('show').removeClass('hide');
+    $('.remove-btn').addClass('hide').removeClass('show');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
  function info_checkbox(parent_product_id, product_id, order_no){
@@ -166,8 +187,42 @@ function loadVideo(product_size){
       {
         for(var i=0;i<response.image_urls.length;i++)
         {
-          myList.push($('#preview').append("<img class='file_images'src='"+response.image_urls[i]+"' width='54px' height='54px' object-fit='cover'>"));
-          $('.file_images').addClass('right-color-image');
+          var imgCont = document.getElementById("preview");
+          var divElm = document.createElement('div');
+          divElm.id = "rowdiv" + i;
+          var spanElm = document.createElement('span');
+          var image = document.createElement('img');
+          image.src = response.image_urls[i];
+          image.id = "output" + i;
+          image.width = "54";
+          image.height = "54";
+          image.className = 'right-color-image'
+          spanElm.appendChild(image);
+          var deleteImg = document.createElement('p');
+          deleteImg.className = 'image-cross'
+          imgp = document.createElement("IMG")
+          imgp.src = '/assets/cross_icon.svg'
+          imgp.setAttribute("class", "cross")
+          deleteImg.appendChild(imgp)
+          deleteImg.onclick = function() {
+            index = this.parentNode.id.replace('rowdiv','');
+            index = Number(index);
+            const dt = new DataTransfer()
+            const input = document.getElementById('image_file')
+            const { files } = input
+            for (let j = 0; j < files.length; j++) {
+              const file = files[j]
+              if (index !== j)
+              {
+                dt.items.add(file)
+              }
+            }
+            input.files = dt.files
+            this.parentNode.remove() 
+          };
+          divElm.appendChild(spanElm);
+          divElm.appendChild(deleteImg);
+          imgCont.appendChild(divElm);
         } 
         $(".custom-check").addClass('hide').removeClass('show');
         $('#divider').css("margin-top", "0rem");  
@@ -196,15 +251,11 @@ function loadVideo(product_size){
         video.width = 150;
         var uploaded_video = document.getElementById('preview_video');
         uploaded_video.appendChild(video);
+        $('.cross-single').addClass('show').removeClass('hide')
         $('#divider').css("margin-top", "4rem");
         $(".custom-check").addClass('hide').removeClass('show');
-        $(".delete").addClass('delete_vid');
-        $("#extra_btns").removeClass('up-btns').addClass('video-up-btns');
         $('.up-images').addClass('hide').removeClass('show');
-        $('.up-more-image').remove();
-        $('.up-more-video').addClass('show').removeClass('hide');
         $('.remove-btn').remove();
-        $('#remove').addClass('show').removeClass('hide');
         $('.submit-btn').addClass('show').removeClass('hide');
       }
       else if(response.error_message != null)
@@ -242,28 +293,16 @@ function loadVideo(product_size){
   hide_notice('success');
  }
 
- function remove_images(){
-  $('#file_images').remove();
-  $('#remove').remove();
-  if ($('#image_file').val() == '')
-  {
-    if ($("#more_image_file").val() == '')
-    {
-      $('.up-images').addClass('show').removeClass('hide');
-      $('.up-more-image').addClass('hide').removeClass('show');
-      $('.remove-btn').addClass('hide').removeClass('show');
-      $('.custom-check').addClass('hide').removeClass('show');
-      $('.submit-btn').addClass('hide').removeClass('show');  
-    }
-  }
-}
+ 
 
 function remove_video()
 {
   $('#uploaded_video').remove();
-  $('#remove').remove();
+  $('.cross-single').remove();
   $('.up-images').addClass('show').removeClass('hide');
-  $('.video-up-btns').addClass('hide').removeClass('show');
+  $('.submit-btn').addClass('hide').removeClass('show');
+  $(".pr-item-left").addClass('next-page-left');
+  document.getElementById("image_file").disabled = false;
 }
 
 function hide_notice(type)
@@ -272,12 +311,12 @@ function hide_notice(type)
   {
     setTimeout(function() { 
       $("#alert_message").addClass('hide').removeClass('alert alert-danger');
-    }, 5000);
+    }, 3000);
   }
   else if (type == 'success')
   {
     setTimeout(function() { 
       $("#alert_message").addClass('hide').removeClass('alert alert-success');
-    }, 5000);
+    }, 3000);
   }
 }

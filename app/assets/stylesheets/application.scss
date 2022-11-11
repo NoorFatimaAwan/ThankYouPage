@@ -398,9 +398,9 @@ input[type=file]{
 	position: relative;
   }
   .cross-single {
-	position: absolute;
-	right: 10px;
-    top: 10px;
+	  position: absolute;
+	  right: 56px;
+    top: 40px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -629,4 +629,11 @@ input[type=file]{
 
 hr{
 	margin-top: 8rem;
+}
+
+.image-cross
+{
+	position: absolute;
+	top: 6px;
+	margin-left: 42px;
 }
