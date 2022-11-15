@@ -13,7 +13,7 @@ $(document).ready(function () {
 });
 
 
-var loadImages = function(event,product_size,image_upload_type) {
+var loadImages = function(event,product_size) {
   var total_file = 0;
   var max_size = 0;
   var single_max_size = 0;
@@ -27,7 +27,7 @@ var loadImages = function(event,product_size,image_upload_type) {
     if(document.getElementById("image_file").files.length > 1896 || total_images > 1896)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 1896.";
-      $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
       hide_notice('error');
       return false;
     }
@@ -39,7 +39,7 @@ var loadImages = function(event,product_size,image_upload_type) {
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
-      $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
       hide_notice('error');
       return false;
     }
@@ -60,13 +60,13 @@ var loadImages = function(event,product_size,image_upload_type) {
     if(event.target.files[i].size > single_max_size )
     {
       document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
-      $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
       hide_notice('error');
     }
     else if (sum > max_size)
     {
       document.getElementById("alert_message").innerHTML = "Total images size cannot be greater than 512MB.";
-      $("#alert_message").addClass('alert alert-danger').removeClass('success-message');
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
       hide_notice('error');
       return false;
     }
@@ -86,7 +86,7 @@ var loadImages = function(event,product_size,image_upload_type) {
       var deleteImg = document.createElement('p');
       deleteImg.className = 'image-cross'
       imgp = document.createElement("IMG")
-      imgp.src = '/assets/cross_icon.svg'
+      imgp.src = document.getElementById('image_cross').src
       imgp.setAttribute("class", "cross")
       deleteImg.appendChild(imgp)
       deleteImg.onclick = function() {
@@ -139,7 +139,7 @@ function loadVideo(product_size){
   if (input.files[0].size > MaxSize)
   {
     document.getElementById("alert_message").innerHTML = input.files[0].name + " is too big. Maximum size should be 512MB.";
-    $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+    $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     hide_notice('error');
     return false;
   }
@@ -178,7 +178,7 @@ function loadVideo(product_size){
   }
   $.ajax({
     method: "GET",
-    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
+    url: "https://c5d9-110-39-190-158.ngrok.io/orders/preview_files",
     data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no},
     dataType: "json",
     success: function(response){
@@ -201,7 +201,7 @@ function loadVideo(product_size){
           var deleteImg = document.createElement('p');
           deleteImg.className = 'image-cross'
           imgp = document.createElement("IMG")
-          imgp.src = '/assets/cross_icon.svg'
+          imgp.src = document.getElementById('image_cross').src
           imgp.setAttribute("class", "cross")
           deleteImg.appendChild(imgp)
           deleteImg.onclick = function() {
@@ -261,7 +261,7 @@ function loadVideo(product_size){
       else if(response.error_message != null)
       {
         document.getElementById("alert_message").innerHTML = response.error_message;
-        $("#alert_message").addClass('alert alert-danger').removeClass('alert-success');
+        $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
       }
       else
       {
@@ -289,7 +289,7 @@ function loadVideo(product_size){
     }
   }
   document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
-  $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
+  $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
   hide_notice('success');
  }
 
