@@ -41,7 +41,7 @@
               <% end %>
               <div class="up-btns">
                 <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
-                <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])})" %>
+                <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images')" %>
                 <a href="" class="up-more remove-btn hide">Remove all</a>
               </div>
               <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
@@ -64,7 +64,7 @@
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])})"  %>
+                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'uploaded_images')"  %>
                       <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
                     </div>
                   </div>

@@ -13,7 +13,7 @@ $(document).ready(function () {
 });
 
 
-var loadImages = function(event,product_size) {
+var loadImages = function(event,product_size,image_type) {
   var total_file = 0;
   var max_size = 0;
   var single_max_size = 0;
@@ -54,14 +54,20 @@ var loadImages = function(event,product_size) {
     total_file = document.getElementById("more_image_file").files.length;
     $('.gallery-right').addClass('show').removeClass('hide');
   }
-  for(var i=0; i<total_file; i++)
+  const dt = new DataTransfer()
+  var input = document.getElementById('image_file');
+  if (image_type == 'more_uploaded_images')
+  {
+    input = document.getElementById('more_image_file')
+  }
+  for(var i = 0; i < total_file; i++)
   {
     sum = sum + event.target.files[i].size;
     if(event.target.files[i].size > single_max_size )
     {
       document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
       $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-      hide_notice('error');
+      hide_notice('error');  
     }
     else if (sum > max_size)
     {
@@ -93,7 +99,11 @@ var loadImages = function(event,product_size) {
         index = this.parentNode.id.replace('rowdiv','');
         index = Number(index);
         const dt = new DataTransfer()
-        const input = document.getElementById('image_file')
+        var input = document.getElementById('image_file');
+        if (image_type == 'more_uploaded_images')
+        {
+          input = document.getElementById('more_image_file')
+        }
         const { files } = input
         for (let j = 0; j < files.length; j++) {
           const file = files[j]
@@ -104,12 +114,25 @@ var loadImages = function(event,product_size) {
         }
         input.files = dt.files
         this.parentNode.remove() 
+        if (document.getElementById('image_file').files.length == 0)
+        {
+          if (input = document.getElementById('more_image_file').files.length == 0)
+          {
+            $('.up-images').addClass('show').removeClass('hide');
+            $('.up-more').addClass('hide').removeClass('show');
+            $('.remove-btn').addClass('hide').removeClass('show');
+            $('.submit-btn').addClass('hide').removeClass('show');
+            document.getElementById("video_file").disabled = false;
+          }
+        }
       };
       divElm.appendChild(spanElm);
       divElm.appendChild(deleteImg);
       imgCont.appendChild(divElm);
-      }
+      dt.items.add(event.target.files[i])
+    }
   }
+  input.files = dt.files
   $('#divider').css("margin-top", "0rem");  
   $(".pr-item-left").addClass('next-page-left');
   $('.pr-item-right').removeClass('flex-1');
@@ -208,7 +231,7 @@ function loadVideo(product_size){
             index = this.parentNode.id.replace('rowdiv','');
             index = Number(index);
             const dt = new DataTransfer()
-            const input = document.getElementById('image_file')
+            input = document.getElementById('more_image_file')
             const { files } = input
             for (let j = 0; j < files.length; j++) {
               const file = files[j]
@@ -298,7 +321,7 @@ function loadVideo(product_size){
 function remove_video()
 {
   $('#uploaded_video').remove();
-  $('.cross-single').remove();
+  $('.cross-single').addClass('hide').removeClass('show');
   $('.up-images').addClass('show').removeClass('hide');
   $('.submit-btn').addClass('hide').removeClass('show');
   $(".pr-item-left").addClass('next-page-left');
@@ -311,12 +334,12 @@ function hide_notice(type)
   {
     setTimeout(function() { 
       $("#alert_message").addClass('hide').removeClass('alert alert-danger');
-    }, 3000);
+    }, 2000);
   }
   else if (type == 'success')
   {
     setTimeout(function() { 
       $("#alert_message").addClass('hide').removeClass('alert alert-success');
-    }, 3000);
+    }, 2000);
   }
 }
