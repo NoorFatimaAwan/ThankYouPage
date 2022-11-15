@@ -1,9 +1,8 @@
 class OrdersController < ApplicationController
-
+  require('zip')
 
   def index
     @orders = Order.all.paginate(page: params[:page], per_page: 20)
-    render(json: { orders: @orders })
   end
 
   def new
@@ -80,6 +79,47 @@ class OrdersController < ApplicationController
     render json: {video_url: @video_url, image_urls: image_urls, error_message: error_message}
   end
 
+  def download_assets  
+    filename = 'my_assets.zip'
+    temp_file = Tempfile.new(filename)
+    @order = Order.find(params[:order_id])
+    begin
+      Zip::OutputStream.open(temp_file) { |zos| }
+    
+      Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
+        if @order.video.attached?
+          image_file = Tempfile.new("#{@order.video}")
+          File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
+            @order.video.download do |chunk|
+              file.write(chunk)
+            end
+
+            zipfile.add("#{@order.video.filename}", image_file.path)
+          end
+
+        elsif @order.images.attached?
+
+          @order.images.each do |image|
+            image_file = Tempfile.new("#{image}")
+            
+            File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
+              image.download do |chunk|
+                file.write(chunk)
+              end
+            end
+      
+            zipfile.add("#{image.filename}", image_file.path)
+          end
+        end
+      end
+    
+      zip_data = File.read(temp_file.path)
+      send_data(zip_data, type: 'application/zip', disposition: 'attachment', filename: filename)
+    ensure 
+      temp_file.close
+      temp_file.unlink
+    end  
+  end
 
 
   private
