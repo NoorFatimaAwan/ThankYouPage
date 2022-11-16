@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   def cors_set_access_control_headers
-    response.headers['Access-Control-Allow-Origin'] = "https://c5d9-110-39-190-158.ngrok.io" || '*'   
+    response.headers['Access-Control-Allow-Origin'] = "https://51fe-202-166-171-14.ngrok.io" || '*'   
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'

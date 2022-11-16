@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://c5d9-110-39-190-158.ngrok.io'
+    origins 'https://51fe-202-166-171-14.ngrok.io'
 
     resource '*',
              headers: :any,

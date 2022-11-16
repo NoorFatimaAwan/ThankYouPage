@@ -55,7 +55,7 @@ var loadPlugin = function() {
             body.append(container)
             container.setAttribute("id","thank_you_container")    
             container.setAttribute("style","min-height: 330px;");
-            body.setAttribute("style","min-height: 330px;border: 1px solid #ccc; border-radius: 4px; margin-top: 30px;" ) 
+            body.setAttribute("style","min-height: 330px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px;" ) 
             container.setAttribute("type", "text/html")
             length = Shopify.checkout.line_items.length + Shopify.checkout.line_items[x].quantity
             if (Shopify.checkout.line_items[step] != undefined)

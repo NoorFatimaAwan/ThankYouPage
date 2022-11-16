@@ -152,7 +152,7 @@ input[type=file]{
 	margin-top: 20px;
 }
 .uplaod-upto-text {
-	font-size: 12px;
+	font-size: 14px;
 	margin-bottom: 8px;
 	color: #7A5E46;
 }
@@ -176,6 +176,8 @@ input[type=file]{
 .up-image-text {
 	color: #7A5E46;
 	font-size: 18px;
+	margin-bottom: 8px;
+	margin-top: 8px;
 }
 .icon-top-border.light-border {
 	border-top: 3px solid #7a5e462e;
@@ -268,6 +270,9 @@ input[type=file]{
     bottom: 0px;
 		display: flex;
   }
+	.custom-check .checkmark {
+		height: 21px;
+	}
   .product-list {
 
 	position: relative;
@@ -335,7 +340,7 @@ input[type=file]{
     border-radius: 8px;
     color: #2C642E;
     text-decoration: none !important;
-    font-size: 14px;
+    font-size: 16px;
 		padding: 8px;
 		border: 0;
   }
@@ -399,8 +404,8 @@ input[type=file]{
   }
   .cross-single {
 	  position: absolute;
-	  right: 56px;
-    top: 40px;
+	  right: 66px;
+    top: 56px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -447,8 +452,8 @@ input[type=file]{
 		display: none;
 	}
 	.img-inner {
-		zoom: .6;
-		left: 15px;
+		zoom: .65;
+		left: 5px;
 	}
 	.custom-check {
 		position: inherit;
@@ -596,7 +601,7 @@ input[type=file]{
 	border: 1px solid transparent;
 	border-radius: 0.25rem;
 	font-size: 12px;
-	margin: 0 20px 0 40px;
+	margin: 0 20px 0 20px;
 }
 .success-message {
   padding: 0px;
@@ -629,13 +634,14 @@ input[type=file]{
 
 hr{
 	margin-top: 8rem;
+	border-color: #7A5E464D;
 }
 
 .image-cross
 {
 	position: absolute;
-	top: 6px;
-	margin-left: 42px;
+	right: 12px;
+	top: -2px;
 }
 .back-btn {
 	font-size: 16px;
@@ -646,4 +652,7 @@ hr{
 	padding: 10px 15px;
 	border-radius: 7px;
 	letter-spacing: 1.2px;
+}
+.relative {
+	position: relative;
 }
