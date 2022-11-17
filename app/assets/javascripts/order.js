@@ -281,7 +281,7 @@ function loadVideo(product_size){
         $('#divider').css("margin-top", "4rem");
         $(".custom-check").addClass('hide').removeClass('show');
         $('.up-images').addClass('hide').removeClass('show');
-        $('.remove-btn').remove();
+        $('.remove-btn').addClass('hide').removeClass('show');
         $('.submit-btn').addClass('show').removeClass('hide');
       }
       else if(response.error_message != null)
