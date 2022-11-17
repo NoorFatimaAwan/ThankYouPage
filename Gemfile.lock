@@ -98,6 +98,8 @@ GEM
       railties (>= 3.2)
     erubi (1.11.0)
     escape (0.0.4)
+    et-orbi (1.2.7)
+      tzinfo
     eventmachine (1.2.7)
     execjs (2.8.1)
     faraday (1.10.2)
@@ -124,6 +126,9 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.15.5)
+    fugit (1.7.2)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
     graphql (2.0.14)
@@ -210,6 +215,7 @@ GEM
     popper_js (1.16.1)
     public_suffix (4.0.7)
     puma (3.12.6)
+    raabro (1.4.0)
     racc (1.6.0)
     rack (2.2.4)
     rack-cors (1.1.1)
@@ -295,10 +301,13 @@ GEM
       rails (> 5.2.1, < 6.2)
       redirect_safely (~> 1.0)
       shopify_api (~> 9.4)
-    sidekiq (6.5.7)
-      connection_pool (>= 2.2.5)
+    sidekiq (6.5.8)
+      connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
+    sidekiq-cron (1.8.0)
+      fugit (~> 1)
+      sidekiq (>= 4.2.1)
     sinatra (2.2.2)
       mustermann (~> 2.0)
       rack (~> 2.2)
@@ -381,6 +390,7 @@ DEPENDENCIES
   selenium-webdriver
   shopify_app (~> 18.0)
   sidekiq
+  sidekiq-cron
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

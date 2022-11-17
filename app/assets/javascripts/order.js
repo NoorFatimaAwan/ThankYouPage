@@ -9,8 +9,6 @@ $(document).ready(function () {
     }
   } 
   $("#preview_video").addClass('show').removeClass('hide');
-  $(".pr-item-left").addClass('next-page-left');
-  $('.pr-item-right').removeClass('flex-1');
 });
 
 
@@ -116,14 +114,17 @@ var loadImages = function(event,product_size,image_type) {
         }
         input.files = dt.files
         this.parentNode.remove() 
-        if ((document.getElementById('image_file').files.length == 0 && document.getElementById('more_image_file').files.length == 0) || document.getElementById('image_file').files.length == 0)
+        if (document.getElementById('image_file').files.length == 0 ) 
         {
-          $('.up-images').addClass('show').removeClass('hide');
-          $('.up-more').addClass('hide').removeClass('show');
-          $('.remove-btn').addClass('hide').removeClass('show');
-          $('.submit-btn').addClass('hide').removeClass('show');
-          $("#preview_video").addClass('hide').removeClass('show');
-          document.getElementById("video_file").disabled = false;
+          if (document.getElementById('more_image_file').files.length == 0)
+          {
+            $('.up-images').addClass('show').removeClass('hide');
+            $('.up-more').addClass('hide').removeClass('show');
+            $('.remove-btn').addClass('hide').removeClass('show');
+            $('.submit-btn').addClass('hide').removeClass('show');
+            $("#preview_video").addClass('hide').removeClass('show');
+            document.getElementById("video_file").disabled = false;
+          }
         }
       };
       divElm.appendChild(spanElm);
@@ -182,7 +183,7 @@ function loadVideo(product_size){
       video.controls = true;
       video.muted = false;
       video.height = 150;
-      video.width = 150;
+      video.width = 200;
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
     }
@@ -274,7 +275,7 @@ function loadVideo(product_size){
         video.controls = true;
         video.muted = false;
         video.height = 150;
-        video.width = 150;
+        video.width = 200;
         var uploaded_video = document.getElementById('preview_video');
         uploaded_video.appendChild(video);
         $('.cross-single').addClass('show').removeClass('hide')
@@ -333,6 +334,7 @@ function remove_video()
   $('.submit-btn').addClass('hide').removeClass('show');
   $(".pr-item-left").addClass('next-page-left');
   $("#preview_video").addClass('hide').removeClass('show');
+  $(".custom-check").removeClass('hide');
   document.getElementById("image_file").disabled = false;
 }
 

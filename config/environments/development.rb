@@ -12,7 +12,7 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-  config.hosts << '51fe-202-166-171-14.ngrok.io'
+  config.hosts << '4b9a-110-39-190-158.ngrok.io'
   config.web_console.whitelisted_ips = '202.166.171.14'
 
   # Enable/disable caching. By default caching is disabled.
