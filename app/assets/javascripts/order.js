@@ -204,7 +204,7 @@ function loadVideo(product_size){
   }
   $.ajax({
     method: "GET",
-    url: "https://d19a-110-39-190-158.ngrok.io/orders/preview_files",
+    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
     data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no},
     dataType: "json",
     success: function(response){
@@ -289,6 +289,7 @@ function loadVideo(product_size){
       {
         document.getElementById("alert_message").innerHTML = response.error_message;
         $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
+        hide_notice('error');
       }
       else
       {
