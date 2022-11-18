@@ -35,7 +35,7 @@
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
               <% if @first_product.present? %>
                 <div class="custom-check">
-                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i})" %>
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i}, #{params[:product_no].to_i})" %>
                   <label class="contain">Fill in the info same as above</label>
                 </div>
               <% end %>

@@ -66,7 +66,9 @@ class OrdersController < ApplicationController
     if params[:checkbox_value] == 'true'
       image_urls = []
       @order = Order.last
-      @parent_product_order =  Order.where("product_id= ? and order_no = ?",  params[:parent_product_id],params[:order_no]).last || Order.where("product_id= ? and order_no = ?",  params[:product_id],params[:order_no]).last
+      parent_product_no = (params[:product_no].to_i - 1)
+      @parent_product_order = Order.where("product_id= ? and order_no = ? and product_no = ?",  params[:parent_product_id],params[:order_no],parent_product_no).last
+      debugger
       if @parent_product_order == @order
         @order.images.each do |image|
           image_urls << url_for(image)
