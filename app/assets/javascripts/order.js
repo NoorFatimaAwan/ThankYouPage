@@ -114,17 +114,17 @@ var loadImages = function(event,product_size,image_type) {
         }
         input.files = dt.files
         this.parentNode.remove() 
-        if (document.getElementById('image_file').files.length == 0 ) 
+        if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
         {
-          if (document.getElementById('more_image_file').files.length == 0)
-          {
-            $('.up-images').addClass('show').removeClass('hide');
-            $('.up-more').addClass('hide').removeClass('show');
-            $('.remove-btn').addClass('hide').removeClass('show');
-            $('.submit-btn').addClass('hide').removeClass('show');
-            $("#preview_video").addClass('hide').removeClass('show');
-            document.getElementById("video_file").disabled = false;
-          }
+          $('.up-images').addClass('show').removeClass('hide');
+          $('.up-more').addClass('hide').removeClass('show');
+          $('.remove-btn').addClass('hide').removeClass('show');
+          $('.submit-btn').addClass('hide').removeClass('show');
+          $("#preview_video").addClass('hide').removeClass('show');
+          document.getElementById("video_file").disabled = false;
+          $('.gallery-right').addClass('hide').removeClass('show');
+          $('#divider').css("margin-top", "8rem");
+          $('.custom-check').removeClass('hide');
         }
       };
       divElm.appendChild(spanElm);
@@ -235,16 +235,15 @@ function loadVideo(product_size){
             index = this.parentNode.id.replace('rowdiv','');
             index = Number(index);
             const dt = new DataTransfer()
-            input = document.getElementById('more_image_file')
-            const { files } = input
-            for (let j = 0; j < files.length; j++) {
-              const file = files[j]
+            input = document.getElementById('preview').getElementsByClassName('relative')
+            var form = $('#uploadForm')[0]
+            formData = new FormData(form)
+            for (let j = 0; j < input.length; j++) {
               if (index !== j)
               {
-                dt.items.add(file)
+                formData.append('order[images][]', response.image_urls[j])
               }
             }
-            input.files = dt.files
             this.parentNode.remove() 
           };
           divElm.appendChild(spanElm);
@@ -263,6 +262,7 @@ function loadVideo(product_size){
         $('.upload-more').addClass('hide').removeClass('show');
         $('.remove-btn').addClass('show').removeClass('hide');
         $('.submit-btn').addClass('show').removeClass('hide');
+        $(".submit-btn").css('font-size','14px');
         $('.submit-btn.upload-btn').addClass('hide').removeClass('show'); 
       }
       else if (response.video_url != null)
@@ -329,7 +329,7 @@ function loadVideo(product_size){
 
 function remove_video()
 {
-  $('#uploaded_video').remove();
+  $('#uploaded_video').addClass('hide').removeClass('show');
   $('.cross-single').addClass('hide').removeClass('show');
   $('.up-images').addClass('show').removeClass('hide');
   $('.submit-btn').addClass('hide').removeClass('show');
