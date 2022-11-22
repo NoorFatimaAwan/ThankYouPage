@@ -274,8 +274,9 @@ input[type=file]{
 		height: 21px;
 	}
   .product-list {
-
-	position: relative;
+		padding-bottom: 20px;
+   	position: relative;
+		padding-top: 50px;
   }
   .gallery-left {
 	padding: 0 25px;
@@ -405,7 +406,7 @@ input[type=file]{
   .cross-single {
 	  position: absolute;
 	  right: 66px;
-    top: 45px;
+    top: 88px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -655,4 +656,15 @@ hr{
 }
 .relative {
 	position: relative;
+}
+
+.right-border{
+	border: 1px dashed  #7a5e4679;
+	position: relative;
+	left: 125px;
+}
+
+.border-padding{
+	padding-left: 20px;
+	padding-right: 20px;
 }

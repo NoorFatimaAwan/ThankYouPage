@@ -20,7 +20,7 @@
         <div id="alert_message", class="">
         </div>
         <div class="pr-item d-flex justify-content-between align-items-center">
-          <div class="pr-item-left next-page-left">
+          <div class="pr-item-left border-padding">
             <div class="d-flex">
               <div class="pr-small-img">
                 <% if  @product_image_url %>
@@ -58,6 +58,7 @@
         </div>
             <% if !@existing_order&.last&.present? %>
               <div class="pr-item-right d-flex justify-content-end">
+                <div class="right-border"></div>
                 <div id="img_tab", class="up-images mr-5">
                   <div class="input-group">
                     <div class="input-group-prepend">
@@ -124,7 +125,6 @@
           <div class="separater"></div>
         </div>
       </div>
-      <hr id="divider">
     </div>
 	</div>
 
