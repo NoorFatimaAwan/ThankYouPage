@@ -135,7 +135,7 @@ input[type=file]{
 }
 .up-images .custom-file-label {
 	  width: 100%;
-    height: 78%
+    height: 100%
 }
 .up-images .input-group-prepend {
 	width: 0;
@@ -441,13 +441,46 @@ input[type=file]{
   .g-scrol-bar::-webkit-scrollbar-thumb:hover {
 	background: #7A5E4633; 
   }
+@media only screen and (max-width: 500px) {
+	.pr-item {
+		flex-direction: column;
+		align-items: flex-start !important;
+		align-items: start !important;
+	}
+	.pr-item-right {
+		flex-direction: column;
+		width: 100%;
+	}
+	.up-images.mr-5 {
+		width: 100%;
+		margin-right: 0 !important;
+		margin-bottom: 20px;
+	}
+	.right-border {
+		border: none !important;
+	}
+	.up-images.up-video {
+		width: 100%;
+	}
+	.img-inner {
+		display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+		zoom: inherit !important;
+	}
+	.image-cal-text {
+		margin-bottom: 0;
+		font-weight: 700;
+	}
+}
 @media only screen and (max-width: 765px) {
 	.pr-item-left {
-		// margin-bottom: 20px;
+		margin-bottom: 10px;
 	}
 	.up-images {
 		width: 100px;
-   		height: 100px;
+   		height: 110px;
 	}
 	.separater {
 		display: none;
@@ -473,7 +506,7 @@ input[type=file]{
 	.submit-btn {
 		margin-bottom: 10px;
 	}
-	
+
   }
 
 	.container{

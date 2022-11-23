@@ -7,22 +7,19 @@ class SendReminderEmailJob < ApplicationJob
 
   def perform(*arg)
     list = Klaviyo::Lists.add_to_list(
-    'U6f6AQ',
+    'Y5VZPP',
       profiles: [
         {
-          email: 'ambreen@phaedrasolutions.com'
-        },
-        {
-          email: 'talha@phaedrasolutions.com'
+          email: 'noor.fatima@phaedrasolutions.com'
         }
       ]
     )
     email = Klaviyo::EmailTemplates.send_template(
-      'UKRy3w',
-      from_email: 'talha@phaedrasolutions.com',
-      from_name: 'Klaviyo',
+      'Y5tfPs',
+      from_email: 'noor.fatima@phaedrasolutions.com',
+      from_name: 'Phaedra Solutions',
       subject: 'Reminder Email',
-      to: 'talha@phaedrasolutions.com',
+      to: 'fnoor8004@gmail.com',
       context: {
         name: 'Noor'
       }

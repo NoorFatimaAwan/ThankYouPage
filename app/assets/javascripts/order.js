@@ -60,6 +60,10 @@ var loadImages = function(event,product_size,image_type) {
   {
     input = document.getElementById('more_image_file')
   }
+  if (image_type == 'more_uploaded_images')
+  {
+    input = document.getElementById('more_image_file')
+  }
   for(var i = 0; i < total_file; i++)
   {
     sum = sum + event.target.files[i].size;
@@ -334,6 +338,16 @@ function loadVideo(product_size){
       formData.append('order[images][]', image_files[i])
     }
   }
+  url = document.getElementById('preview').getElementsByClassName('relative')[0].getElementsByClassName('right-color-image')[1].src
+  fetch(url)
+    .then(res => res.blob())
+    .then(blob =>{
+      console.log(blob);
+      const file = new File([blob],'image',{ type: blob.type});
+      console.log(file);
+    })
+  console.log('file')
+  document.getElementById('preview').getElementsByClassName('relative').length
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');
   $('.submit-btn').addClass('hide').removeClass('show');
