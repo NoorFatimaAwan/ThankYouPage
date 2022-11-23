@@ -46,7 +46,7 @@
               </div>
               <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
               <%= f.file_field :video, accept: "video/*", id: "video_file" ,onchange: "loadVideo()" %>
-              <%= f.submit "Submit", class: "submit-btn", onclick: "submit_form()"%>
+              <%= f.submit "Submit", id: "submit_button", class: "submit-btn", onclick: "submit_form()"%>
               <%= image_tag('loader.gif', class: "loader hide")%>
               <%= f.hidden_field :shop_id , value: @shop_id %>
               <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
@@ -106,29 +106,37 @@
                   </div>
                 </div>
               </div>
-            <% end %>
-            <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
-              <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
+              <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
                 <ul class="gallery-list">
-                  <% (0...@existing_order.last.images&.count).each do |image| %>
-                    <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image", id: "uploaded_images")%>
-                  <% end %>
+                  <div id="preview"></div>
+                  <%= image_tag('cross_icon.svg', class: "hide", id: "image_cross") %>
                 </ul>
               </div>
+              <div class="video-style">
+              <div id="preview_video"></div>
+                <%= image_tag('cross_icon.svg', class: "cross-single hide", onclick: "remove_video()")%>
+              </div>
             <% end %>
-            <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
-              <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 200px;height: 150px;margin-bottom: 65px;") %>
-            <% end %>
-            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
+            <div class="up-btns">
+              <%= f.label 'Upload More', for: "mobile_image_file", id: "mobile_image_label", class: "up-more hide"%>  
+              <%= f.file_field :images, multiple: true, accept: "image/*", id: "mobile_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images')" %>
+              <a href="" id="mobile_remove" class="up-more remove-btn hide">Remove all</a>
+            </div>
+              <%= f.label 'Upload', for: "mobile_video_file", id: "mobile_video_label" , class: "submit-btn upload-btn my-2" %>  
+              <%= f.file_field :video, accept: "video/*", id: "mobile_video_file" ,onchange: "loadVideo()" %>
+              <%= f.submit "Submit", id: "mobile_submit", class: "submit-btn", onclick: "submit_form()"%>
+          <% end %>
+          <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
+            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
               <ul class="gallery-list">
-                <div id="preview"></div>
-                <%= image_tag('cross_icon.svg', class: "hide", id: "image_cross") %>
+                <% (0...@existing_order.last.images&.count).each do |image| %>
+                  <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image", id: "uploaded_images")%>
+                <% end %>
               </ul>
             </div>
-            <div>
-              <div id="preview_video"></div>
-              <%= image_tag('cross_icon.svg', class: "cross-single hide", onclick: "remove_video()")%>
-            </div>
+          <% end %>
+          <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
+            <%= video_tag(url_for(@existing_order&.last&.video), controls: '', class: "existing-video") %>
           <% end %>
           <div class="separater"></div>
         </div>
