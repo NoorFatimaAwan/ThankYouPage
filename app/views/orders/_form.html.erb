@@ -1,11 +1,15 @@
-<div id="orders"><br></div>
-<nav class="navbar bg-light">
-  <div class="container-fluid">
-    <span class="navbar-text">
-      List of all Orders
-    </span>
-  </div>
-</nav>   
+<div class="orders-header">
+    
+      <span class="navbar-text">
+        List of all Orders
+      </span>
+  <%= search_form_for @q, url: :orders, class: "d-flex flex-wrap"  do |form| %>
+    <div class="search-field">
+      <%= form.text_field :order_no_eq %>
+    </div>
+    <%= form.submit class: "btn btn-primary search-button" %>
+  <% end %>
+</div>
 <div class="datail-table">
   <table class="table table-hover">
     <thead>
@@ -18,8 +22,8 @@
       </tr>
     </thead>
     <tbody>
-      <% orders.each_with_index do |order,index| %>
-        <tr class="js-tr">
+      <% orders.each do |order| %>
+        <tr>
           <th scope="row"><%= order.order_no %></th>
           <td> <%= order.product_title %> </td>
           <td> <%= order.file_type %> </td>
@@ -34,5 +38,14 @@
         </tr>
       <% end %>
     </tbody>
-</table>
-<%= will_paginate orders %>
+  </table>
+</div>
+<% if orders.empty? %>
+  <div class="no-order-text">
+    <p> No orders to show </p>
+  </div>
+<% end %>
+
+<div class="digg_pagination">
+  <%= will_paginate orders %>
+</div>

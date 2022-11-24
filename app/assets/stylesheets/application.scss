@@ -508,6 +508,9 @@ input[type=file]{
 		height: 100% !important;
 		margin-bottom: 0px !important;
 	}
+	.icon-top-border.light-border {
+		border: none;
+	}
 }
 @media only screen and (max-width: 765px) {
 	.pr-item-left {
@@ -751,4 +754,114 @@ hr{
 	height: 150px;
 	margin-bottom: 65px;
 	margin-right: 48px
+}
+
+.no-order-text{
+	align-items: center;
+	text-align: center;
+	height: 400px;
+	display: flex;
+	justify-content: center;
+}
+.no-order-text p {
+	font-size: 20px;
+	font-weight: 800;
+}
+
+.orders-header{
+	padding: 20px;
+
+}
+.navbar-text {
+	font-size: 20px;
+	font-weight: 700;
+	padding-bottom: 10px;
+	/* border-bottom: 2px solid #000; */
+	margin-bottom: 40px;
+	background: #cccccc57;
+	width: 100%;
+	padding: 20px;
+}
+
+.search-field{
+	max-width: 400px;
+	width: 100%;
+}
+
+.search-field input{
+	height: 54px;
+	width: 100%;
+	border-radius: 10px;
+	border: 1px solid #ccc;
+	padding: 0 15px;
+	color: #000000ba;
+}
+.search-field input:focus {
+	box-shadow: none;
+	outline: #ccc;
+}
+.search-button{
+	font-size: 18px;
+	padding: 8px 30px;
+	border-radius: 7px;
+	margin-left: 12px;
+	background-color: #5d6ac4;
+	border: 1px solid #5d6ac4;
+	color: #fff;
+}
+.search-button:hover {
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+	background-color: #5d6ac4;
+}
+
+.digg_pagination {
+  cursor: default;
+	padding: 30px 0;
+  /* self-clearing method: */ }
+  .digg_pagination a, .digg_pagination span, .digg_pagination em {
+    padding: 0.2em 0.5em;
+    display: block;
+    float: left;
+    margin-right: 1px; }
+  .digg_pagination .disabled {
+    color: #999999;
+    border: 1px solid #dddddd; }
+  .digg_pagination .current {
+    font-style: normal;
+    font-weight: bold;
+    background: #2e6ab1;
+    color: white;
+    border: 1px solid #2e6ab1; }
+  .digg_pagination a {
+    text-decoration: none;
+    color: #105cb6;
+    border: 1px solid #9aafe5; }
+    .digg_pagination a:hover, .digg_pagination a:focus {
+      color: #000033;
+      border-color: #000033; }
+  .digg_pagination .page_info {
+    background: #2e6ab1;
+    color: white;
+    padding: 0.4em 0.6em;
+    width: 22em;
+    margin-bottom: 0.3em;
+    text-align: center; }
+    .digg_pagination .page_info b {
+      color: #000033;
+      background: #6aa6ed;
+      padding: 0.1em 0.25em; }
+  .digg_pagination:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden; }
+  * html .digg_pagination {
+    height: 1%; }
+  *:first-child + html .digg_pagination {
+    overflow: hidden; 
+}
+
+.pagination {
+	justify-content: center;
 }

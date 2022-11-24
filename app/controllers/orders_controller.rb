@@ -2,7 +2,8 @@ class OrdersController < ApplicationController
   require('zip')
 
   def index
-    @orders = Order.all.paginate(page: params[:page], per_page: 20)
+    @q = Order.ransack(params[:q])
+    @orders = @q.result(distinct: true).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def new

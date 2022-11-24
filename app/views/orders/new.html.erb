@@ -40,7 +40,7 @@
                 </div>
               <% end %>
               <div class="up-btns">
-                <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
+                <%= f.label :images, 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
                 <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images')" %>
                 <a href="" class="up-more remove-btn hide">Remove all</a>
               </div>
@@ -118,7 +118,7 @@
               </div>
             <% end %>
             <div class="up-btns">
-              <%= f.label 'Upload More', for: "mobile_image_file", id: "mobile_image_label", class: "up-more hide"%>  
+              <%= f.label :images, 'Upload More', for: "mobile_image_file", id: "mobile_image_label", class: "up-more hide"%>  
               <%= f.file_field :images, multiple: true, accept: "image/*", id: "mobile_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images')" %>
               <a href="" id="mobile_remove" class="up-more remove-btn hide">Remove all</a>
             </div>
