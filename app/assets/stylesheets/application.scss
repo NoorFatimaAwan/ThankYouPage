@@ -405,8 +405,8 @@ input[type=file]{
   }
   .cross-single {
 	  position: absolute;
-	  right: 90px;
-    top: 90px;
+	  right: 67px;
+    top: 96px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -444,8 +444,12 @@ input[type=file]{
 @media only screen and (max-width: 500px) 
 {
 	.pr-item {
-		flex-direction: column;
+		flex-direction: column-reverse;
+		position: relative;
 	
+	}
+	.pr-item-left {
+		width: 100%;
 	}
 	.pr-item.align-items-center {
 		align-items: start !important;
@@ -456,6 +460,7 @@ input[type=file]{
 	.pr-item-right {
 		flex-direction: column;
 		width: 100%;
+		padding-top: 70px;
 	}
 	.up-images.mr-5 {
 		width: 100%;
@@ -489,8 +494,8 @@ input[type=file]{
     width: 100%;
 	}
 	.cross-single {
-    right: 15px;
-    top: 88px;
+    right: 31px;
+    top: 91px;
 	}
 	.video-style
 	{
@@ -501,7 +506,9 @@ input[type=file]{
 		height: 100% !important;
 	}
 	.preview-video-style{
+		margin-top: 80px !important;
 		margin-right: 0px !important;
+		padding: 0 20px;
 	}
 	.existing-video{
 		width: 100% !important;
@@ -511,6 +518,23 @@ input[type=file]{
 	.icon-top-border.light-border {
 		border: none;
 	}
+	.next-page-left {
+		border-right: none !important;
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.gallery-right {
+		margin-top: 63px;
+	}
+	.pr-top-content{
+		position: absolute;
+    top: 0;
+	}
+
+	.btn-padding-top{
+		padding-top: 0;
+	}
+
 }
 @media only screen and (max-width: 765px) {
 	.pr-item-left {

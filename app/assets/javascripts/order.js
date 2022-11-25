@@ -154,26 +154,18 @@ var loadImages = function(event,product_size,image_type) {
   document.getElementById("video_file").disabled = true;
   if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
   {
-    $("#mobile_image_label").addClass('show').removeClass('hide');    
-    $("#mobile_remove").addClass('show').removeClass('hide');
-    $("#mobile_submit").addClass('show').removeClass('hide');
     $(".right-border").addClass('hide').removeClass('show');
+    $(".pr-item-right").addClass('btn-padding-top');
   }
-  else
-  {
-    $(".product-list").css("padding-top","0px");
-    $(".pr-item-left").addClass('next-page-left');
-    $('.pr-item-right').removeClass('flex-1');
-    $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
-    $('.up-more').addClass('show').removeClass('hide');
-    $('.remove-btn').addClass('show').removeClass('hide');
-    $('.submit-btn').addClass('show').removeClass('hide');
-    $(".submit-btn").css('font-size','14px');
-    $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
-    $("#mobile_image_label").addClass('hide').removeClass('show');    
-    $("#mobile_remove").addClass('hide').removeClass('show');
-    $("#mobile_submit").addClass('hide').removeClass('show');
-  }
+  $(".product-list").css("padding-top","0px");
+  $(".pr-item-left").addClass('next-page-left');
+  $('.pr-item-right').removeClass('flex-1');
+  $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
+  $('.up-more').addClass('show').removeClass('hide');
+  $('.remove-btn').addClass('show').removeClass('hide');
+  $('.submit-btn').addClass('show').removeClass('hide');
+  $(".submit-btn").css('font-size','14px');
+  $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
 };
 
 function loadVideo(product_size){
@@ -211,6 +203,10 @@ function loadVideo(product_size){
       video.className = 'video-attributes';
       var uploaded_video = document.getElementById('preview_video');
       uploaded_video.appendChild(video);
+      imgp = document.createElement("IMG")
+      imgp.src = document.getElementById('image_cross').src
+      imgp.className = "cross-single"
+      uploaded_video.appendChild(imgp);
     }
     document.getElementById("image_file").disabled = true;
     $('.up-images').addClass('hide').removeClass('show');
@@ -220,19 +216,13 @@ function loadVideo(product_size){
     $("#preview_video").addClass('preview-video-style');
     if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
     {
-      $("#mobile_video_label").addClass('show').removeClass('hide');
-      $("#mobile_submit").addClass('show').removeClass('hide');
       $(".right-border").addClass('hide').removeClass('show');
+      $(".pr-item-right").addClass('btn-padding-top');
     }
-    else
-    {
-      $(".product-list").css("padding-top","45px")
-      $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
-      $('.remove-btn').addClass('hide').removeClass('show');
-      $('.submit-btn').addClass('show').removeClass('hide');
-      $("#mobile_video_label").addClass('hide').removeClass('show');
-      $("#mobile_submit").addClass('hide').removeClass('show');
-    }
+    $(".product-list").css("padding-top","45px")
+    $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
+    $('.remove-btn').addClass('hide').removeClass('show');
+    $('.submit-btn').addClass('show').removeClass('hide');
  }
  function info_checkbox(parent_product_id, product_id, order_no, product_no){
   checkbox_value = $("#prev_checkbox").is(':checked')
@@ -242,7 +232,7 @@ function loadVideo(product_size){
   }
   $.ajax({
     method: "GET",
-    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
+    url: "https://00c5-202-166-171-14.ngrok.io/orders/preview_files",
     data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no},
     dataType: "json",
     success: function(response){
@@ -307,26 +297,18 @@ function loadVideo(product_size){
         $('.gallery-right').addClass('show').removeClass('hide');
         if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
         {
-          $("#mobile_image_label").addClass('show').removeClass('hide');    
-          $("#mobile_remove").addClass('show').removeClass('hide');
-          $("#mobile_submit").addClass('show').removeClass('hide');
           $(".right-border").addClass('hide').removeClass('show')
+          $(".pr-item-right").addClass('btn-padding-top');
         }
-        else
-        {
-          $(".product-list").css("padding-top","0px");
-          $(".pr-item-left").addClass('next-page-left');
-          $('.pr-item-right').removeClass('flex-1');
-          $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
-          $('.up-more').addClass('show').removeClass('hide');
-          $('.remove-btn').addClass('show').removeClass('hide');
-          $('.submit-btn').addClass('show').removeClass('hide');
-          $(".submit-btn").css('font-size','14px');
-          $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
-          $("#mobile_image_label").addClass('hide').removeClass('show');    
-          $("#mobile_remove").addClass('hide').removeClass('show');
-          $("#mobile_submit").addClass('hide').removeClass('show');
-        }
+        $(".product-list").css("padding-top","0px");
+        $(".pr-item-left").addClass('next-page-left');
+        $('.pr-item-right').removeClass('flex-1');
+        $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
+        $('.up-more').addClass('show').removeClass('hide');
+        $('.remove-btn').addClass('show').removeClass('hide');
+        $('.submit-btn').addClass('show').removeClass('hide');
+        $(".submit-btn").css('font-size','14px');
+        $('.submit-btn.upload-btn').addClass('hide').removeClass('show');
       }
       else if (response.video_url != null)
       {
@@ -348,19 +330,13 @@ function loadVideo(product_size){
         $("#preview_video").addClass('preview-video-style');    
         if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
         {
-          $("#mobile_video_label").addClass('show').removeClass('hide');
-          $("#mobile_submit").addClass('show').removeClass('hide');
           $(".right-border").addClass('hide').removeClass('show')
+          $(".pr-item-right").addClass('btn-padding-top');
         }
-        else
-        {
-          $(".product-list").css("padding-top","45px")
-          $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
-          $('.remove-btn').addClass('hide').removeClass('show');
-          $('.submit-btn').addClass('show').removeClass('hide');
-          $("#mobile_video_label").addClass('hide').removeClass('show');
-          $("#mobile_submit").addClass('hide').removeClass('show');
-        }
+        $(".product-list").css("padding-top","45px")
+        $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
+        $('.remove-btn').addClass('hide').removeClass('show');
+        $('.submit-btn').addClass('show').removeClass('hide');
       }
       else if(response.error_message != null)
       {
@@ -392,6 +368,22 @@ function loadVideo(product_size){
     {
       formData.append('order[images][]', image_files[i])
     }
+  }
+  preview_length = document.getElementById('preview').getElementsByClassName('relative').length - 1
+  for(var i = 1; i < preview_length; i++)
+  {   
+    // setTimeout(function() {
+      // url = document.getElementById('preview').getElementsByClassName('relative')[i].getElementsByClassName('right-color-image')[0].src
+      // fetch(url)
+      //   .then((res) => res.blob())
+      //   .then((myBlob) => {
+      //     var myFile = new File([myBlob], 'image.jpeg', {type: myBlob.type});
+      //     formData.append('order[images][]', myFile)
+      //   });
+        // formData.append('order[images][]', url)
+
+        // debugger;
+    // }, 2000);
   }
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');

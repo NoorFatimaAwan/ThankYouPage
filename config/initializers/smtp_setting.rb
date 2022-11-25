@@ -7,5 +7,5 @@ Rails.application.config.action_mailer.delivery_method = :smtp
     domain: "gmail.com",
     authentication: "plain",
     user_name: "fnoor8004@gmail.com",
-    password: "loxuiyhmwizyllly"
+    password: "zkopbxdmngelrryx"
   }

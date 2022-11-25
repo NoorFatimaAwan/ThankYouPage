@@ -14,6 +14,7 @@ class SendReminderEmailJob < ApplicationJob
         }
       ]
     )
+    # ReminderMailer.new_reminder.deliver_now
     email = Klaviyo::EmailTemplates.send_template(
       'Y5tfPs',
       from_email: 'noor.fatima@phaedrasolutions.com',
