@@ -406,7 +406,7 @@ input[type=file]{
   .cross-single {
 	  position: absolute;
 	  right: 67px;
-    top: 96px;
+    top: 90px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -514,6 +514,7 @@ input[type=file]{
 		width: 100% !important;
 		height: 100% !important;
 		margin-bottom: 0px !important;
+		padding-top: 135px;
 	}
 	.icon-top-border.light-border {
 		border: none;
@@ -531,8 +532,12 @@ input[type=file]{
     top: 0;
 	}
 
-	.btn-padding-top{
+	.btn-rem-padding-top{
 		padding-top: 0;
+	}
+
+	.btn-add-padding-top{
+		padding-top: 70px;
 	}
 
 }
