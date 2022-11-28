@@ -22,7 +22,6 @@ $(document).ready(function () {
 
 var storedFiles = [];
 function handleFileSelect(e) {
-  debugger;
   var files = e.target.files;
   var filesArr = Array.prototype.slice.call(files);
   filesArr.forEach(function(f) {
@@ -86,7 +85,7 @@ var loadImages = function(event,product_size,image_type) {
     sum = sum + event.target.files[i].size;
     if(event.target.files[i].size > single_max_size )
     {
-      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
+      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200KB.";
       $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
       hide_notice('error');  
     }
@@ -270,7 +269,7 @@ function loadVideo(product_size){
   }
   $.ajax({
     method: "GET",
-    url: "https://acd5-103-152-101-235.ngrok.io/orders/preview_files",
+    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
     data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no},
     dataType: "json",
     success: function(response){
@@ -426,47 +425,28 @@ function loadVideo(product_size){
   });
  }
 
- function submit_form(user_email, order_no)
+ function submit_form(user_email, order_no,e)
  {
-  var form = $('#uploadForm')[0];
-  var formData = new FormData(form);
-  if (document.getElementById("more_image_file")!= undefined && document.getElementById("more_image_file").files.length != 0)
+  if (document.getElementById('image_file').files.length == 1 && document.getElementById('more_image_file').files.length == 1)
   {
-    image_files = document.getElementById("image_file").files;
-    total_file = image_files.length;
-    for(var i=0; i<total_file; i++)
-    {
-      formData.append('order[images][]', image_files[i])
+    e.preventDefault();
+    var form = $('#uploadForm')[0]
+    var formData = new FormData(form);
+    $("#uploadForm").serializeArray();
+    for(var i=0, len=(storedFiles.length - 1) ; i<len; i++) {
+      formData.append('order[images][]', storedFiles[i]); 
     }
-  }
-  preview_length = document.getElementById('preview').getElementsByClassName('relative').length - 1
-  for(var i = 1; i < preview_length; i++)
-  {   
-    // setTimeout(function() {
-      // url = document.getElementById('preview').getElementsByClassName('relative')[i].getElementsByClassName('right-color-image')[0].src
-      // fetch(url)
-      //   .then((res) => res.blob())
-      //   .then((myBlob) => {
-      //     var myFile = new File([myBlob], 'image.jpeg', {type: myBlob.type});
-      //     formData.append('order[images][]', myFile)
-      //   });
-        // formData.append('order[images][]', url)
-
-        // debugger;
-    // }, 2000);
-    debugger;
-    for(var i=0, len=storedFiles.length; i<len; i++) {
-      debugger;
-        formData.append('order[images][]', storedFiles[i]); 
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://mcacao.phaedrasolutions.com/orders', true);
+    
+    xhr.onload = function(e) {
+      if(this.status == 200) {
+        console.log(e.currentTarget.responseText);	
+        alert(e.currentTarget.responseText + ' items uploaded.');
+      }
     }
+    xhr.send(formData);
   }
-  $('.up-more').addClass('hide').removeClass('show');
-  $('.remove-btn').addClass('hide').removeClass('show');
-  $('.submit-btn').addClass('hide').removeClass('show');
-  $('.cross-single').addClass('hide').removeClass('show');
-  $(".cross").addClass('hide').removeClass('show')
-  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
-  $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
   $.ajax({
     method: "GET",
     url: "https://mcacao.phaedrasolutions.com/orders/send_email",
@@ -479,6 +459,13 @@ function loadVideo(product_size){
       console.log('error');
     }
   });
+  $('.up-more').addClass('hide').removeClass('show');
+  $('.remove-btn').addClass('hide').removeClass('show');
+  $('.submit-btn').addClass('hide').removeClass('show');
+  $('.cross-single').addClass('hide').removeClass('show');
+  $(".cross").addClass('hide').removeClass('show')
+  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+  $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
  }
 
  
