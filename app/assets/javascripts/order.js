@@ -21,11 +21,13 @@ $(document).ready(function () {
 });
 
 var storedFiles = [];
+var more_images_count = 0;
 function handleFileSelect(e) {
   var files = e.target.files;
   var filesArr = Array.prototype.slice.call(files);
   filesArr.forEach(function(f) {
     storedFiles.push(f);
+    more_images_count += 1;
   });
 }
 
@@ -106,6 +108,10 @@ var loadImages = function(event,product_size,image_type) {
       var image = document.createElement('img');
       image.src = URL.createObjectURL(event.target.files[i]);
       image.id = "output" + i;
+      if (image_type == 'more_uploaded_images')
+      {
+        image.id = "output" + more_images_count;
+      }
       image.width = "54";
       image.height = "54";
       image.className = 'right-color-image'
@@ -117,23 +123,32 @@ var loadImages = function(event,product_size,image_type) {
       imgp.setAttribute("class", "cross")
       deleteImg.appendChild(imgp)
       deleteImg.onclick = function() {
-        index = this.parentNode.id.replace('rowdiv','');
-        index = Number(index);
-        const dt = new DataTransfer()
-        var input = document.getElementById('image_file');
-        if (image_type == 'more_uploaded_images')
+        if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
         {
-          input = document.getElementById('more_image_file')
+          index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
+          index = Number(index);
+          storedFiles.splice(index, 1)
         }
-        const { files } = input
-        for (let j = 0; j < files.length; j++) {
-          const file = files[j]
-          if (index !== j)
+        else
+        {
+          index = this.parentNode.id.replace('rowdiv','');
+          index = Number(index);
+          const dt = new DataTransfer()
+          var input = document.getElementById('image_file');
+          if (image_type == 'more_uploaded_images')
           {
-            dt.items.add(file)
+            input = document.getElementById('more_image_file')
           }
+          const { files } = input
+          for (let j = 0; j < files.length; j++) {
+            const file = files[j]
+            if (index !== j)
+            {
+              dt.items.add(file)
+            }
+          }
+          input.files = dt.files
         }
-        input.files = dt.files
         this.parentNode.remove() 
         if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
         {
@@ -427,7 +442,7 @@ function loadVideo(product_size){
 
  function submit_form(user_email, order_no,e)
  {
-  if (document.getElementById('image_file').files.length == 1 && document.getElementById('more_image_file').files.length == 1)
+  if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
   {
     e.preventDefault();
     var form = $('#uploadForm')[0]
