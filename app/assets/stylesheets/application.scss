@@ -144,7 +144,7 @@ input[type=file]{
 	position: absolute;
     top: 0;
 	pointer-events: none;
-	left: 7px;
+	left: 18px;
 }
 .img-inner .inner-icon {
 	width: 20px !important;
@@ -481,6 +481,7 @@ input[type=file]{
 		height: 100%;
     align-items: center;
 		zoom: inherit !important;
+		left: 7px !important;
 	}
 	.image-cal-text {
 		margin-bottom: 0;
@@ -554,7 +555,7 @@ input[type=file]{
 	}
 	.img-inner {
 		zoom: .65;
-		left: 5px;
+		left: 18px;
 	}
 	.custom-check {
 		position: inherit;
