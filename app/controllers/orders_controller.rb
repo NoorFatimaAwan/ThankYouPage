@@ -123,6 +123,11 @@ class OrdersController < ApplicationController
     end  
   end
 
+  def send_email
+    if params[:order_no].to_i != Order.last.order_no
+      SendReminderEmailJob.perform_later(params[:user_email])
+    end
+  end
 
   private
 

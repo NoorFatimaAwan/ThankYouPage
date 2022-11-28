@@ -5,25 +5,8 @@ class SendReminderEmailJob < ApplicationJob
   require 'openssl'
   
 
-  def perform(*arg)
-    list = Klaviyo::Lists.add_to_list(
-    'Y5VZPP',
-      profiles: [
-        {
-          email: 'noor.fatima@phaedrasolutions.com'
-        }
-      ]
-    )
-    # ReminderMailer.new_reminder.deliver_now
-    email = Klaviyo::EmailTemplates.send_template(
-      'Y5tfPs',
-      from_email: 'noor.fatima@phaedrasolutions.com',
-      from_name: 'Phaedra Solutions',
-      subject: 'Reminder Email',
-      to: 'fnoor8004@gmail.com',
-      context: {
-        name: 'Noor'
-      }
-    )
+  def perform(user_email)
+    ReminderMailer.new_reminder(user_email).deliver_now
   end
+
 end

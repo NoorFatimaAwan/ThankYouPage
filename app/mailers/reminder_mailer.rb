@@ -1,6 +1,6 @@
 class ReminderMailer < ApplicationMailer
 
-  def new_reminder
-    mail to: "fnoor8004@gmail.com", subject: "Reminder Email"
+  def new_reminder(user_email)
+    mail to: user_email, subject: "Reminder Email"
   end
 end
