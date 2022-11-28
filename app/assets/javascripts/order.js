@@ -17,8 +17,18 @@ $(document).ready(function () {
     }
   } 
   $("#preview_video").addClass('show').removeClass('hide');
+  document.querySelector('#more_image_file').addEventListener('change', handleFileSelect, false);
 });
 
+var storedFiles = [];
+function handleFileSelect(e) {
+  debugger;
+  var files = e.target.files;
+  var filesArr = Array.prototype.slice.call(files);
+  filesArr.forEach(function(f) {
+    storedFiles.push(f);
+  });
+}
 
 var loadImages = function(event,product_size,image_type) {
   var total_file = 0;
@@ -260,7 +270,7 @@ function loadVideo(product_size){
   }
   $.ajax({
     method: "GET",
-    url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
+    url: "https://acd5-103-152-101-235.ngrok.io/orders/preview_files",
     data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no},
     dataType: "json",
     success: function(response){
@@ -444,6 +454,11 @@ function loadVideo(product_size){
 
         // debugger;
     // }, 2000);
+    debugger;
+    for(var i=0, len=storedFiles.length; i<len; i++) {
+      debugger;
+        formData.append('order[images][]', storedFiles[i]); 
+    }
   }
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');
