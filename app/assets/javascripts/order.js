@@ -442,7 +442,6 @@ function loadVideo(product_size){
 
  function submit_form(e,order_no,user_email)
  {
-  
   if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
   {
     e.preventDefault();
@@ -463,7 +462,7 @@ function loadVideo(product_size){
     }
     xhr.send(formData);
   }
-  if (user_email != undefined)
+  if (user_email != '')
   {
     $.ajax({
       method: "GET",

@@ -6,4 +6,8 @@ module OrderHelper
       return 4
     end
   end
+
+  def user_email(email)
+    email.to_s
+  end
 end
