@@ -440,8 +440,9 @@ function loadVideo(product_size){
   });
  }
 
- function submit_form(user_email, order_no,e)
+ function submit_form(e,order_no,user_email)
  {
+  
   if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
   {
     e.preventDefault();
@@ -462,18 +463,21 @@ function loadVideo(product_size){
     }
     xhr.send(formData);
   }
-  $.ajax({
-    method: "GET",
-    url: "https://mcacao.phaedrasolutions.com/orders/send_email",
-    data: {user_email: user_email, order_no: order_no},
-    dataType: "json",
-    success: function(response){
-    },
-    error: function(response)
-    {
-      console.log('error');
-    }
-  });
+  if (user_email != undefined)
+  {
+    $.ajax({
+      method: "GET",
+      url: "https://mcacao.phaedrasolutions.com/orders/send_email",
+      data: {user_email: user_email, order_no: order_no},
+      dataType: "json",
+      success: function(response){
+      },
+      error: function(response)
+      {
+        console.log('error');
+      }
+    });
+  }
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');
   $('.submit-btn').addClass('hide').removeClass('show');

@@ -13,6 +13,7 @@ class OrdersController < ApplicationController
     @product_image_url = params[:product_image_url]
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_no] == "0" ? params[:product_title] == params[:first_product_title] ? false : true : true
+    @user_email = params[:user_email].present? ? params[:user_email] : nil
   end
 
   def create
