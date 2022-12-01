@@ -21,8 +21,8 @@ if (!document.documentElement.hasAttribute("data-turbolinks-preview")) {
         }).dispatch(Toast.Action.SHOW);
       }      
     }
-    catch {
-      
+    catch(err){
+
     }
 
   });  

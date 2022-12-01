@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
       title: data.page,
     });    
   }
-  catch {
-    
+  catch(err) {
+
   }
 
 });
