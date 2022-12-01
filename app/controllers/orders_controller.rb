@@ -21,7 +21,7 @@ class OrdersController < ApplicationController
     params[:order][:images].present? ? params[:order][:file_type] = 'image' : params[:order][:file_type] = 'video' 
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
-      @parent_product =  Order.where("product_id= ? and order_no = ?", params[:order][:product_id],params[:order][:order_no]&.to_i)
+      @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
       @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
@@ -49,7 +49,7 @@ class OrdersController < ApplicationController
   end
 
   def should_show
-    render json: {show: params[:product_title].include?('expressio')}
+    render (json: params[:product_title].include?('expressio'))
   end
 
   def show
