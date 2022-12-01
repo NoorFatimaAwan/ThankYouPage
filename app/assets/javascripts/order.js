@@ -1,4 +1,3 @@
-
 var host_url = "https://mcacao.phaedrasolutions.com"
 var storedFiles = [];
 var more_images_count = 0;
