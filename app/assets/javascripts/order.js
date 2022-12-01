@@ -264,7 +264,7 @@ function loadVideo(product_size){
     $('.remove-btn').addClass('hide').removeClass('show');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
- function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title){
+ function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length){
   checkbox_value = $("#prev_checkbox").is(':checked')
   if (checkbox_value == false && $("#alert_message").hasClass('alert-danger'))
   {
@@ -273,7 +273,7 @@ function loadVideo(product_size){
   $.ajax({
     method: "GET",
     url: `${host_url}/orders/preview_files`,
-    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title},
+    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title,product_length: product_length},
     dataType: "json",
     success: function(response){
       var myList = new Array();

@@ -33,21 +33,22 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
                   }
                   body.setAttribute("style","position: relative;;min-height: 330px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px; border-bottom: 0;" ) 
                   container.setAttribute("type", "text/html")
-                  length = Shopify.checkout.line_items.length + Shopify.checkout.line_items[x].quantity
+                  length = Shopify.checkout.line_items[x].quantity
                    const loadState = document.createElement("div")
                    loadState.setAttribute("style",'display:flex;position:absolute;z-index:9999;top:0;bottom:0;right:0;left:0;background-color: #fffc;')
                    loadState.innerHTML += loadingSpinner;
                    body.append(loadState);
                    body.style.display = "block"
-                  if (Shopify.checkout.line_items[step] != undefined)
-                  {
-                    parent_product_id = Shopify.checkout.line_items[step].product_id
-                  }
-                  else
-                  {
-                    parent_product_id = Shopify.checkout.line_items[x].product_id
-                  }
-                  options = `first_product_title=${Shopify.checkout.line_items[0].title}&product_no=${step}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}&user_email=${Shopify.checkout.email}&variant_title=${Shopify.checkout.line_items[x].variant_title}`
+                   if (x == 0)
+                   {
+                    index = 0
+                   }
+                   else
+                   {
+                    index = x-1
+                   }
+                  parent_product_id = Shopify.checkout.line_items[index].variant_id
+                  options = `first_product_title=${Shopify.checkout.line_items[0].title}&product_no=${step}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].variant_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}&user_email=${Shopify.checkout.email}&variant_title=${Shopify.checkout.line_items[x].variant_title}`
                   container.onload  = function() {
                      setTimeout(() => {
                       container.contentWindow.postMessage('message',host_url);

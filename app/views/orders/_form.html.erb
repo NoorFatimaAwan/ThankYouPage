@@ -18,6 +18,7 @@
         <th  scope="col">Title</th>
         <th  scope="col">Asset Type</th>
         <th  scope="col">Asset</th>
+        <th  scope="col">Email Status</th>
         <th  scope="col" class="text-center">Action</th>
       </tr>
     </thead>
@@ -34,6 +35,7 @@
           <% else %>
             <td> No Assets </td>
           <% end %>
+          <td> <%= Order.where("order_no = ?", order.order_no).first.email_status %> </td>
           <td class="text-center">
             <%= link_to "Show Details", order_path(order.id), class: "link-tag" %>    
           </td>

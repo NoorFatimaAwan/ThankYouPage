@@ -64,6 +64,7 @@ class OrdersController < ApplicationController
     @images = @order.images if @order.images.attached?
     @video = @order.video if @order.video.attached?
     @product_title = @order.product_title
+    @variant_title = @order.variant_title
     @order_no = "Order #" + @order.order_no.to_s
   end
 
@@ -72,7 +73,13 @@ class OrdersController < ApplicationController
       image_urls = []
       @order = Order.last
       parent_product_no = (params[:product_no].to_i - 1)
-      @parent_product_order = parent_product_no >= 0 ? Order.where("product_id= ? and order_no = ? and product_no = ?",  params[:parent_product_id],params[:order_no],parent_product_no).last : Order.where("product_id= ? and order_no = ?",  params[:parent_product_id],params[:order_no]).last
+      if parent_product_no < 0
+        @parent_product_order = Order.where("product_title = ? and order_no = ? and product_no = ?", params[:first_product_title],params[:order_no],((params[:product_length].to_i) - 1)).last
+      elsif params[:product_title] == params[:first_product_title]
+        @parent_product_order = Order.where("product_id= ? and order_no = ? and product_no = ?",  params[:parent_product_id],params[:order_no],parent_product_no).last 
+      elsif params[:product_title] != params[:first_product_title] &&  params[:product_no].to_i == (params[:product_length].to_i) - 1
+        @parent_product_order = @order 
+      end
       if @parent_product_order == @order
         @order.images.each do |image|
           image_urls << url_for(image)
@@ -136,7 +143,7 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no, :video, images: [])
+    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no,:email_status,:variant_title, :video, images: [])
   end
 
 end
