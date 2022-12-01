@@ -49,7 +49,7 @@ class OrdersController < ApplicationController
   end
 
   def should_show
-    render (json: params[:product_title].include?('expressio'))
+    render json: {show: params[:product_title].include?('expressio')}
   end
 
   def show

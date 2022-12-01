@@ -13,7 +13,6 @@
     {mode: 'no-cors'})
           .then(response => response)
           .then(data => {
-            debugger
             if (true)
             {
               let body = document.createElement("body")
