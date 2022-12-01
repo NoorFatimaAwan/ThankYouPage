@@ -48,8 +48,13 @@ class OrdersController < ApplicationController
     raise Errors::Invalid.new(@order.errors)
   end
 
-  def should_show
-    render json: {show: params[:product_title].include?('expressio')}
+  def should_show    
+    product_title_array = []
+    (0...params[:product_amount].to_i).each do |index|
+      product_title_array.push(params[:product_title]["#{index}"][:title].include? 'expressio')
+    end
+    @product_required = product_title_array.include?(false) ? false : true
+    render json: @product_required ,:callback => params[:callback]
   end
 
   def show

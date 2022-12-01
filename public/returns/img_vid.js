@@ -5,12 +5,13 @@
 
   var loadPlugin = function() {
     const variant_titles = []
+    const substring = 'expressio'
     for(let x = 0; x < Shopify.checkout.line_items.length; x++){
-      variant_titles.push(Shopify.checkout.line_items[x].title)
+      variant_titles.push((Shopify.checkout.line_items[x].title).includes(substring))
     }
-    options = `product_title=${variant_titles.join('|')}&product_amount=${Shopify.checkout.line_items.length}`;
-    fetch(`https://mcacao.phaedrasolutions.com/orders/should_show?${options}`, 
-    {mode: 'no-cors'})
+    if (variant_titles.every(Boolean))
+    {
+      fetch("",{mode: "no-cors"})
           .then(response => response)
           .then(data => {
             if (true)
@@ -50,8 +51,10 @@
             }
     
       });
-  }
+    }
 
+
+  }
 
   loadPlugin();
 })();

@@ -20,7 +20,7 @@ function handleFileSelect(e) {
   if (product_size == 6)
   {
     max_size = 512 * 1024 * 1024;
-    single_max_size = 270 * 1024; 
+    single_max_size = 200 * 1024 * 1024; 
     if(document.getElementById("image_file").files.length > 1896 || total_images > 1896)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 1896.";
@@ -32,7 +32,7 @@ function handleFileSelect(e) {
   else
   {
     max_size = 128 * 1024 * 1024;
-    single_max_size = 200 * 1024;
+    single_max_size = 100 * 1024 * 1024;
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
@@ -66,9 +66,18 @@ function handleFileSelect(e) {
     sum = sum + event.target.files[i].size;
     if(event.target.files[i].size > single_max_size )
     {
-      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200KB.";
-      $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-      hide_notice('error');  
+      if (product_size == 4)
+      {
+        document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 100MB.";
+        $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+        hide_notice('error');  
+      }
+      else
+      {
+        document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
+        $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+        hide_notice('error');  
+      }
     }
     else if (sum > max_size)
     {
