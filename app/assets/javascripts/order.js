@@ -1,24 +1,3 @@
-$(document).ready(function () {
-  if (!($('#img_tab').hasClass('up-images')))
-  {
-    if (document.getElementById('prev_checkbox') != null)
-    {
-      document.getElementById('prev_checkbox').remove();
-      $('.contain').text("");
-    }
-    $(".product-list").css("padding-top","0px");
-    if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
-    {
-      $(".pr-item-left").removeClass('next-page-left')
-    }
-    else
-    {
-      $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
-    }
-  } 
-  $("#preview_video").addClass('show').removeClass('hide');
-  document.querySelector('#more_image_file').addEventListener('change', handleFileSelect, false);
-});
 
 var storedFiles = [];
 var more_images_count = 0;
@@ -31,7 +10,7 @@ function handleFileSelect(e) {
   });
 }
 
-var loadImages = function(event,product_size,image_type) {
+ function loadImages(event,product_size,image_type) {
   var total_file = 0;
   var max_size = 0;
   var single_max_size = 0;
@@ -276,7 +255,7 @@ function loadVideo(product_size){
     $('.remove-btn').addClass('hide').removeClass('show');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
- function info_checkbox(parent_product_id, product_id, order_no, product_no){
+ function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title){
   checkbox_value = $("#prev_checkbox").is(':checked')
   if (checkbox_value == false && $("#alert_message").hasClass('alert-danger'))
   {
@@ -285,7 +264,7 @@ function loadVideo(product_size){
   $.ajax({
     method: "GET",
     url: "https://mcacao.phaedrasolutions.com/orders/preview_files",
-    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no},
+    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title},
     dataType: "json",
     success: function(response){
       var myList = new Array();

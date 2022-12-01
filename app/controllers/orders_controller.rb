@@ -14,13 +14,14 @@ class OrdersController < ApplicationController
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_no] == "0" ? params[:product_title] == params[:first_product_title] ? false : true : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
+    render layout: false
   end
 
   def create
     params[:order][:images].present? ? params[:order][:file_type] = 'image' : params[:order][:file_type] = 'video' 
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
-      @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
+      @parent_product =  Order.where("product_id= ? and order_no = ?", params[:order][:product_id],params[:order][:order_no]&.to_i)
       @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
@@ -48,12 +49,7 @@ class OrdersController < ApplicationController
   end
 
   def should_show
-    product_title_array = []
-    (0...params[:product_amount].to_i).each do |index|
-      product_title_array.push(params[:product_title]["#{index}"][:title].include? 'expressio')
-    end
-    @product_required = product_title_array.include?(false) ? false : true
-    render json: @product_required ,:callback => params[:callback]
+    render json: {show: params[:product_title].include?('expressio')}
   end
 
   def show
