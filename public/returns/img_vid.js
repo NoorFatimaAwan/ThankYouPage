@@ -43,7 +43,7 @@
                   {
                     parent_product_id = Shopify.checkout.line_items[x].product_id
                   }
-                  options = `first_product_title=${Shopify.checkout.line_items[0].title}&product_no=${step}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}&user_email=${Shopify.checkout.email}`
+                  options = `first_product_title=${Shopify.checkout.line_items[0].title}&product_no=${step}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&product_length=${length}&domain=${Shopify.shop}&parent_product_id=${parent_product_id}&product_id=${Shopify.checkout.line_items[x].product_id}&product_title=${Shopify.checkout.line_items[x].title}&product_image_url=${Shopify.checkout.line_items[x].image_url}&user_email=${Shopify.checkout.email}&variant_title=${Shopify.checkout.line_items[x].variant_title}`
                   container.setAttribute("data", `https://mcacao.phaedrasolutions.com/orders/new?${options}`)
                   document.getElementsByClassName("section")[0].after(body)  
                 }   

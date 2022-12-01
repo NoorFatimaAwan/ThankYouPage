@@ -30,7 +30,7 @@
               </div>
               <div>
                 <h4 class="product-name"><%= @product_title %></h4>
-                <h6 class="product-detail"><%= params[:variant_title] %></h6>
+                <h6 class="product-detail"><%= @variant_title %></h6>
               </div>
             </div>
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>

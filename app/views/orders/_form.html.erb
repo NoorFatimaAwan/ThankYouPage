@@ -24,13 +24,15 @@
     <tbody>
       <% orders.each do |order| %>
         <tr>
-          <th scope="row"><%= order.order_no %></th>
+          <th scope="row"><%= order.order_no.to_s + "-" +(order.product_no + 1).to_s %></th>
           <td> <%= order.product_title %> </td>
           <td> <%= order.file_type %> </td>
           <% if order.images.attached? %>
             <td class="product-img"><%= image_tag(order.images.first.blob, size: "100x100")%></td>
           <% elsif order.video.attached? %>
             <td class="product-img"><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+          <% else %>
+            <td> No Assets </td>
           <% end %>
           <td class="text-center">
             <%= link_to "Show Details", order_path(order.id), class: "link-tag" %>    

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  # protect_from_forgery  except: :should_show
+  # protect_from_forgery  except: :create
   after_action :allow_shopify_iframe
   # before_action :cors_set_access_control_headers
   include Rails.application.routes.url_helpers

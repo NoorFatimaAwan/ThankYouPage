@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   require('zip')
+  skip_before_action :verify_authenticity_token
 
   def index
     @q = Order.ransack(params[:q])
@@ -10,6 +11,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @shop_id = Shop.find_by(shopify_domain: params[:domain])&.id
     @product_title = params[:product_title]
+    @variant_title = params[:variant_title]
     @product_image_url = params[:product_image_url]
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_no] == "0" ? params[:product_title] == params[:first_product_title] ? false : true : true
