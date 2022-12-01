@@ -9,7 +9,7 @@
       variant_titles.push(Shopify.checkout.line_items[x].title)
     }
     options = `product_title=${variant_titles.join('|')}&product_amount=${Shopify.checkout.line_items.length}`;
-    fetch(`https://mcacao.phaedrasolutions.com/order_status_page/should_show?${options}`, 
+    fetch(`https://mcacao.phaedrasolutions.com/orders/should_show?${options}`, 
     {mode: 'no-cors'})
           .then(response => response)
           .then(data => {
