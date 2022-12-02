@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @shop_id = Shop.find_by(shopify_domain: params[:domain])&.id
     @product_title = params[:product_title]
-    @variant_title = params[:variant_title] if params[:variant_title].present?
+    @variant_title = params[:variant_title] if params[:variant_title].present? && params[:variant_title] != "null"
     @product_image_url = params[:product_image_url]
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_no] == "0" ? params[:variant_title] == params[:first_variant_title] ? false : true : true
