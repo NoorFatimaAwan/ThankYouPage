@@ -64,29 +64,21 @@ function handleFileSelect(e) {
   for(var i = 0; i < total_file; i++)
   {
     sum = sum + event.target.files[i].size;
-    if(event.target.files[i].size > single_max_size )
+    if (event.target.files[i].name.includes('.svg'))
     {
       if(image_type == 'uploaded_images' && i == 0 )
       {
-        $('.up-images').addClass('show').removeClass('hide');
-        $('.up-more').addClass('hide').removeClass('show');
-        $('.remove-btn').addClass('hide').removeClass('show');
-        $('.submit-btn').addClass('hide').removeClass('show');
-        $("#preview_video").addClass('hide').removeClass('show');
-        document.getElementById("video_file").disabled = false;
-        $('.gallery-right').addClass('hide').removeClass('show');
-        $('.custom-check').removeClass('hide');
-        $("#prev_checkbox").prop("checked", false);
-        if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
-        {
-          $(".pr-item-right").addClass('btn-add-padding-top').removeClass('btn-rem-padding-top');
-        }
-        else
-        {
-          $(".product-list").css("padding-top","50px");
-        }
-        $(".pr-item-left").addClass('border-padding').removeClass('next-page-left');
-        $(".right-border").addClass('show').removeClass('hide');
+        main_tabs();
+      }
+      document.getElementById("alert_message").innerHTML = event.target.files[i].name +" svg format images are not allowed";
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+      hide_notice('error');  
+    }
+    else if(event.target.files[i].size > single_max_size )
+    {
+      if(image_type == 'uploaded_images' && i == 0 )
+      {
+        main_tabs();
       }
       if (product_size == 4)
       {
@@ -162,25 +154,7 @@ function handleFileSelect(e) {
         this.parentNode.remove() 
         if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
         {
-          $('.up-images').addClass('show').removeClass('hide');
-          $('.up-more').addClass('hide').removeClass('show');
-          $('.remove-btn').addClass('hide').removeClass('show');
-          $('.submit-btn').addClass('hide').removeClass('show');
-          $("#preview_video").addClass('hide').removeClass('show');
-          document.getElementById("video_file").disabled = false;
-          $('.gallery-right').addClass('hide').removeClass('show');
-          $('.custom-check').removeClass('hide');
-          $("#prev_checkbox").prop("checked", false);
-          if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
-          {
-            $(".pr-item-right").addClass('btn-add-padding-top').removeClass('btn-rem-padding-top');
-          }
-          else
-          {
-            $(".product-list").css("padding-top","50px");
-          }
-          $(".pr-item-left").addClass('border-padding').removeClass('next-page-left');
-          $(".right-border").addClass('show').removeClass('hide');
+          main_tabs();
         }
       };
       divElm.appendChild(spanElm);
@@ -509,3 +483,26 @@ function hide_notice(type)
     }, 2000);
   }
 }
+
+ function main_tabs()
+ {
+  $('.up-images').addClass('show').removeClass('hide');
+  $('.up-more').addClass('hide').removeClass('show');
+  $('.remove-btn').addClass('hide').removeClass('show');
+  $('.submit-btn').addClass('hide').removeClass('show');
+  $("#preview_video").addClass('hide').removeClass('show');
+  document.getElementById("video_file").disabled = false;
+  $('.gallery-right').addClass('hide').removeClass('show');
+  $('.custom-check').removeClass('hide');
+  $("#prev_checkbox").prop("checked", false);
+  if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
+  {
+    $(".pr-item-right").addClass('btn-add-padding-top').removeClass('btn-rem-padding-top');
+  }
+  else
+  {
+    $(".product-list").css("padding-top","50px");
+  }
+  $(".pr-item-left").addClass('border-padding').removeClass('next-page-left');
+  $(".right-border").addClass('show').removeClass('hide');
+ }

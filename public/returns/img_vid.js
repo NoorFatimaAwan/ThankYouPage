@@ -25,13 +25,13 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
                   container.setAttribute("id","thank_you_container")    
                   if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
                   {
-                    container.setAttribute("style","width: 100%;min-height: 476px; border-bottom:1px solid #7a5e4679;");
+                    container.setAttribute("style","width: 100%;min-height: 409px; border-bottom:1px solid #7a5e4679;overflow:hidden;");
                   }
                   else
                   {
-                    container.setAttribute("style","width: 100%;min-height: 330px; border-bottom:1px solid #7a5e4679;");
+                    container.setAttribute("style","width: 100%;min-height: 220px; border-bottom:1px solid #7a5e4679;overflow:hidden;");
                   }
-                  body.setAttribute("style","position: relative;;min-height: 330px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px; border-bottom: 0;" ) 
+                  body.setAttribute("style","position: relative;min-height: 150px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px; border-bottom: 0;overflow:hidden;" ) 
                   container.setAttribute("type", "text/html")
                   length = Shopify.checkout.line_items[x].quantity
                    const loadState = document.createElement("div")
