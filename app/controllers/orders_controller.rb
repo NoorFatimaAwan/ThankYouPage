@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
     @variant_title = params[:variant_title] if params[:variant_title].present? && params[:variant_title] != "null"
     @product_image_url = params[:product_image_url]
     @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
-    @first_product = params[:product_no] == "0" ? params[:variant_title] == params[:first_variant_title] ? false : true : true
+    @first_product = params[:product_index].to_i == 1 ? false : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
     render layout: false
   end
