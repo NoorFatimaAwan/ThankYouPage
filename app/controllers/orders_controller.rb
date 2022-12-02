@@ -73,12 +73,10 @@ class OrdersController < ApplicationController
       image_urls = []
       @order = Order.last
       parent_product_no = (params[:product_no].to_i - 1)
-      if parent_product_no < 0
-        @parent_product_order = Order.where("product_title = ? and order_no = ? and product_no = ?", params[:first_product_title],params[:order_no],((params[:product_length].to_i) - 1)).last
-      elsif params[:product_title] == params[:first_product_title]
-        @parent_product_order = Order.where("product_id= ? and order_no = ? and product_no = ?",  params[:parent_product_id],params[:order_no],parent_product_no).last 
-      elsif params[:product_title] != params[:first_product_title] &&  params[:product_no].to_i == (params[:product_length].to_i) - 1
-        @parent_product_order = @order 
+      if params[:product_no].to_i <= 0
+        @parent_product_order = Order.where("order_no = ? and product_no = ? and product_id = ?", params[:order_no],((params[:product_length].to_i) - 1),params[:parent_product_id]).last
+      elsif params[:product_no].to_i > 0
+        @parent_product_order = Order.where("order_no = ? and variant_title = ? and product_no = ?",params[:order_no], params[:variant_title],parent_product_no).last
       end
       if @parent_product_order == @order
         @order.images.each do |image|

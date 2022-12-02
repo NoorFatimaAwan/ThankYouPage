@@ -264,7 +264,7 @@ function loadVideo(product_size){
     $('.remove-btn').addClass('hide').removeClass('show');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
- function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length){
+ function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title){
   checkbox_value = $("#prev_checkbox").is(':checked')
   if (checkbox_value == false && $("#alert_message").hasClass('alert-danger'))
   {
@@ -273,7 +273,7 @@ function loadVideo(product_size){
   $.ajax({
     method: "GET",
     url: `${host_url}/orders/preview_files`,
-    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title,product_length: product_length},
+    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title,product_length: product_length,variant_title: variant_title},
     dataType: "json",
     success: function(response){
       var myList = new Array();
@@ -412,6 +412,7 @@ function loadVideo(product_size){
       }
       else if(response.error_message != null)
       {
+        document.getElementById("prev_checkbox").checked = false;
         document.getElementById("alert_message").innerHTML = response.error_message;
         $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
         hide_notice('error');
@@ -471,7 +472,7 @@ function loadVideo(product_size){
   $('.cross-single').addClass('hide').removeClass('show');
   $(".cross").addClass('hide').removeClass('show')
   document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
-  $("#alert_message").addClass('alert alert-success').removeClass('alert-danger');
+  $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
  }
 
  
