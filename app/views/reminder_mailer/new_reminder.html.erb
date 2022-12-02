@@ -1,3 +1,16 @@
-<p>
-  "Thanks for your video box purchase….for privacy purposes, your images/video is being deleted in two days. Nothing personal..lol..we just wanted you to know.”
-</p>
+<div style="background-color: #cccccc5e;padding: 100px;">
+  <div style="max-width: 700px;margin: 0 auto;background: white;padding: 20px;">
+    <div> 
+      <%= "Order# " + @order_no.to_s %>
+      <p style="font-size: 18px;"><%= "Hi " + @user_name %></p>
+      <p style="max-width: 500px;margin: 0 auto;font-size: 18px;color: black;">
+        Thanks for your video box purchase….for privacy purposes, your images/video is being deleted in two days. Nothing personal..lol..we just wanted you to know.
+      </p>
+    <div>
+      <div style="text-align: center;padding: 20px 0;">
+        <% if @product_image_url.present? %>
+          <%= image_tag(@product_image_url, style: "width: 200px;height: 200px;")%>
+        <% end %>
+      </div>
+  </div>
+</div>
