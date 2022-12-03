@@ -32,7 +32,7 @@ function handleFileSelect(e) {
   else
   {
     max_size = 128 * 1024 * 1024;
-    single_max_size = 100 * 1024 * 1024;
+    single_max_size = 200 * 1024;
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
