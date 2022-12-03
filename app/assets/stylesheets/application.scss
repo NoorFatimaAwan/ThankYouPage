@@ -894,3 +894,15 @@ hr{
 .pagination {
 	justify-content: center;
 }
+
+#loader {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 215px;
+  right: 0;
+  bottom: 0;
+  width: 50px;
+  background: rgba(0,0,0,0.75) no-repeat center center;
+  z-index: 10000;
+}

@@ -32,7 +32,7 @@ function handleFileSelect(e) {
   else
   {
     max_size = 128 * 1024 * 1024;
-    single_max_size = 200 * 1024;
+    single_max_size = 100 * 1024 * 1024;
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
@@ -125,7 +125,7 @@ function handleFileSelect(e) {
       imgp.setAttribute("class", "cross")
       deleteImg.appendChild(imgp)
       deleteImg.onclick = function() {
-        if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
+        if (storedFiles.length == 1 && document.getElementById("more_image_file").files.length == 1)
         {
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
           index = Number(index);
@@ -427,26 +427,47 @@ function loadVideo(product_size){
 
  function submit_form(e,order_no,user_email,product_image_url,user_name)
  {
-  if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
+  var spinner = $('#loader');
+  spinner.show();
+  e.preventDefault();
+  var form = $('#uploadForm')[0]
+  var formData = new FormData(form);
+  length = document.getElementById("more_image_file").files.length
+  if (storedFiles.length != length)
   {
-    e.preventDefault();
-    var form = $('#uploadForm')[0]
-    var formData = new FormData(form);
-    $("#uploadForm").serializeArray();
     for(var i=0, len=(storedFiles.length - 1) ; i<len; i++) {
-      formData.append('order[images][]', storedFiles[i]); 
-    }
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', `${host_url}/orders`, true);
-    
-    xhr.onload = function(e) {
-      if(this.status == 200) {
-        console.log(e.currentTarget.responseText);	
-        alert(e.currentTarget.responseText + ' items uploaded.');
+      if (document.getElementById("more_image_file").files[i] == storedFiles[i + length])
+      {
+        storedFiles.splice((i+length), 1)
+        length--;
+        len--;
       }
-    }
-    xhr.send(formData);
+      formData.append('order[images][]', storedFiles[i]); 
+    }  
   }
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', `${host_url}/orders`, true);
+  
+  xhr.onload = function(e) {
+    spinner.hide();
+    if(this.status == 200) {
+      $('.up-more').addClass('hide').removeClass('show');
+      $('.remove-btn').addClass('hide').removeClass('show');
+      $('.submit-btn').addClass('hide').removeClass('show');
+      $('.cross-single').addClass('hide').removeClass('show');
+      $(".cross").addClass('hide').removeClass('show')
+      document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+      $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
+    }
+    else
+    {
+      main_tabs();
+      document.getElementById("image_file").disabled = false;
+      document.getElementById("alert_message").innerHTML = 'Order did not submit. Please try again';
+      $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
+    }
+  }
+  xhr.send(formData);
   if (user_email != '')
   {
     $.ajax({
@@ -462,13 +483,6 @@ function loadVideo(product_size){
       }
     });
   }
-  $('.up-more').addClass('hide').removeClass('show');
-  $('.remove-btn').addClass('hide').removeClass('show');
-  $('.submit-btn').addClass('hide').removeClass('show');
-  $('.cross-single').addClass('hide').removeClass('show');
-  $(".cross").addClass('hide').removeClass('show')
-  document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
-  $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
  }
 
  

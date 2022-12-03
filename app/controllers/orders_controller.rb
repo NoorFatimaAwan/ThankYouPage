@@ -23,7 +23,11 @@ class OrdersController < ApplicationController
     params[:order][:images].present? ? params[:order][:file_type] = 'image' : params[:order][:file_type] = 'video' 
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
-      @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
+      if params[:order][:product_no].to_i <= 0
+        @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
+      elsif params[:order][:product_no].to_i > 0 
+        @parent_product = Order.where("order_no = ? and variant_title = ? and product_no = ?",params[:order][:order_no], params[:order][:variant_title],((params[:order][:product_no].to_i) - 1))
+      end
       @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
@@ -46,6 +50,7 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
+    render json: {status: :ok}
     rescue ActiveRecord::RecordInvalid
     raise Errors::Invalid.new(@order.errors)
   end
