@@ -1,7 +1,7 @@
 var host_url = "https://mcacao.phaedrasolutions.com"
 var storedFiles = [];
-var deleted_upload_files = 0;
-var deleted_more_upload_files = 0;
+var deleted_upload_files = -1;
+var deleted_more_upload_files = -1;
 var image_blob_file = [];
 var info_deleted = false;
 var more_images_count = 0;
@@ -133,7 +133,7 @@ function handleFileSelect(e) {
         {
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
           index = Number(index);
-          if (index > deleted_more_upload_files )
+          if (deleted_more_upload_files >= 0 && index > deleted_more_upload_files )
           {
             index-=1;
           }
@@ -148,7 +148,7 @@ function handleFileSelect(e) {
           if (image_type == 'uploaded_images')
           {
             var input = document.getElementById('image_file');
-            if (index > deleted_upload_files )
+            if (deleted_upload_files >= 0 && index > deleted_upload_files )
             {
               index-=1;
             }
@@ -157,7 +157,7 @@ function handleFileSelect(e) {
           else if (image_type == 'more_uploaded_images')
           {
             input = document.getElementById('more_image_file')
-            if (index > deleted_more_upload_files )
+            if (deleted_more_upload_files >= 0 && index > deleted_more_upload_files )
             {
               index-=1;
             }
@@ -470,7 +470,7 @@ function loadVideo(product_size){
   length = document.getElementById("more_image_file").files.length
   if (storedFiles.length > length)
   {
-    for(var i=0, len=(storedFiles.length -1) ; i<len; i++) {
+    for(var i=0, len=(storedFiles.length ) ; i<len; i++) {
       if (document.getElementById("more_image_file").files[i] == storedFiles[i + (storedFiles.length - length) ])
       {
         storedFiles.splice((i + (storedFiles.length - length)), length)
