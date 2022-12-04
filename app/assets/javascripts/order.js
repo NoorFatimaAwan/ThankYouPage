@@ -450,7 +450,7 @@ function loadVideo(product_size){
       }
       else
       {
-        console.log('something is wrong');
+        console.log(response.generic_error);
       }   
       },
       error: function(response)

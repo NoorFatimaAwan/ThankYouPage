@@ -94,7 +94,7 @@ class OrdersController < ApplicationController
         error_message = 'Please submit the above files before checking check box.'
       end
     end
-    render json: {video_url: @video_url,image_blobs: image_blobs, image_urls: image_urls, error_message: error_message}
+    render json: {video_url: @video_url,image_blobs: image_blobs, image_urls: image_urls, error_message: error_message, generic_error: @parent_product_order&.errors&.messages}
   end
 
   def download_assets  
