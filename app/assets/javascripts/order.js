@@ -1,5 +1,9 @@
 var host_url = "https://mcacao.phaedrasolutions.com"
 var storedFiles = [];
+var deleted_upload_files = 0;
+var deleted_more_upload_files = 0;
+var image_blob_file = [];
+var info_deleted = false;
 var more_images_count = 0;
 function handleFileSelect(e) {
   var files = e.target.files;
@@ -19,8 +23,8 @@ function handleFileSelect(e) {
   total_images = document.getElementById("image_file").files.length + document.getElementById("more_image_file").files.length
   if (product_size == 6)
   {
-    max_size = 512 * 1024 * 1024;
-    single_max_size = 200 * 1024 * 1024; 
+    max_size = 512 * 1000 * 1000;
+    single_max_size = 200 * 1000 * 1000; 
     if(document.getElementById("image_file").files.length > 1896 || total_images > 1896)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 1896.";
@@ -31,8 +35,8 @@ function handleFileSelect(e) {
   }
   else
   {
-    max_size = 128 * 1024 * 1024;
-    single_max_size = 100 * 1024 * 1024;
+    max_size = 128 * 1000 * 1000;
+    single_max_size = 100 * 1000 * 1000;
     if(document.getElementById("image_file").files.length > 640 || total_images > 640)
     {
       document.getElementById("alert_message").innerHTML = "Total images cannot be greater than 640.";
@@ -125,21 +129,38 @@ function handleFileSelect(e) {
       imgp.setAttribute("class", "cross")
       deleteImg.appendChild(imgp)
       deleteImg.onclick = function() {
-        if (storedFiles.length == 1 && document.getElementById("more_image_file").files.length == 1)
+        if ((document.getElementById('image_file').files.length == 1 || $("#prev_checkbox").is(':checked')) && document.getElementById('more_image_file').files.length == 1)
         {
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
           index = Number(index);
+          if (index > deleted_more_upload_files )
+          {
+            index-=1;
+          }
           storedFiles.splice(index, 1)
+          deleted_more_upload_files = index;
         }
         else
         {
           index = this.parentNode.id.replace('rowdiv','');
           index = Number(index);
           const dt = new DataTransfer()
-          var input = document.getElementById('image_file');
-          if (image_type == 'more_uploaded_images')
+          if (image_type == 'uploaded_images')
+          {
+            var input = document.getElementById('image_file');
+            if (index > deleted_upload_files )
+            {
+              index-=1;
+            }
+          }
+
+          else if (image_type == 'more_uploaded_images')
           {
             input = document.getElementById('more_image_file')
+            if (index > deleted_more_upload_files )
+            {
+              index-=1;
+            }
           }
           const { files } = input
           for (let j = 0; j < files.length; j++) {
@@ -148,8 +169,20 @@ function handleFileSelect(e) {
             {
               dt.items.add(file)
             }
+            else
+            {
+              if (image_type == 'more_uploaded_images')
+              {
+                deleted_more_upload_files = index
+              }
+              else
+              {
+                deleted_upload_files = index
+              }
+            }
           }
           input.files = dt.files
+          storedFiles = document.getElementById('more_image_file').files
         }
         this.parentNode.remove() 
         if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
@@ -190,15 +223,17 @@ function loadVideo(product_size){
   var MaxSize = 0;
   if (product_size == 6)
   {
-    MaxSize = 512 * 1024 * 1024 
+    MaxSize = 512 * 1000 * 1000 
+    error_msg = input.files[0].name + " is too big. Maximum size should be 512MB."
   }
   else
   {
-    MaxSize = 128 * 1024 * 1024
+    MaxSize = 128 * 1000 * 1000
+    error_msg = input.files[0].name + " is too big. Maximum size should be 128MB."
   }
   if (input.files[0].size > MaxSize)
   {
-    document.getElementById("alert_message").innerHTML = input.files[0].name + " is too big. Maximum size should be 512MB.";
+    document.getElementById("alert_message").innerHTML = error_msg;
     $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     hide_notice('error');
     return false;
@@ -299,13 +334,13 @@ function loadVideo(product_size){
             index = this.parentNode.id.replace('rowdiv','');
             index = Number(index);
             const dt = new DataTransfer()
-            input = document.getElementById('preview').getElementsByClassName('relative')
-            var form = $('#uploadForm')[0]
-            formData = new FormData(form)
-            for (let j = 0; j < input.length; j++) {
+            info_deleted = true;
+            for (let j = 0; j < response.image_blobs.length; j++) {
               if (index !== j)
               {
-                formData.append('order[images][]', response.image_urls[j])
+                var blob = response.image_blobs[j]
+                var file = new File([blob], blob.filename, { type: blob.type }) 
+                image_blob_file.push(file); 
               }
             }
             this.parentNode.remove() 
@@ -433,16 +468,18 @@ function loadVideo(product_size){
   var form = $('#uploadForm')[0]
   var formData = new FormData(form);
   length = document.getElementById("more_image_file").files.length
-  if (storedFiles.length != length)
+  if (storedFiles.length > length)
   {
-    for(var i=0, len=(storedFiles.length - 1) ; i<len; i++) {
-      if (document.getElementById("more_image_file").files[i] == storedFiles[i + length])
+    for(var i=0, len=(storedFiles.length -1) ; i<len; i++) {
+      if (document.getElementById("more_image_file").files[i] == storedFiles[i + (storedFiles.length - length) ])
       {
-        storedFiles.splice((i+length), 1)
-        length--;
-        len--;
+        storedFiles.splice((i + (storedFiles.length - length)), length)
+ 
       }
-      formData.append('order[images][]', storedFiles[i]); 
+      if (storedFiles[i] != undefined)
+      {
+        formData.append('order[images][]', storedFiles[i]);
+      } 
     }  
   }
   var xhr = new XMLHttpRequest();
@@ -461,7 +498,7 @@ function loadVideo(product_size){
     }
     else
     {
-      main_tabs();
+      document.getElementById("video_file").disabled = false;
       document.getElementById("image_file").disabled = false;
       document.getElementById("alert_message").innerHTML = 'Order did not submit. Please try again';
       $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');

@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
-    render json: {status: :ok}
+    render json: {status: :ok} if @order.save
     rescue ActiveRecord::RecordInvalid
     raise Errors::Invalid.new(@order.errors)
   end
@@ -76,6 +76,7 @@ class OrdersController < ApplicationController
   def preview_files
     if params[:checkbox_value] == 'true'
       image_urls = []
+      image_blobs = []
       @order = Order.last
       parent_product_no = (params[:product_no].to_i - 1)
       if params[:product_no].to_i <= 0
@@ -86,13 +87,14 @@ class OrdersController < ApplicationController
       if @parent_product_order == @order
         @order.images.each do |image|
           image_urls << url_for(image)
+          image_blobs << image.blob
         end
         @video_url = url_for(@order.video) if @order.video.attached?
       else
         error_message = 'Please submit the above files before checking check box.'
       end
     end
-    render json: {video_url: @video_url, image_urls: image_urls, error_message: error_message}
+    render json: {video_url: @video_url,image_blobs: image_blobs, image_urls: image_urls, error_message: error_message}
   end
 
   def download_assets  
