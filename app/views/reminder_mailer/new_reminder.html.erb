@@ -1,4 +1,4 @@
-<div style="background-color: #cccccc5e;padding: 100px;">
+<div style="background-color: #cccccc5e;padding: 100px 20;">
   <div style="max-width: 700px;margin: 0 auto;background: white;padding: 20px;">
     <div> 
       <%= "Order# " + @order_no.to_s %>
@@ -11,6 +11,9 @@
         <% if @product_image_url.present? %>
           <%= image_tag(@product_image_url, style: "width: 200px;height: 200px;")%>
         <% end %>
+      </div>
+      <div style="text-align: center;margin-bottom:20px;">
+        <a style="color: white;background: #5d6ac4;padding: 20px;text-decoration: none;font-size: 16px;border-radius: 10px;margin-bottom: 10px;cursor: pointer;" href="<%= @thank_you_page_url %>">See Your Order</a>
       </div>
   </div>
 </div>

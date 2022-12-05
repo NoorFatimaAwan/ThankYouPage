@@ -141,7 +141,7 @@ class OrdersController < ApplicationController
 
   def send_email
     if params[:order_no] != Order.last.order_no
-      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name])
+      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url])
     end
   end
 
