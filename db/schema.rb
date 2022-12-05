@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_01_142630) do
+ActiveRecord::Schema.define(version: 2022_12_05_084815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2022_12_01_142630) do
     t.datetime "updated_at", null: false
     t.bigint "parent_product_id"
     t.string "product_title"
-    t.bigint "order_no"
+    t.string "order_no"
     t.integer "product_no"
     t.string "email_status"
     t.string "variant_title"

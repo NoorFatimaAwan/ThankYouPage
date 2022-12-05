@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
 		integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
 		crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     
     <%= javascript_include_tag 'application' %>
     <%= stylesheet_link_tag    'application' %>
@@ -35,7 +36,7 @@
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
               <% if @first_product.present? %>
                 <div class="custom-check">
-                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i}, #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title]}')" %>
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title]}')" %>
                   <label class="contain">Fill in the info same as above</label>
                 </div>
               <% end %>
@@ -47,14 +48,14 @@
                 </div>
                 <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
                 <%= f.file_field :video, accept: "video/*", id: "video_file" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
-                <%= f.submit "Submit", id: "submit_button", class: "submit-btn", onclick: "submit_form(event,#{params[:order_no].to_i},'#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}');"%>
+                <%= f.submit "Submit", id: "submit_button", class: "submit-btn", onclick: "submit_form(event,'#{params[:order_no]}','#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}');"%>
               </div>  
               <%= image_tag('loading.gif', id: "loader")%>
               <%= f.hidden_field :shop_id , value: @shop_id %>
               <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
               <%= f.hidden_field :file_type , value: "" %>
               <%= f.hidden_field :product_no , value: params[:product_no] %>
-              <%= f.hidden_field :order_no , value: params[:order_no].to_i %>
+              <%= f.hidden_field :order_no , value: params[:order_no] %>
               <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
               <%= f.hidden_field :product_title , value: params[:product_title] %>
               <%= f.hidden_field :variant_title , value: params[:variant_title] %>
@@ -143,26 +144,3 @@
 </html>
 
 
-<script>
-  $(document).ready(function () {
-    if (!($('#img_tab').hasClass('up-images')))
-    {
-      if (document.getElementById('prev_checkbox') != null)
-      {
-        document.getElementById('prev_checkbox').remove();
-        $('.contain').text("");
-      }
-      $(".product-list").css("padding-top","0px");
-      if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
-      {
-        $(".pr-item-left").removeClass('next-page-left')
-      }
-      else
-      {
-        $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
-      }
-    } 
-    $("#preview_video").addClass('show').removeClass('hide');
-    document.querySelector('#more_image_file').addEventListener('change', handleFileSelect, false);
-  });
-</script>

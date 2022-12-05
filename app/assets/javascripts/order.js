@@ -5,6 +5,29 @@ var deleted_more_upload_files = -1;
 var image_blob_file = [];
 var info_deleted = false;
 var more_images_count = 0;
+$(document).ready(function () {
+  if (!($('#img_tab').hasClass('up-images')))
+  {
+    if (document.getElementById('prev_checkbox') != null)
+    {
+      document.getElementById('prev_checkbox').remove();
+      $('.contain').text("");
+    }
+    $(".product-list").css("padding-top","0px");
+    if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
+    {
+      $(".pr-item-left").removeClass('next-page-left')
+    }
+    else
+    {
+      $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
+    }
+  } 
+  $("#preview_video").addClass('show').removeClass('hide');
+  document.querySelector('#more_image_file').addEventListener('change', handleFileSelect, false);
+
+});
+
 function handleFileSelect(e) {
   var files = e.target.files;
   var filesArr = Array.prototype.slice.call(files);

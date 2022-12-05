@@ -24,7 +24,7 @@ class OrdersController < ApplicationController
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
       if params[:order][:product_no].to_i <= 0
-        @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
+        @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no])
       elsif params[:order][:product_no].to_i > 0 
         @parent_product = Order.where("order_no = ? and variant_title = ? and product_no = ?",params[:order][:order_no], params[:order][:variant_title],((params[:order][:product_no].to_i) - 1))
       end
@@ -140,8 +140,8 @@ class OrdersController < ApplicationController
   end
 
   def send_email
-    if params[:order_no].to_i != Order.last.order_no
-      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no].to_i,params[:user_name])
+    if params[:order_no] != Order.last.order_no
+      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name])
     end
   end
 
