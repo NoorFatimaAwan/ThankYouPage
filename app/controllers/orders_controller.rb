@@ -70,7 +70,7 @@ class OrdersController < ApplicationController
     @video = @order.video if @order.video.attached?
     @product_title = @order.product_title
     @variant_title = @order.variant_title
-    @order_no = "Order #" + @order.order_no.to_s
+    @order_no = "Order/confirmation #" + @order.order_no.to_s
   end
 
   def preview_files

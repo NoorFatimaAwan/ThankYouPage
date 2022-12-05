@@ -18,7 +18,7 @@
 	<div class="main-page">
     <div class="product-component">
       <div class="product-list">
-        <div id="alert_message", class="">
+        <div id="alert_message", class="mb-2">
         </div>
         <div class="pr-item d-flex justify-content-between align-items-center">
           <div class="pr-item-left border-padding">
@@ -81,7 +81,7 @@
                         </div>
                         <p class="up-image-text">Upload Images</p>
                     </div>
-                    <div class="pr-3">
+                    <div >
                       <p class="uplaod-upto-text">up to 1896 Photos </p>
                       <p class="image-cal-text">960 x 540,270 kb each</p>
                     </div>
@@ -104,7 +104,7 @@
                       </div>
                       <p class="up-image-text">Upload video</p>
                     </div>
-                    <div class="pr-3">
+                    <div >
                       <p class="uplaod-upto-text">up  to  512  Mb </p>
                       <p class="image-cal-text">720p(HD),30  Min</p>
                     </div>
@@ -117,7 +117,7 @@
                   <%= image_tag('cross_icon.svg', class: "hide", id: "image_cross") %>
                 </ul>
               </div>
-              <div id="preview_video"></div>
+              <div id="preview_video", class="hide"></div>
             <% end %>
           <% end %>
           <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>

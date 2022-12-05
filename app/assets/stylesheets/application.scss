@@ -114,6 +114,7 @@ input[type=file]{
 }
 .pr-item-right {
 	position: relative;
+	margin-right: 20px;
 }
 .separater {
 	width: 1px;
@@ -141,9 +142,9 @@ input[type=file]{
 }
 .img-inner {
 	position: absolute;
-    top: 0;
+  top: 0;
 	pointer-events: none;
-	left: 18px;
+	width: 100%;
 }
 .img-inner .inner-icon {
 	width: 20px !important;
@@ -158,6 +159,8 @@ input[type=file]{
 .image-cal-text {
 	font-size: 14px;
 	color: #7A5E46;
+	font-weight: 600;
+	margin-bottom: 0;
 }
 .icon-top-border {
 	border-top: 3px solid #7A5E466B;
@@ -224,7 +227,7 @@ input[type=file]{
   /* Create a custom checkbox */
   .checkmark {
 	height: 18px;
-	width: 14px;
+	width: 22px;
 	background-color: #fff;
 	border: 1px solid #7A5E46;
 	border-radius: 6px;
@@ -268,6 +271,7 @@ input[type=file]{
 	  position: absolute;
     bottom: 0px;
 		display: flex;
+		margin-top: 26px;
   }
 	.custom-check .checkmark {
 		height: 21px;
@@ -275,7 +279,7 @@ input[type=file]{
   .product-list {
 		padding-bottom: 20px;
    	position: relative;
-		padding-top: 37px;
+		padding-top: 25px;
   }
   .gallery-left {
 	padding: 0 25px;
@@ -404,8 +408,8 @@ input[type=file]{
   }
   .cross-single {
 	  position: absolute;
-	  right: 67px;
-    top: 90px;
+	  right: 8px;
+    top: 20px;
   }
   .remove-btn {
 	background-color: #9F4A4A30;
@@ -470,6 +474,9 @@ input[type=file]{
 		left: inherit !important;
     top: 120px;
 	}
+	.up-images {
+		height: 110px !important;
+	}
 	.up-images.up-video {
 		width: 100%;
 	}
@@ -480,7 +487,7 @@ input[type=file]{
 		height: 100%;
     align-items: center;
 		zoom: inherit !important;
-		left: 7px !important;
+		padding: 20px;
 	}
 	.image-cal-text {
 		margin-bottom: 0;
@@ -495,7 +502,6 @@ input[type=file]{
 	}
 	.cross-single {
     right: 31px;
-    top: 91px;
 	}
 	.video-style
 	{
@@ -506,7 +512,7 @@ input[type=file]{
 		height: 100% !important;
 	}
 	.preview-video-style{
-		margin-top: 80px !important;
+		margin-top: 66px !important;
 		margin-right: 0px !important;
 		padding: 0 20px;
 	}
@@ -539,26 +545,34 @@ input[type=file]{
 	.btn-add-padding-top{
 		padding-top: 70px;
 	}
-
+	.gallery-list{
+		height: 130px !important;
+	}
+	.custom-check {
+		margin-top: 15px !important;
+	}
 }
 @media only screen and (max-width: 765px) {
 	.pr-item-left {
 		margin-bottom: 10px;
 	}
 	.up-images {
-		width: 100px;
-   		height: 110px;
+		width: 115px;
+		height: 130px;
+	}
+	.up-images.mr-5 {
+		margin-right: 20px !important;
 	}
 	.separater {
 		display: none;
 	}
 	.img-inner {
-		zoom: .65;
-		left: 18px;
+		zoom: .8;
+		width: 100%;
 	}
 	.custom-check {
 		position: inherit;
-		margin-top: 10px;
+		margin-top: 26px;
 	}
 	.gallery-left {
 		border: 0;
@@ -679,7 +693,7 @@ input[type=file]{
 	border: 1px solid black;
 	border-radius: 5px;
 	height: 54px;
-	width: 54px;
+	width: 53px;
 
 }
 .datail-table .table-hover tbody tr:hover {
@@ -776,6 +790,7 @@ hr{
 
 .preview-video-style{
 	margin-right: 55px;
+	position: relative;
 }
 
 .existing-video{
@@ -898,11 +913,11 @@ hr{
 #loader {
   display: none;
   position: fixed;
-  top: 70px;
-  left: 215px;
+  top: 89px;
+  left: 50%;
   right: 0;
   bottom: 0;
-  width: 50px;
+  width: 33px;
   background: rgba(0,0,0,0.75) no-repeat center center;
   z-index: 10000;
 }

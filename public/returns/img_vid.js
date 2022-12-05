@@ -32,7 +32,7 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
                   {
                     container.setAttribute("style","width: 100%;min-height: 220px; border-bottom:1px solid #7a5e4679;overflow:hidden;");
                   }
-                  body.setAttribute("style","position: relative;min-height: 150px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px; border-bottom: 0;overflow:hidden;" ) 
+                  body.setAttribute("style","position: relative;min-height: 150px;border: 1px solid #7A5E464D; border-radius: 4px; margin-top: 30px;overflow:hidden;" ) 
                   container.setAttribute("type", "text/html")
                    const loadState = document.createElement("div")
                    loadState.setAttribute("style",'display:flex;position:absolute;z-index:9999;top:0;bottom:0;right:0;left:0;background-color: #fffc;')
