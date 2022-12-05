@@ -4,7 +4,7 @@ class ReminderMailer < ApplicationMailer
     @product_image_url = product_image_url
     @order_no = order_no
     @user_name = user_name
-    @thank_you_page_url = thank_you_page_url
+    @thank_you_page_url = thank_you_page_url.to_s
     mail to: user_email, subject: "Reminder Email From Mcacao"
   end
 end
