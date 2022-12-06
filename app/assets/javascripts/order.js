@@ -319,7 +319,7 @@ function loadVideo(product_size){
     $('.remove-btn').addClass('hide').removeClass('show');
     $('.submit-btn').addClass('show').removeClass('hide');
  }
- function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title){
+ function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title,order_id){
   checkbox_value = $("#prev_checkbox").is(':checked')
   if (checkbox_value == false && $("#alert_message").hasClass('alert-danger'))
   {
@@ -328,7 +328,7 @@ function loadVideo(product_size){
   $.ajax({
     method: "GET",
     url: `${host_url}/orders/preview_files`,
-    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title,product_length: product_length,variant_title: variant_title},
+    data: {checkbox_value: checkbox_value, parent_product_id: parent_product_id, product_id: product_id, order_no: order_no, product_no: product_no,first_product_title: first_product_title,product_title: product_title,product_length: product_length,variant_title: variant_title,order_id: order_id},
     dataType: "json",
     success: function(response){
       var myList = new Array();
@@ -495,7 +495,7 @@ function loadVideo(product_size){
   });
  }
 
- function submit_form(e,order_no,user_email,product_image_url,user_name,thank_you_page_url)
+ function submit_form(e,order_no,user_email,product_image_url,user_name,thank_you_page_url,order_id)
  {
   var spinner = $('#loader');
   spinner.show();
@@ -545,7 +545,7 @@ function loadVideo(product_size){
     $.ajax({
       method: "GET",
       url: `${host_url}/orders/send_email`,
-      data: {user_email: user_email, order_no: order_no, product_image_url: product_image_url,user_name: user_name,thank_you_page_url: thank_you_page_url},
+      data: {user_email: user_email, order_no: order_no, product_image_url: product_image_url,user_name: user_name,thank_you_page_url: thank_you_page_url,order_id: order_id},
       dataType: "json",
       success: function(response){
       },

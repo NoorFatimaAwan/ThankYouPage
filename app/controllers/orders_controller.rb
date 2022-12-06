@@ -13,7 +13,7 @@ class OrdersController < ApplicationController
     @product_title = params[:product_title]
     @variant_title = params[:variant_title] if params[:variant_title].present? && params[:variant_title] != "null"
     @product_image_url = params[:product_image_url]
-    @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
+    @existing_order = Order.where("shop_order_id =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_id], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_index].to_i == 1 ? false : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
     render layout: false
@@ -80,9 +80,9 @@ class OrdersController < ApplicationController
       @order = Order.last
       parent_product_no = (params[:product_no].to_i - 1)
       if params[:product_no].to_i <= 0
-        @parent_product_order = Order.where("order_no = ? and product_no = ? and product_id = ?", params[:order_no],((params[:product_length].to_i) - 1),params[:parent_product_id]).last
+        @parent_product_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],((params[:product_length].to_i) - 1),params[:parent_product_id]).last
       elsif params[:product_no].to_i > 0
-        @parent_product_order = Order.where("order_no = ? and variant_title = ? and product_no = ?",params[:order_no], params[:variant_title],parent_product_no).last
+        @parent_product_order = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order_id], params[:variant_title],parent_product_no).last
       end
       if @parent_product_order == @order
         @order.images.each do |image|
@@ -140,15 +140,15 @@ class OrdersController < ApplicationController
   end
 
   def send_email
-    if params[:order_no] != Order.last.order_no
-      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url])
+    if params[:order_id] != Order.last.shop_order_id
+      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url],params[:order_id])
     end
   end
 
   private
 
   def order_params
-    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no,:email_status,:variant_title, :video, images: [])
+    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no,:email_status,:variant_title,:shop_order_id, :video, images: [])
   end
 
 end
