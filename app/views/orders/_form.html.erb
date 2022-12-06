@@ -4,12 +4,14 @@
         List of all Orders
       </span>
   <%= search_form_for @q, url: :orders, class: "d-flex flex-wrap"  do |form| %>
-    <div class="search-field">
+    <div class="search-field relative">
       <%= form.text_field :order_no_eq %>
+      <span>
+        <%= link_to 'x', orders_path, class: "cross-search" %>
+      </span>
     </div>
     <%= form.submit class: "btn btn-primary search-button" %>
   <% end %>
-  <%= link_to '< Back', orders_path, class: "back-btn" %>
 </div>
 <div class="datail-table">
   <table class="table table-hover">

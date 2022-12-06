@@ -546,7 +546,7 @@ input[type=file]{
 	}
 	.video-attributes{
 		width: 100% !important;
-		height: 100% !important;
+		// height: 100% !important;
 	}
 	.preview-video-style{
 		margin-top: 66px !important;
@@ -843,12 +843,28 @@ hr{
 	width: 100%;
 	border-radius: 10px;
 	border: 1px solid #ccc;
-	padding: 0 15px;
+	padding: 0 36px 0 15px;
 	color: #000000ba;
 }
 .search-field input:focus {
 	box-shadow: none;
 	outline: #ccc;
+}
+// .search-field span {
+// 	position: absolute;
+//     right: 19px;
+//     top: 15px;
+//     display: block;
+//     height: 100%;
+// }
+.search-field span a {
+	font-size: 22px;
+	color: #00000091;
+	text-decoration: none;
+	position: absolute;
+	top: 17px;
+	line-height: 16px;
+	right: 15px;
 }
 .search-button{
 	font-size: 18px;
