@@ -23,6 +23,10 @@ $(document).ready(function () {
       $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
     }
   } 
+  if ($('#search_field').val() != '')
+  {
+    $('.cross-search').addClass('show').removeClass('hide')
+  }
   document.querySelector('#more_image_file').addEventListener('change', handleFileSelect, false);
 
 });
@@ -495,7 +499,7 @@ function loadVideo(product_size){
   });
  }
 
- function submit_form(e,order_no,user_email,product_image_url,user_name,thank_you_page_url,order_id)
+ function submit_form(e,order_no,user_email,product_image_url,user_name,thank_you_page_url,order_id,total_products,product_index)
  {
   var spinner = $('#loader');
   spinner.show();
@@ -539,22 +543,18 @@ function loadVideo(product_size){
       $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     }
   }
-  xhr.send(formData);
   if (user_email != '')
   {
-    $.ajax({
-      method: "GET",
-      url: `${host_url}/orders/send_email`,
-      data: {user_email: user_email, order_no: order_no, product_image_url: product_image_url,user_name: user_name,thank_you_page_url: thank_you_page_url,order_id: order_id},
-      dataType: "json",
-      success: function(response){
-      },
-      error: function(response)
-      {
-        console.log('error');
-      }
-    });
+    formData.append('user_email', user_email)
+    formData.append('order_no', order_no)
+    formData.append('product_image_url', product_image_url)
+    formData.append('user_name', user_name)
+    formData.append('thank_you_page_url', thank_you_page_url)
+    formData.append('order_id', order_id)
+    formData.append('total_products', total_products)
+    formData.append('product_index', product_index)
   }
+  xhr.send(formData);
  }
 
  
@@ -592,3 +592,15 @@ function hide_notice(type)
   $(".pr-item-left").addClass('border-padding').removeClass('next-page-left');
   $(".right-border").addClass('show').removeClass('hide');
  }
+
+  function cross_show()
+  {
+    if ($('#search_field').val() != '')
+    {
+      $('.cross-search').addClass('show').removeClass('hide')
+    }
+    else
+    {
+      $('.cross-search').addClass('hide').removeClass('show')
+    }
+  }

@@ -50,7 +50,13 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
-    render json: {status: :ok} if @order.save
+    if @order.save!
+      @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
+      if params[:product_index].to_i == params[:total_products].to_i && @products_submitted < params[:total_products].to_i  
+        SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url],params[:order_id])
+      end
+      render json: {status: :ok}
+    end
     rescue ActiveRecord::RecordInvalid
     raise Errors::Invalid.new(@order.errors)
   end
@@ -140,7 +146,7 @@ class OrdersController < ApplicationController
   end
 
   def send_email
-    if params[:order_no] != Order.last.order_no
+    if Order.where(shop_order_id: params[:order_id].to_i).count < params[:total_products].to_i  
       SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url],params[:order_id])
     end
   end

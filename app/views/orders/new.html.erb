@@ -48,7 +48,7 @@
                 </div>
                 <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
                 <%= f.file_field :video, accept: "video/*", id: "video_file" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
-                <%= f.submit "Submit", id: "submit_button", class: "submit-btn", onclick: "submit_form(event,'#{params[:order_no]}','#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}','#{params[:thank_you_page_url]}',#{params[:order_id].to_i});"%>
+                <%= f.submit "Submit", id: "submit_button", class: "submit-btn", onclick: "submit_form(event,'#{params[:order_no]}','#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}','#{params[:thank_you_page_url]}',#{params[:order_id].to_i},#{params[:total_products].to_i},#{params[:product_index]});"%>
               </div>  
               <%= image_tag('loading.gif', id: "loader")%>
               <%= f.hidden_field :shop_id , value: @shop_id %>
