@@ -164,6 +164,7 @@ function handleFileSelect(e) {
             index-=1;
           }
           storedFiles.splice(index, 1)
+          this.parentNode.remove()
           deleted_more_upload_files = index;
         }
         else
@@ -189,6 +190,10 @@ function handleFileSelect(e) {
             }
           }
           const { files } = input
+          if (files.length == 1)
+          {
+            index = 0
+          }
           for (let j = 0; j < files.length; j++) {
             const file = files[j]
             if (index !== j)
@@ -205,12 +210,12 @@ function handleFileSelect(e) {
               {
                 deleted_upload_files = index
               }
+              this.parentNode.remove()
             }
           }
           input.files = dt.files
           storedFiles = document.getElementById('more_image_file').files
-        }
-        this.parentNode.remove() 
+        } 
         if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
         {
           main_tabs();
@@ -506,6 +511,18 @@ function loadVideo(product_size){
   e.preventDefault();
   var form = $('#uploadForm')[0]
   var formData = new FormData(form);
+  images_in_form = Array.from(formData.keys()).filter(x => x === "order[images][]").length
+  if (document.getElementById("image_file").files.length == 0 || document.getElementById("more_image_file").files.length == 0)
+  {
+    images_in_form = (Array.from(formData.keys()).filter(x => x === "order[images][]").length) - 1
+  }
+  if (!($("#prev_checkbox").is(':checked')) && images_in_form != document.getElementById("image_file").files.length + document.getElementById("more_image_file").files.length)
+  {
+    for(var i=0, len=document.getElementById("image_file").files.length ; i<len; i++) 
+    {
+      formData.append('order[images][]', document.getElementById("image_file").files[i]);
+    }
+  }
   length = document.getElementById("more_image_file").files.length
   if (storedFiles.length > length)
   {

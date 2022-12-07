@@ -59,7 +59,6 @@
               <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
               <%= f.hidden_field :product_title , value: params[:product_title] %>
               <%= f.hidden_field :variant_title , value: params[:variant_title] %>
-              <%= f.hidden_field :email_status , value: "pending" %>
               <%= f.hidden_field :shop_order_id , value: params[:order_id].to_i %>
         </div>
             <% if !@existing_order&.last&.present? %>
