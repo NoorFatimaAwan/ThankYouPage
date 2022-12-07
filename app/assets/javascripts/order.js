@@ -506,6 +506,13 @@ function loadVideo(product_size){
   e.preventDefault();
   var form = $('#uploadForm')[0]
   var formData = new FormData(form);
+  if (!($("#prev_checkbox").is(':checked')) && Array.from(formData.keys()).filter(x => x === "order[images][]").length != document.getElementById('preview').getElementsByClassName('right-color-image').length)
+  {
+    for(var i=0, len=document.getElementById("image_file").files.length ; i<len; i++) 
+    {
+      formData.append('order[images][]', ocument.getElementById("image_file").files[i]);
+    }
+  }
   length = document.getElementById("more_image_file").files.length
   if (storedFiles.length > length)
   {

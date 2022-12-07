@@ -7,7 +7,7 @@
     <div class="search-field relative">
       <%= form.text_field :order_no_eq, {id: 'search_field', onkeyup: "cross_show();" }  %>
       <span>
-        <%= link_to 'x', orders_path, class: "cross-search hide" %>
+        <%= link_to 'x', orders_path, class: "cross-search" %>
       </span>
     </div>
     <%= form.submit class: "btn btn-primary search-button" %>

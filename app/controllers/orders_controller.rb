@@ -52,7 +52,7 @@ class OrdersController < ApplicationController
     end
     if @order.save!
       @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
-      if params[:product_index].to_i == params[:total_products].to_i && @products_submitted < params[:total_products].to_i  
+      if (params[:product_index].to_i < params[:total_products].to_i || params[:product_index].to_i == params[:total_products].to_i) && @products_submitted < params[:total_products].to_i  
         SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url],params[:order_id])
       end
       render json: {status: :ok}
