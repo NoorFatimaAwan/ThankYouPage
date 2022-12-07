@@ -510,7 +510,7 @@ function loadVideo(product_size){
   {
     for(var i=0, len=document.getElementById("image_file").files.length ; i<len; i++) 
     {
-      formData.append('order[images][]', ocument.getElementById("image_file").files[i]);
+      formData.append('order[images][]', document.getElementById("image_file").files[i]);
     }
   }
   length = document.getElementById("more_image_file").files.length
