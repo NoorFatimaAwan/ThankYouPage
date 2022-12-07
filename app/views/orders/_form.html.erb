@@ -5,9 +5,9 @@
       </span>
   <%= search_form_for @q, url: :orders, class: "d-flex flex-wrap"  do |form| %>
     <div class="search-field relative">
-      <%= form.text_field :order_no_eq, {id: 'search_field', onkeyup: "cross_show();" }  %>
+      <%= form.text_field :order_no_eq, {id: 'search_field',include_blank: true, onkeyup: "cross_show();" }  %>
       <span>
-        <%= link_to 'x', orders_path, class: "cross-search" %>
+        <%= link_to 'x', orders_path, class: "cross-search hide" %>
       </span>
     </div>
     <%= form.submit class: "btn btn-primary search-button" %>
