@@ -190,7 +190,7 @@ function handleFileSelect(e) {
             }
           }
           const { files } = input
-          if (files.length == 1)
+          if (files.length <=  index)
           {
             index = 0
           }
