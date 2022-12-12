@@ -52,13 +52,12 @@ class OrdersController < ApplicationController
     end
     if @order.save!
       @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
-      if (params[:product_index].to_i < params[:total_products].to_i || params[:product_index].to_i == params[:total_products].to_i) && @products_submitted < params[:total_products].to_i  
-        @order.update(email_status: 'Pending')
-      elsif @products_submitted == params[:total_products].to_i
+      if @products_submitted == params[:total_products].to_i
         @order.update(email_status: 'Completed')
       end
-      if @order.email_status == 'Pending'
-        SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id)
+      if @order.email_status != 'Completed'
+        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],params[:product_image_url],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '0 11 * * *', class: 'SendReminderEmailJob')
+        job.save
       end
       render json: {status: :ok}
     end

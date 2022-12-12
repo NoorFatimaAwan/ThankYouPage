@@ -60,6 +60,7 @@
               <%= f.hidden_field :product_title , value: params[:product_title] %>
               <%= f.hidden_field :variant_title , value: params[:variant_title] %>
               <%= f.hidden_field :shop_order_id , value: params[:order_id].to_i %>
+              <%= f.hidden_field :email_status , value: 'Pending' %>
         </div>
             <% if !@existing_order&.last&.present? %>
               <div class="pr-item-right d-flex justify-content-end">
