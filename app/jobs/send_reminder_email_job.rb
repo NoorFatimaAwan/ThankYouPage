@@ -8,7 +8,7 @@ class SendReminderEmailJob < ApplicationJob
   def perform(user_email,product_image_url,order_no,user_name,thank_you_page_url,order_id)
     @order = Order.where(shop_order_id: order_id)&.last
     send_email = false
-    if @order.created_at.to_date == Date.today
+    if @order.created_at.to_date + 1.day == Date.today
       send_email = true
       @order.update(email_status: 'Delivered after 1 day')
     elsif @order.created_at.to_date + 3.days == Date.today
