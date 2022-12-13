@@ -5,8 +5,10 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
     const variant_titles = []
     var host_url = "https://mcacao.phaedrasolutions.com"
     const substring = 'expressio'
+    let total_products = 0
     for(let x = 0; x < Shopify.checkout.line_items.length; x++){
       variant_titles.push((Shopify.checkout.line_items[x].title).includes(substring))
+      total_products = total_products + Shopify.checkout.line_items[x].quantity
     }
     if (variant_titles.every(Boolean))
     {
@@ -17,10 +19,8 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
             {
               let body = document.createElement("body")
               let product_index = 0;
-              let total_products = 0
               for(let x = 0; x < Shopify.checkout.line_items.length; x++)
               {
-                total_products = total_products + Shopify.checkout.line_items[x].quantity
                 for (let step = 0; step < Shopify.checkout.line_items[x].quantity; step++){
                   let container = document.createElement("object")
                   body.setAttribute("id", "assistalong-reminder-body");
