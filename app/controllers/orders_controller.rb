@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
     @first_product = params[:product_index].to_i == 1 ? false : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
     @order_count = Order.where(shop_order_id: params[:order_id].to_i)&.count
-    if params[:product_index].to_i == 1 && params[:open_with_mail] == false 
+    if params[:product_index].to_i == 1 
       ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],true).deliver_now!
     end
     render layout: false
