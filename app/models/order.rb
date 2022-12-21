@@ -4,6 +4,8 @@ class Order < ApplicationRecord
 
   validates :shop_id, presence: true
 
+  $order_id_for_email = ''
+
   def thumbnail input
     return self.images[input].variant(resize: '300x300!').processed
   end
