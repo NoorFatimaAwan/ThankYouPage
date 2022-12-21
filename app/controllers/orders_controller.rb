@@ -16,7 +16,6 @@ class OrdersController < ApplicationController
     @existing_order = Order.where("shop_order_id =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_id], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_index].to_i == 1 ? false : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
-    @order_count = Order.where(shop_order_id: params[:order_id].to_i)&.count
     if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
       $order_id_for_email = params[:order_id]
       ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],true).deliver_now!
