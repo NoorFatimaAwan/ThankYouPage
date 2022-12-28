@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
         @order.update(email_status: 'Completed')
       end
       if @order.email_status != 'Completed'
-        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '0 12 * * *', class: 'SendReminderEmailJob')
+        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '* * * * *', class: 'SendReminderEmailJob')
         job.save
       end
       render json: {status: :ok}
