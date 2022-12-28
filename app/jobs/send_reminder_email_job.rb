@@ -13,7 +13,7 @@ class SendReminderEmailJob < ApplicationJob
     order_id = args[4]
     @order = Order.where(shop_order_id: order_id)&.last
     send_email = false
-    if @order&.created_at&.to_date == Date.today
+    if @order&.created_at&.to_date + 2.days == Date.today
       send_email = true
       @order&.update(email_status: 'Delivered after 2 days')
     elsif @order&.created_at&.to_date + 7.days == Date.today
