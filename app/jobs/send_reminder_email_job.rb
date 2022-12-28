@@ -13,19 +13,19 @@ class SendReminderEmailJob < ApplicationJob
     order_id = args[4]
     @order = Order.where(shop_order_id: order_id)&.last
     send_email = false
-    if @order.created_at.to_date + 2.days == Date.today
+    if @order&.created_at&.to_date + 2.days == Date.today
       send_email = true
-      @order.update(email_status: 'Delivered after 2 days')
-    elsif @order.created_at.to_date + 7.days == Date.today
+      @order&.update(email_status: 'Delivered after 2 days')
+    elsif @order&.created_at&.to_date + 7.days == Date.today
       send_email = true
-      @order.update(email_status: 'Delivered after 7 days')
-    elsif @order.created_at.to_date + 14.days == Date.today
+      @order&.update(email_status: 'Delivered after 7 days')
+    elsif @order&.created_at&.to_date + 14.days == Date.today
       send_email = true
-      @order.update(email_status: 'Delivered after 14 days')
-    elsif @order.created_at.to_date + 21.days == Date.today
+      @order&.update(email_status: 'Delivered after 14 days')
+    elsif @order&.created_at&.to_date + 21.days == Date.today
       send_email = true
-      @order.update(email_status: 'Delivered after 21 days')
-    elsif @order.email_status == 'unsubscribed'
+      @order&.update(email_status: 'Delivered after 21 days')
+    elsif @order&.email_status == 'unsubscribed'
       send_email = false
     end
     if send_email == true
