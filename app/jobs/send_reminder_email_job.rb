@@ -11,10 +11,9 @@ class SendReminderEmailJob < ApplicationJob
     user_name = args[2]
     thank_you_page_url = args[3]
     order_id = args[4]
-    @order = Order.where(shop_order_id: order_id)&.first
+    @order = Order.where(shop_order_id: order_id)&.last
     send_email = false
-    byebug
-    if @order&.created_at&.to_date + 1.day == Date.today
+    if @order&.created_at&.to_date + 2.days == Date.today
       send_email = true
       @order&.update(email_status: 'Delivered after 2 days')
     elsif @order&.created_at&.to_date + 7.days == Date.today
@@ -29,7 +28,6 @@ class SendReminderEmailJob < ApplicationJob
     elsif @order&.email_status == 'unsubscribed'
       send_email = false
     end
-    byebug
     if send_email == true
       ReminderMailer.new_reminder(user_email,order_no,user_name,thank_you_page_url,order_id,false).deliver_now!
     end
