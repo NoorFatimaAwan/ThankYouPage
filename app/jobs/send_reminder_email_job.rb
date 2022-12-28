@@ -11,7 +11,7 @@ class SendReminderEmailJob < ApplicationJob
     user_name = args[2]
     thank_you_page_url = args[3]
     order_id = args[4]
-    @order = Order.where("DATE(created_at) = ?", Date.today - 1.day).last
+    @order = Order.where(shop_order_id: order_id)&.first
     send_email = false
     if @order&.created_at&.to_date + 1.day == Date.today
       send_email = true
