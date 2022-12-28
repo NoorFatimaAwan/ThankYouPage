@@ -1,4 +1,4 @@
 reminder_email:
-  cron: "* * * * *"
+  cron: "0 11 * * *"
   class: "SendReminderEmailJob"
   queue: default

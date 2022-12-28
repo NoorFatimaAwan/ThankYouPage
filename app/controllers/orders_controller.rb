@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
     @user_email = params[:user_email].present? ? params[:user_email] : nil
     if !@first_product && !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
       $order_id_for_email = params[:order_id]
-      ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],true).deliver_now!
+      ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!
     end
     render layout: false
   end
@@ -153,9 +153,13 @@ class OrdersController < ApplicationController
     end  
   end
 
-  def send_email
-    if Order.where(shop_order_id: params[:order_id].to_i).count < params[:total_products].to_i  
-      SendReminderEmailJob.perform_later(params[:user_email],params[:product_image_url],params[:order_no],params[:user_name],params[:thank_you_page_url],params[:order_id])
+  def unsubscribe
+    @order = Order.where(shop_order_id: params[:id].to_i)&.last
+    @order&.update(email_status: 'unsubscribed')
+    if @order.present?
+      @msg = "You've unsubscribed from our mailing list. You won't receive any more mails"
+    else
+      @msg = "Please upload images/videos for your chocolate box (or boxes!) before unsubscribing"
     end
   end
 

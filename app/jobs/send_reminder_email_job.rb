@@ -25,9 +25,11 @@ class SendReminderEmailJob < ApplicationJob
     elsif @order.created_at.to_date + 21.days == Date.today
       send_email = true
       @order.update(email_status: 'Delivered after 21 days')
+    elsif @order.email_status == 'unsubscribed'
+      send_email = false
     end
     if send_email == true
-      ReminderMailer.new_reminder(user_email,order_no,user_name,thank_you_page_url,false).deliver_now!
+      ReminderMailer.new_reminder(user_email,order_no,user_name,thank_you_page_url,order_id,false).deliver_now!
     end
   end
 
