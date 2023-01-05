@@ -33,8 +33,8 @@
           <td> <%= order.file_type %> </td>
           <% if order.images.attached? %>
             <td class="product-img"><%= image_tag(order.images.first.blob, size: "100x100")%></td>
-          <% elsif order.video.attached? %>
-            <td class="product-img"><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+          <% elsif order.videos.attached? %>
+            <td class="product-img"><%= video_tag(url_for(order.videos.first.blob), controls: '', size: "100x100") %></td>
           <% else %>
             <td> No Assets </td>
           <% end %>

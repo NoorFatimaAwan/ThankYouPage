@@ -82,3 +82,5 @@ gem 'will_paginate', '~> 3.3'
 gem 'sidekiq-cron'
 
 gem 'ransack'
+
+gem 'data_migrate'

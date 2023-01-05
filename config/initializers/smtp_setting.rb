@@ -6,6 +6,6 @@ Rails.application.config.action_mailer.delivery_method = :smtp
     port: 587,
     domain: "gmail.com",
     authentication: "plain",
-    user_name: "fnoor8004@gmail.com",
-    password: "zkopbxdmngelrryx"
+    user_name: "mcacao.phaedrasolutions@gmail.com",
+    password: "lgyjsswshxanptib"
   }

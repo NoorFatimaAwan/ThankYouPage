@@ -3,7 +3,7 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
 (function() {
   var loadPlugin = function() {
     const variant_titles = []
-    var host_url = "https://mcacao.phaedrasolutions.com"
+    var host_url = "https://7c27-202-166-171-14.ngrok.io"
     const substring = 'expressio'
     let total_products = 0
     for(let x = 0; x < Shopify.checkout.line_items.length; x++){
@@ -17,6 +17,24 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
           .then(data => {
             if (true)
             {
+              document.getElementById('main-header').innerHTML = "Hi " + Shopify.checkout.billing_address.first_name + "!"
+              if (document.getElementsByClassName('content-box__row--no-padding')[0] != undefined)
+              {
+                document.getElementsByClassName('content-box__row--no-padding')[0].setAttribute('style', 'display:none;')
+              }
+              if (document.getElementsByClassName('content-box')[0] != undefined)
+              {
+                document.getElementsByClassName('content-box')[0].setAttribute('style','display:none;');
+              }
+              let question_body = document.createElement("body")
+              let question_container = document.createElement("object")
+              question_body.setAttribute("id", "question_body");
+              question_body.append(question_container)
+              question_container.setAttribute("id","question_container")
+              question_body.setAttribute("style","position: relative;border-radius: 4px; margin-top: 30px;overflow:hidden;" )
+              question_container.setAttribute("style","width: 100%;min-height: 170px;overflow:hidden;");
+              question_container.setAttribute("data", `${host_url}/orders/should_show`)
+              document.getElementsByClassName('os-header__heading')[0].after(question_body)
               let body = document.createElement("body")
               let product_index = 0;
               for(let x = 0; x < Shopify.checkout.line_items.length; x++)

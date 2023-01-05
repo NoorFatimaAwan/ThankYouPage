@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/orders/preview_files', :to => "orders#preview_files"
   post '/orders/download_assets', :to => "orders#download_assets"
   get '/orders/unsubscribe/:id', :to => "orders#unsubscribe"
+  get '/orders/delete_assets', :to => "orders#delete_assets"
   resources 'orders', only:[:index,:new,:create,:show]
   mount ShopifyApp::Engine, at: '/'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

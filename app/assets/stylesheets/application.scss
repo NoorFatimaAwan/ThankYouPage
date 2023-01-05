@@ -795,15 +795,14 @@ hr{
 }
 
 .preview-video-style{
+	display: flex;
 	margin-right: 55px;
 	position: relative;
 }
 
 .existing-video{
-	width: 200px;
-	height: 150px;
-	margin-bottom: 65px;
-	margin-right: 48px
+	width: 50px;
+	height: 50px;
 }
 
 .no-order-text{
@@ -942,4 +941,24 @@ hr{
   width: 33px;
   background: rgba(0,0,0,0.75) no-repeat center center;
   z-index: 10000;
+}
+
+@media (orientation: landscape)
+{
+	.video {
+		object-fit: cover;
+	}
+}
+
+@media (orientation: portrait)
+{
+	.video {
+		object-fit: cover;
+	}
+}
+
+.video-orientation {
+	max-height: 100vh;
+	max-width: 100vw;
+	width: 100%;
 }

@@ -24,8 +24,12 @@
                    <%= image_tag(@images[image], style: "width: 100%;height: 150px;", class: "pr-main-img")%>
                   </div>
               <% end %>
-          <% elsif @video.present? %>
-            <%= video_tag(url_for(@video), controls: '', style: "width: 350px;height: 350px;margin-left:312px;") %>
+          <% elsif @videos.present? %>
+            <% (0...@videos&.count).each do |video| %>
+              <div class="col-md-3">
+              <%= video_tag(url_for(@videos[video]), controls: '', style: "width: 100%;height: 150px;", class: "pr-main-img")%>
+              </div>
+            <% end %>
           <% end %>  
         </div>
   </div>

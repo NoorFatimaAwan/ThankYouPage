@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   has_many_attached :images
-  has_one_attached :video
+  has_many_attached :videos
 
   validates :shop_id, presence: true
 
