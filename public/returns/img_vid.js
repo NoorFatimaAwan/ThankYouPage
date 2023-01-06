@@ -3,7 +3,7 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
 (function() {
   var loadPlugin = function() {
     const variant_titles = []
-    var host_url = "https://7c27-202-166-171-14.ngrok.io"
+    var host_url = "https://mcacao.phaedrasolutions.com"
     const substring = 'expressio'
     let total_products = 0
     for(let x = 0; x < Shopify.checkout.line_items.length; x++){

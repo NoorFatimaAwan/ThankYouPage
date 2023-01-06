@@ -1,4 +1,4 @@
-var host_url = "https://7c27-202-166-171-14.ngrok.io"
+var host_url = "https://mcacao.phaedrasolutions.com"
 var storedFiles = [];
 var storedVideoFiles = [];
 var deleted_upload_files = -1;
@@ -28,7 +28,7 @@ $(document).ready(function () {
   {
     $('.cross-search').addClass('show').removeClass('hide')
   }
-  document.querySelectorAll('#more_image_file,#more_video_file')
+  document.querySelectorAll('#more_image_file,#more_video_file');
 
 });
 
@@ -44,15 +44,6 @@ document.addEventListener('change', function(e) {
   }
   $("#submit_button").trigger('click')
 });
-// function handleFileSelect(e) {
-//   debugger
-//   var files = e.target.files;
-//   var filesArr = Array.prototype.slice.call(files);
-//   filesArr.forEach(function(f) {
-//     storedFiles.push(f);
-//     more_images_count += 1;
-//   });
-// }
 
  function loadImages(event,product_size,image_type,product_no,order_id,product_id) {
   var total_file = 0;
@@ -152,10 +143,9 @@ document.addEventListener('change', function(e) {
       var image = document.createElement('img');
       image.src = URL.createObjectURL(event.target.files[i]);
       image.id = "output" + i;
-      debugger
-      if (image_type == 'more_uploaded_images')
+      if (more_files_count > 0)
       {
-        image.id = "output" + (image_file.length + i);
+        image.id = "output" + more_files_count;
       }
       image.width = "53";
       image.height = "54";
@@ -168,11 +158,10 @@ document.addEventListener('change', function(e) {
       imgp.setAttribute("class", "cross")
       deleteImg.appendChild(imgp)
       deleteImg.onclick = function() {
-        debugger
         this.parentNode.remove();
         index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
-        index = Number(index) + 1
-        delete_assets(index,product_no,order_id,product_id)
+        index = Number(index)
+        delete_assets(index,product_no,order_id,product_id,image_file.length,more_image_file.length,image_type)
         if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
         {
           main_tabs();
@@ -201,7 +190,7 @@ document.addEventListener('change', function(e) {
   }
 };
 
-function loadVideo(event,product_size,product_no,order_id,product_id){
+function loadVideo(event,product_size,product_no,order_id,product_id,video_type){
   video_file = document.getElementById('video_file').files 
   more_video_file = document.getElementById('more_video_file').files
   var input = document.getElementById('video_file');
@@ -242,9 +231,9 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
     video.width = "53";
     video.height = "54";
     video.id = "uploaded_video" + i
-    if (more_video_file.length != 0)
+    if (more_files_count > 0)
     {
-      video.id = "uploaded_video" + (video_file.length + i)
+      image.id = "uploaded_video" + more_files_count;
     }
     video.autoplay = false;
     video.controls = true;
@@ -260,8 +249,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
     {
       this.parentNode.remove();
       index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-      index = Number(index) + 1
-      delete_assets(index,product_no,order_id,product_id)
+      index = Number(index)
+      delete_assets(index,product_no,order_id,product_id,video_file.length,more_video_file.length,video_type)
     };
     deleteImg.appendChild(imgp)
     divElm.appendChild(spanElm);
@@ -275,7 +264,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
     $("#preview_video").addClass('show').removeClass('hide');
     $("#preview_video").addClass('preview-video-style');
     $('.remove-btn').addClass('show').removeClass('hide');
-    debugger
     $('.submit-btn.upload-btn').addClass('show').removeClass('hide');
     if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
     {
@@ -327,8 +315,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
           deleteImg.onclick = function() {
             this.parentNode.remove();
             index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
-            index = Number(index) + 1
-            delete_assets(index,product_no,order_id,product_id)
+            index = Number(index)
+            delete_assets(index,product_no,order_id,product_id,document.getElementById('image_file').files.length,document.getElementById('more_image_file').files.length)
             if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
             {
               $('.up-images').addClass('show').removeClass('hide');
@@ -391,6 +379,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
           video.autoplay = false;
           video.controls = true;
           video.muted = false;
+          console.log(i + response.assets_urls[i].name)
           video.className = 'right-color-image'
           spanElm.appendChild(video);
           var deleteImg = document.createElement('p');
@@ -402,8 +391,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
           {
             this.parentNode.remove();
             index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-            index = Number(index) + 1
-            delete_assets(index,product_no,order_id,product_id)    
+            index = Number(index)
+            delete_assets(index,product_no,order_id,product_id,document.getElementById('video_file').files.length,document.getElementById('more_video_file').files.length)    
           };
           deleteImg.appendChild(imgp)
           divElm.appendChild(spanElm);
@@ -471,13 +460,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id){
   length = more_file_length
   if (storedFiles.length > length)
   {
-    for(var i=0, len=(storedFiles.length ) ; i<len; i++) {
-      if (more_uploaded_files[i] == storedFiles[i + (storedFiles.length - length) ])
-      {
-        storedFiles.splice((i + (storedFiles.length - length)), length)
-  
-      }
-      if (storedFiles[i] != undefined)
+    for(var i= 0, len=(storedFiles.length) ; i<len; i++) {
+      if (more_uploaded_files[0] != storedFiles[i] && storedFiles[i] != undefined)
       {
         formData.append(files_in_form_data, storedFiles[i]);
       } 
@@ -562,16 +546,14 @@ function hide_notice(type)
     }
   }
 
-  function delete_assets(index,product_no,order_id,product_id)
+  function delete_assets(index,product_no,order_id,product_id,asset_length,more_asset_length,asset_type)
   {
-    debugger
     $.ajax({
       method: "GET",
       url: `${host_url}/orders/delete_assets`,
-      data: {index: index, product_no: product_no, order_id: order_id,product_id: product_id},
+      data: {index: index, product_no: product_no, order_id: order_id,product_id: product_id,asset_length: asset_length,more_asset_length: more_asset_length,asset_type: asset_type},
       dataType: "json",
       success: function(response){
-        debugger
       },
       error: function(response)
       {

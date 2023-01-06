@@ -84,3 +84,5 @@ gem 'sidekiq-cron'
 gem 'ransack'
 
 gem 'data_migrate'
+
+gem 'streamio-ffmpeg'

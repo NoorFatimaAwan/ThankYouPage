@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   require('zip')
+  require 'streamio-ffmpeg'
   skip_before_action :verify_authenticity_token
 
   def index
@@ -31,13 +32,11 @@ class OrdersController < ApplicationController
       elsif params[:order][:product_no].to_i > 0 
         @parent_product = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order][:shop_order_id], params[:order][:variant_title],((params[:order][:product_no].to_i) - 1))
       end
-      debugger
       @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
         @order&.images&.attach(@parent_product_files)
       elsif @parent_product.present? && @parent_product&.last&.videos.attached?
-        debugger
         @parent_product_files = @parent_product&.last&.videos&.map(&:blob)
         @order&.videos&.attach(@parent_product_files)
       end
@@ -58,7 +57,6 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
-    debugger
     if @order.save!
       @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
       if @products_submitted == params[:total_products].to_i
@@ -163,12 +161,15 @@ class OrdersController < ApplicationController
   end
 
   def delete_assets
-    debugger
-    @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id]).last
+    @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id])&.last
     @order_assets = @order.file_type == 'image' ? @order.images : @order.videos
-    blob_signed_id = @order_assets.map(&:blob).last(params[:index].to_i).first.signed_id
-    @asset = ActiveStorage::Blob.find_signed(blob_signed_id)
-    @asset.attachments.first.purge
+    if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
+      @order_assets&.last(params[:asset_length].to_i)[params[:index].to_i].purge
+    elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
+      @order_assets&.first(params[:more_asset_length].to_i)[params[:index].to_i].purge
+    else
+      @order_assets.last(@order_assets.count)[params[:index].to_i].purge
+    end
     render json: {deleted: true}
   end
 
