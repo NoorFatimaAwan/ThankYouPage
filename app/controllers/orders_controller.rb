@@ -19,6 +19,7 @@ class OrdersController < ApplicationController
     @user_email = params[:user_email].present? ? params[:user_email] : nil
     if !@first_product && !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
       $order_id_for_email = params[:order_id]
+      ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!
     end
     render layout: false
   end
@@ -63,7 +64,7 @@ class OrdersController < ApplicationController
         @order.update(email_status: 'Completed')
       end
       if @order.email_status != 'Completed'
-        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '* * * * *', class: 'SendReminderEmailJob')
+        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '0 12 * * *', class: 'SendReminderEmailJob')
         job.save
       end
       render json: {status: :ok}
