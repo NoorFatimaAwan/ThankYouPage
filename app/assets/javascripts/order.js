@@ -554,6 +554,10 @@ function hide_notice(type)
       data: {index: index, product_no: product_no, order_id: order_id,product_id: product_id,asset_length: asset_length,more_asset_length: more_asset_length,asset_type: asset_type},
       dataType: "json",
       success: function(response){
+        if (response.deleted == 'removed_all')
+        {
+          main_tabs() 
+        }
       },
       error: function(response)
       {

@@ -164,14 +164,20 @@ class OrdersController < ApplicationController
   def delete_assets
     @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id])&.last
     @order_assets = @order.file_type == 'image' ? @order.images : @order.videos
-    if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
-      @order_assets&.last(params[:asset_length].to_i)[params[:index].to_i].purge
-    elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
-      @order_assets&.first(params[:more_asset_length].to_i)[params[:index].to_i].purge
-    else
-      @order_assets.last(@order_assets.count)[params[:index].to_i].purge
+    if params[:asset_type] == "remove_all"        
+      @order.destroy
+      deleted = 'removed_all'
     end
-    render json: {deleted: true}
+    if @order.present?
+      if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
+        @order_assets&.last(params[:asset_length].to_i)[params[:index].to_i]&.purge
+      elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
+        @order_assets&.first(params[:more_asset_length].to_i)[params[:index].to_i]&.purge
+      else
+        @order_assets&.last(@order_assets&.count)[params[:index].to_i]&.purge
+      end
+    end
+    render json: {deleted: 'removed_all'}
   end
 
   private
