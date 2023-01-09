@@ -4,7 +4,7 @@ var storedVideoFiles = [];
 var deleted_upload_files = -1;
 var deleted_more_upload_files = -1;
 var image_blob_file = [];
-var info_deleted = false;
+var error_shown = true;
 var more_files_count = 0;
 $(document).ready(function () {
   if (!($('#img_tab').hasClass('up-images')))
@@ -42,7 +42,10 @@ document.addEventListener('change', function(e) {
       more_files_count += 1;
     });
   }
-  $("#submit_button").trigger('click')
+  if (error_shown == false)
+  {
+    $("#submit_button").trigger('click')
+  }
 });
 
  function loadImages(event,product_size,image_type,product_no,order_id,product_id) {
@@ -135,6 +138,7 @@ document.addEventListener('change', function(e) {
     }
     else
     {
+      error_shown = false;
       var imgCont = document.getElementById("preview");
       var divElm = document.createElement('div');
       divElm.id = "rowdiv" + i;
@@ -193,6 +197,7 @@ document.addEventListener('change', function(e) {
 function loadVideo(event,product_size,product_no,order_id,product_id,video_type){
   video_file = document.getElementById('video_file').files 
   more_video_file = document.getElementById('more_video_file').files
+  sum = 0;
   var input = document.getElementById('video_file');
   if (more_video_file.length != 0)
   {
@@ -215,66 +220,88 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     document.getElementById("alert_message").innerHTML = error_msg;
     $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     hide_notice('error');
+    main_tabs();
     return false;
   }
   $('.gallery-right').addClass('show').removeClass('hide');
   const dt = new DataTransfer()
   for(var i = 0; i < input.files.length; i++)
   {
-    var vidCont = document.getElementById("preview_video");
-    var divElm = document.createElement('div');
-    divElm.id = "rowdiv" + i;
-    divElm.className = 'relative'
-    var spanElm = document.createElement('span');
-    var video = document.createElement('video');
-    video.src = URL.createObjectURL(event.target.files[i]);
-    video.width = "53";
-    video.height = "54";
-    video.id = "uploaded_video" + i
-    if (more_files_count > 0)
+    sum = sum + event.target.files[i].size;
+    if (sum > MaxSize)
     {
-      image.id = "uploaded_video" + more_files_count;
+      if (product_size == 4)
+      {
+        document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 128MB.";
+        $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+        hide_notice('error');  
+      }
+      else
+      {
+        document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 512MB.";
+        $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+        hide_notice('error');  
+      }
+      return false;
     }
-    video.autoplay = false;
-    video.controls = true;
-    video.muted = false;
-    video.className = 'right-color-image'
-    spanElm.appendChild(video);
-    var deleteImg = document.createElement('p');
-    deleteImg.className = 'image-cross'
-    imgp = document.createElement("IMG")
-    imgp.src = document.getElementById('image_cross').src
-    imgp.setAttribute("class", "cross")
-    deleteImg.onclick = function() 
+    else 
     {
-      this.parentNode.remove();
-      index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-      index = Number(index)
-      delete_assets(index,product_no,order_id,product_id,video_file.length,more_video_file.length,video_type)
-    };
-    deleteImg.appendChild(imgp)
-    divElm.appendChild(spanElm);
-    divElm.appendChild(deleteImg);
-    vidCont.appendChild(divElm);
-    document.getElementById("image_file").disabled = true;
-    $('.up-images').addClass('hide').removeClass('show');
-    $('.custom-check').addClass('hide').removeClass('show');
-    $('.cross-single').addClass('show').removeClass('hide');
-    $(".right-border").addClass('hide').removeClass('show');
-    $("#preview_video").addClass('show').removeClass('hide');
-    $("#preview_video").addClass('preview-video-style');
-    $('.remove-btn').addClass('show').removeClass('hide');
-    $('.submit-btn.upload-btn').addClass('show').removeClass('hide');
-    if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
-    {
+      error_shown = false;
+      var vidCont = document.getElementById("preview_video");
+      var divElm = document.createElement('div');
+      divElm.id = "rowdiv" + i;
+      divElm.className = 'relative'
+      var spanElm = document.createElement('span');
+      var video = document.createElement('video');
+      video.src = URL.createObjectURL(event.target.files[i]);
+      video.width = "53";
+      video.height = "54";
+      video.id = "uploaded_video" + i
+      if (more_files_count > 0)
+      {
+        image.id = "uploaded_video" + more_files_count;
+      }
+      video.autoplay = false;
+      video.controls = true;
+      video.muted = false;
+      video.className = 'right-color-image'
+      spanElm.appendChild(video);
+      var deleteImg = document.createElement('p');
+      deleteImg.className = 'image-cross'
+      imgp = document.createElement("IMG")
+      imgp.src = document.getElementById('image_cross').src
+      imgp.setAttribute("class", "cross")
+      deleteImg.onclick = function() 
+      {
+        this.parentNode.remove();
+        index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
+        index = Number(index)
+        delete_assets(index,product_no,order_id,product_id,video_file.length,more_video_file.length,video_type)
+      };
+      deleteImg.appendChild(imgp)
+      divElm.appendChild(spanElm);
+      divElm.appendChild(deleteImg);
+      vidCont.appendChild(divElm);
+      document.getElementById("image_file").disabled = true;
+      $('.up-images').addClass('hide').removeClass('show');
+      $('.custom-check').addClass('hide').removeClass('show');
+      $('.cross-single').addClass('show').removeClass('hide');
       $(".right-border").addClass('hide').removeClass('show');
-      $(".pr-item-right").addClass('btn-rem-padding-top').removeClass('btn-add-padding-top');
-    }
-    else
-    {
-      $(".product-list").css("padding-top","0px")
-    }
-    $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
+      $("#preview_video").addClass('show').removeClass('hide');
+      $("#preview_video").addClass('preview-video-style');
+      $('.remove-btn').addClass('show').removeClass('hide');
+      $('.submit-btn.upload-btn').addClass('show').removeClass('hide');
+      if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
+      {
+        $(".right-border").addClass('hide').removeClass('show');
+        $(".pr-item-right").addClass('btn-rem-padding-top').removeClass('btn-add-padding-top');
+      }
+      else
+      {
+        $(".product-list").css("padding-top","0px")
+      }
+      $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
+    } 
   }
  }
  function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title,order_id){
@@ -290,6 +317,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     dataType: "json",
     success: function(response){
       var myList = new Array();
+      error_shown = false;
       if (response.assets_urls != null && response.assets_urls.length != 0 && response.file_type == 'image')
       {
         for(var i=0;i<response.assets_urls.length;i++)
@@ -418,13 +446,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
         }
       }
-      else if(response.error_message != null)
-      {
-        document.getElementById("prev_checkbox").checked = false;
-        document.getElementById("alert_message").innerHTML = response.error_message;
-        $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
-        hide_notice('error');
-      }
       else
       {
         console.log(response.generic_error);
@@ -441,6 +462,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
  {
   var spinner = $('#loader');
   spinner.show();
+  $(".remove-btn").attr("disabled", true);
+  document.getElementsByTagName('a')[0].removeAttribute('href');
   e.preventDefault();
   var form = $('#uploadForm')[0]
   var formData = new FormData(form);
@@ -483,6 +506,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       document.getElementById("alert_message").innerHTML = 'Order did not submit. Please try again';
       $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     }
+    $(".remove-btn").attr("disabled", false);
+    $("a").prop("href", "");
   }
   if (user_email != '')
   {

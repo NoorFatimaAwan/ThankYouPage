@@ -58,6 +58,11 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
+    @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
+    @order_count = @last_order.count
+    if @order_count > 1
+      @last_order.first.destroy
+    end
     if @order.save!
       @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
       if @products_submitted == params[:total_products].to_i
@@ -89,24 +94,19 @@ class OrdersController < ApplicationController
     if params[:checkbox_value] == 'true'
       assets_urls = []
       assets_blobs = []
-      @order = Order.last
       parent_product_no = (params[:product_no].to_i - 1)
       if params[:product_no].to_i <= 0
         @parent_product_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],((params[:product_length].to_i) - 1),params[:parent_product_id]).last
       elsif params[:product_no].to_i > 0
         @parent_product_order = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order_id], params[:variant_title],parent_product_no).last
       end
-      if @parent_product_order == @order
-        @parent_assets = @parent_product_order.file_type == 'image' ? @order.images : @order.videos
-        @parent_assets.each do |asset|
-          assets_urls << url_for(asset)
-          assets_blobs << asset.blob
-        end
-      else
-        error_message = 'Please submit the above files before checking check box.'
+      @parent_assets = @parent_product_order.file_type == 'image' ? @parent_product_order.images : @parent_product_order.videos
+      @parent_assets.each do |asset|
+        assets_urls << url_for(asset)
+        assets_blobs << asset.blob
       end
     end
-     render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order.file_type, error_message: error_message, generic_error: @parent_product_order&.errors&.messages}
+     render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order.file_type, generic_error: @parent_product_order&.errors&.messages}
   end
 
   def download_assets  
@@ -177,7 +177,7 @@ class OrdersController < ApplicationController
         @order_assets&.last(@order_assets&.count)[params[:index].to_i]&.purge
       end
     end
-    render json: {deleted: 'removed_all'}
+    render json: {deleted: deleted}
   end
 
   private
