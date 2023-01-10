@@ -291,6 +291,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       $("#preview_video").addClass('preview-video-style');
       $('.remove-btn').addClass('show').removeClass('hide');
       $('.submit-btn.upload-btn').addClass('show').removeClass('hide');
+      $('.submit-btn.upload-btn').addClass('upload-video');
       if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
       {
         $(".right-border").addClass('hide').removeClass('show');
@@ -390,7 +391,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       else if (response.assets_urls != null && response.assets_urls.length != 0 && response.file_type == 'video')
       {
         $("#preview_video").addClass('show').removeClass('hide');
-        document.getElementById("preview_video").style.marginRight = "55px";
         for(var i=0;i<response.assets_urls.length;i++)
         {
           $('.gallery-right').addClass('show').removeClass('hide');
@@ -434,6 +434,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           $('.remove-btn').addClass('show').removeClass('hide');
           $("#preview_video").addClass('preview-video-style');    
           $('.submit-btn.upload-btn').addClass('show').removeClass('hide');
+          $('.submit-btn.upload-btn').addClass('upload-video');
           if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
           {
             $(".right-border").addClass('hide').removeClass('show')
