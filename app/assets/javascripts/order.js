@@ -305,6 +305,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   }
  }
  function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title,order_id){
+  error_shown = false;
   checkbox_value = $("#prev_checkbox").is(':checked')
   if (checkbox_value == false && $("#alert_message").hasClass('alert-danger'))
   {
@@ -317,7 +318,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     dataType: "json",
     success: function(response){
       var myList = new Array();
-      error_shown = false;
       if (response.assets_urls != null && response.assets_urls.length != 0 && response.file_type == 'image')
       {
         for(var i=0;i<response.assets_urls.length;i++)
