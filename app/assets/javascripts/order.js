@@ -35,12 +35,20 @@ $(document).ready(function () {
 document.addEventListener('change', function(e) {
   if (e.target.matches('#more_image_file,#more_video_file'))
   {
-    var files = e.target.files;
-    var filesArr = Array.prototype.slice.call(files);
-    filesArr.forEach(function(f) {
-      storedFiles.push(f);
-      more_files_count += 1;
-    });
+    if ($('#loader').is(':visible'))
+    {
+      alert('Please wait for submission of already uploaded assets');
+      error_shown = true;
+    }
+    else
+    {
+      var files = e.target.files;
+      var filesArr = Array.prototype.slice.call(files);
+      filesArr.forEach(function(f) {
+        storedFiles.push(f);
+        more_files_count += 1;
+      });
+    }
   }
   if (error_shown == false)
   {
@@ -465,6 +473,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   spinner.show();
   $(".remove-btn").attr("disabled", true);
   document.getElementsByTagName('a')[0].removeAttribute('href');
+  $('.image-cross').hide();
   e.preventDefault();
   var form = $('#uploadForm')[0]
   var formData = new FormData(form);
@@ -499,6 +508,9 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     if(this.status == 200) {
       document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
       $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
+      $(".remove-btn").attr("disabled", false);
+      $("a").prop("href", "");
+      $('.image-cross').show();  
     }
     else
     {
@@ -507,8 +519,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       document.getElementById("alert_message").innerHTML = 'Order did not submit. Please try again';
       $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     }
-    $(".remove-btn").attr("disabled", false);
-    $("a").prop("href", "");
   }
   if (user_email != '')
   {
@@ -574,20 +584,23 @@ function hide_notice(type)
 
   function delete_assets(index,product_no,order_id,product_id,asset_length,more_asset_length,asset_type)
   {
-    $.ajax({
-      method: "GET",
-      url: `${host_url}/orders/delete_assets`,
-      data: {index: index, product_no: product_no, order_id: order_id,product_id: product_id,asset_length: asset_length,more_asset_length: more_asset_length,asset_type: asset_type},
-      dataType: "json",
-      success: function(response){
-        if (response.deleted == 'removed_all')
+    if (!$('#loader').is(':visible'))
+    {
+      $.ajax({
+        method: "GET",
+        url: `${host_url}/orders/delete_assets`,
+        data: {index: index, product_no: product_no, order_id: order_id,product_id: product_id,asset_length: asset_length,more_asset_length: more_asset_length,asset_type: asset_type},
+        dataType: "json",
+        success: function(response){
+          if (response.deleted == 'removed_all')
+          {
+            main_tabs() 
+          }
+        },
+        error: function(response)
         {
-          main_tabs() 
+          console.log('error');
         }
-      },
-      error: function(response)
-      {
-        console.log('error');
-      }
-    });
+      });  
+    }
   }

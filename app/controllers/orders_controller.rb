@@ -163,10 +163,10 @@ class OrdersController < ApplicationController
 
   def delete_assets
     @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id])&.last
-    @order_assets = @order.file_type == 'image' ? @order.images : @order.videos
+    @order_assets = @order&.file_type == 'image' ? @order&.images : @order&.videos
     if params[:asset_type] == "remove_all"        
-      @order.destroy
-      deleted = 'removed_all'
+      destroyed = @order&.destroy
+      deleted = 'removed_all' if destroyed
     end
     if @order.present?
       if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
