@@ -17,10 +17,6 @@ class OrdersController < ApplicationController
     @existing_order = Order.where("shop_order_id =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_id], params[:product_id],params[:product_no],params[:product_title])
     @first_product = params[:product_index].to_i == 1 ? false : true
     @user_email = params[:user_email].present? ? params[:user_email] : nil
-    if !@first_product && !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
-      $order_id_for_email = params[:order_id]
-      ReminderMailer.new_reminder(@user_email, params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!
-    end
     render layout: false
   end
 
@@ -78,7 +74,11 @@ class OrdersController < ApplicationController
     raise Errors::Invalid.new(@order.errors)
   end
 
-  def should_show    
+  def should_show  
+    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
+      $order_id_for_email = params[:order_id]
+      ReminderMailer.new_reminder(params[:user_email], params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!  
+    end
   end
 
   def show
@@ -100,13 +100,17 @@ class OrdersController < ApplicationController
       elsif params[:product_no].to_i > 0
         @parent_product_order = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order_id], params[:variant_title],parent_product_no).last
       end
-      @parent_assets = @parent_product_order.file_type == 'image' ? @parent_product_order.images : @parent_product_order.videos
-      @parent_assets.each do |asset|
-        assets_urls << url_for(asset)
-        assets_blobs << asset.blob
+      @parent_assets = @parent_product_order&.file_type == 'image' ? @parent_product_order&.images : @parent_product_order&.videos if @parent_product_order.present?
+      if @parent_assets&.attached?
+        @parent_assets&.each do |asset|
+          assets_urls << url_for(asset)
+          assets_blobs << asset.blob
+        end
+      else
+        error_message = 'Please upload and submit assets on box above.'
       end
     end
-     render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order.file_type, generic_error: @parent_product_order&.errors&.messages}
+     render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order&.file_type,error_message: error_message, generic_error: @parent_product_order&.errors&.messages}
   end
 
   def download_assets  
@@ -163,21 +167,24 @@ class OrdersController < ApplicationController
 
   def delete_assets
     @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id])&.last
-    @order_assets = @order&.file_type == 'image' ? @order&.images : @order&.videos
     if params[:asset_type] == "remove_all"        
       destroyed = @order&.destroy
       deleted = 'removed_all' if destroyed
     end
+    asset_index = params[:index].to_i
     if @order.present?
+      @order_assets = @order&.file_type == 'image' ? @order&.images : @order&.videos
       if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
-        @order_assets&.last(params[:asset_length].to_i)[params[:index].to_i]&.purge
+        asset_index = params[:index].to_i - 1 if params[:index].to_i == params[:asset_length].to_i
+        @order_assets&.last(params[:asset_length].to_i)[asset_index]&.purge
       elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
-        @order_assets&.first(params[:more_asset_length].to_i)[params[:index].to_i]&.purge
+        asset_index = params[:index].to_i - 1 if params[:index].to_i == params[:more_asset_length].to_i
+        @order_assets&.first(params[:more_asset_length].to_i)[asset_index]&.purge
       else
-        @order_assets&.last(@order_assets&.count)[params[:index].to_i]&.purge
+        @order_assets&.last(@order_assets&.count)[asset_index]&.purge
       end
     end
-    render json: {deleted: deleted}
+    render json: {deleted: deleted,asset_type: params[:asset_type],index: params[:index].to_i}
   end
 
   private
