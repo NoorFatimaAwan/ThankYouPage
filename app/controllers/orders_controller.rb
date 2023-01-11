@@ -54,6 +54,18 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
+    if (@order.videos.attached?)
+      for i in 0..params[:order][:videos].count
+        video_path = ActiveStorage::Blob.service.path_for(@order.videos[i].key)
+        temp_file = "#{Rails.root}/testing#{i}.mp4"
+        system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
+        downloaded_video = open(temp_file)
+        @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
+        @order.videos[i].purge
+        downloaded_video.close
+        File.delete(temp_file)
+      end
+    end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
     @order_count = @last_order.count
     if @order_count > 1
@@ -121,28 +133,19 @@ class OrdersController < ApplicationController
       Zip::OutputStream.open(temp_file) { |zos| }
     
       Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
-        if @order.video.attached?
-          image_file = Tempfile.new("#{@order.video}")
-          File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
-            @order.video.download do |chunk|
-              file.write(chunk)
-            end
 
-            zipfile.add("#{@order.video.filename}", image_file.path)
-          end
+        @order_assets = @order.videos.attached? ? @order.videos : @order.images
+        if @order_assets.present?
 
-        elsif @order.images.attached?
-
-          @order.images.each do |image|
-            image_file = Tempfile.new("#{image}")
-            
-            File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
-              image.download do |chunk|
+          @order_assets.each do |asset|
+            file = Tempfile.new("#{asset}")
+            File.open(file.path, 'w', encoding: 'ASCII-8BIT') do |file|
+              asset.download do |chunk|
                 file.write(chunk)
               end
             end
       
-            zipfile.add("#{image.filename}", image_file.path)
+            zipfile.add("#{asset.filename}", file.path)
           end
         end
       end
@@ -171,17 +174,24 @@ class OrdersController < ApplicationController
       destroyed = @order&.destroy
       deleted = 'removed_all' if destroyed
     end
+    file_index = 0
     asset_index = params[:index].to_i
     if @order.present?
       @order_assets = @order&.file_type == 'image' ? @order&.images : @order&.videos
       if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
-        asset_index = params[:index].to_i - 1 if params[:index].to_i == params[:asset_length].to_i
-        @order_assets&.last(params[:asset_length].to_i)[asset_index]&.purge
+        @order_assets&.last(params[:asset_length].to_i).map(&:blob).each_with_index do |blob,index|
+          if "#{blob.filename}" == params[:index]
+            file_index = index
+          end
+        end
+        @order_assets&.last(params[:asset_length].to_i)[file_index]&.purge
       elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
-        asset_index = params[:index].to_i - 1 if params[:index].to_i == params[:more_asset_length].to_i
-        @order_assets&.first(params[:more_asset_length].to_i)[asset_index]&.purge
-      else
-        @order_assets&.last(@order_assets&.count)[asset_index]&.purge
+        @order_assets&.first(params[:more_asset_length].to_i).map(&:blob).each_with_index do |blob,index|
+          if "#{blob.filename}" == params[:index]
+            file_index = index
+          end
+        end
+        @order_assets&.first(params[:more_asset_length].to_i)[file_index]&.purge
       end
     end
     render json: {deleted: deleted,asset_type: params[:asset_type],index: params[:index].to_i}

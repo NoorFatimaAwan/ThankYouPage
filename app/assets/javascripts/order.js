@@ -160,10 +160,10 @@ document.addEventListener('change', function(e) {
         var spanElm = document.createElement('span');
         var image = document.createElement('img');
         image.src = URL.createObjectURL(event.target.files[i]);
-        image.id = "output" + i;
+        image.id = "output" + event.target.files[i].name;
         if (more_files_count > 0)
         {
-          image.id = "output" + more_files_count;
+          image.id = "output" + storedFiles[i].name;
         }
         image.width = "53";
         image.height = "54";
@@ -178,20 +178,17 @@ document.addEventListener('change', function(e) {
         deleteImg.onclick = function() {
           this.parentNode.remove();
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
-          index = Number(index)
           image_file_length = image_file.length
           image_more_file_length = more_image_file.length
           if (image_type.includes('more'))
           {
             if (deleted_more_upload_files > 0)
             {
-              index = index -1
               image_more_file_length = more_image_file.length - deleted_more_upload_files
             }
           }
           else if (deleted_upload_files > 0)
           {
-            index = index -1
             image_file_length = image_file.length - deleted_upload_files
           }
           delete_assets(index,product_no,order_id,product_id,image_file_length,image_more_file_length,image_type)
@@ -293,10 +290,10 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         video.src = URL.createObjectURL(event.target.files[i]);
         video.width = "53";
         video.height = "54";
-        video.id = "uploaded_video" + i
+        video.id = "uploaded_video" + event.target.files[i].name
         if (more_files_count > 0)
         {
-          image.id = "uploaded_video" + more_files_count;
+          image.id = "uploaded_video" + storedFiles[i].name;
         }
         video.autoplay = false;
         video.controls = true;
@@ -312,20 +309,17 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         {
           this.parentNode.remove();
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-          index = Number(index)
           video_file_length = video_file.length
           video_more_file_length = more_video_file.length
           if (video_type.includes('more'))
           {
             if (deleted_more_upload_files > 0)
             {
-              index = index -1
               video_more_file_length = more_video_file.length - deleted_more_upload_files
             }
           }
           else if (deleted_upload_files > 0)
           {
-            index = index -1
             video_file_length = video_file.length - deleted_upload_files
           }
           delete_assets(index,product_no,order_id,product_id,video_file_length,video_more_file_length,video_type)
@@ -378,6 +372,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       var myList = new Array();
       if (response.assets_urls != null && response.assets_urls.length != 0 && response.file_type == 'image')
       {
+        image_file = document.getElementById('image_file').files
         for(var i=0;i<response.assets_urls.length;i++)
         {
           var imgCont = document.getElementById("preview");
@@ -387,7 +382,8 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           var spanElm = document.createElement('span');
           var image = document.createElement('img');
           image.src = response.assets_urls[i];
-          image.id = "output" + i;
+          debugger
+          image.id = "output" + response.assets_blobs[i].filename;
           image.width = "53";
           image.height = "54";
           image.className = 'right-color-image'
@@ -400,13 +396,9 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           deleteImg.appendChild(imgp)
           deleteImg.onclick = function() {
             this.parentNode.remove();
+            length_image_file = document.getElementById('preview').getElementsByClassName('relative').length - document.getElementById('more_image_file').files.length
             index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
-            index = Number(index)
-            if (deleted_upload_files > 0)
-            {
-              index -=1
-            }
-            delete_assets(index,product_no,order_id,product_id,document.getElementById('image_file').files.length,document.getElementById('more_image_file').files.length,'')
+            delete_assets(index,product_no,order_id,product_id,length_image_file,document.getElementById('more_image_file').files.length,'uploaded_images')
             if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
             {
               $('.up-images').addClass('show').removeClass('hide');
@@ -465,7 +457,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           video.src = response.assets_urls[i];
           video.width = "53";
           video.height = "54";
-          video.id = "uploaded_video" + i
+          video.id = "uploaded_video" + response.assets_blobs[i].filename
           video.autoplay = false;
           video.controls = true;
           video.muted = false;
@@ -481,12 +473,11 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           {
             this.parentNode.remove();
             index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-            index = Number(index)
             if (deleted_upload_files > 0)
             {
               index -=1
             }
-            delete_assets(index,product_no,order_id,product_id,document.getElementById('video_file').files.length,document.getElementById('more_video_file').files.length,'')    
+            delete_assets(index,product_no,order_id,product_id,document.getElementById('video_file').files.length,document.getElementById('more_video_file').files.length,'uploaded_videos')    
             if (document.getElementById('preview_video').getElementsByClassName('relative').length == 0 ) 
             {
               main_tabs()
