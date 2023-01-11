@@ -54,7 +54,7 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
-    if (@order.videos.attached?)
+    if (@order.videos.attached? && @order.prev_checkbox == false)
       for i in 0..params[:order][:videos].count
         video_path = ActiveStorage::Blob.service.path_for(@order.videos[i].key)
         temp_file = "#{Rails.root}/testing#{i}.mp4"
