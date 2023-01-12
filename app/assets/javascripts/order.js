@@ -132,15 +132,11 @@ document.addEventListener('change', function(e) {
         }
         if (product_size == 4)
         {
-          document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 100MB.";
-          $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-          hide_notice('error');  
+          alert(event.target.files[i].name + "size cannot be greater than 100MB.")
         }
         else
         {
-          document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 200MB.";
-          $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-          hide_notice('error');  
+          alert(event.target.files[i].name + "size cannot be greater than 200MB.")
         }
       }
       else if (sum > max_size)
@@ -266,15 +262,13 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       {
         if (product_size == 4)
         {
-          document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 128MB.";
-          $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-          hide_notice('error');  
+          alert(event.target.files[i].name + "size cannot be greater than 128MB.")
+          return false;
         }
         else
         {
-          document.getElementById("alert_message").innerHTML = event.target.files[i].name +" size cannot be greater than 512MB.";
-          $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
-          hide_notice('error');  
+          alert(event.target.files[i].name + "size cannot be greater than 512MB.")
+          return false;
         }
         return false;
       }
@@ -293,7 +287,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         video.id = "uploaded_video" + event.target.files[i].name
         if (more_files_count > 0)
         {
-          image.id = "uploaded_video" + storedFiles[i].name;
+          video.id = "uploaded_video" + storedFiles[i].name;
         }
         video.autoplay = false;
         video.controls = true;
@@ -382,7 +376,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           var spanElm = document.createElement('span');
           var image = document.createElement('img');
           image.src = response.assets_urls[i];
-          debugger
           image.id = "output" + response.assets_blobs[i].filename;
           image.width = "53";
           image.height = "54";
@@ -551,6 +544,15 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     more_file_length = more_uploaded_files.length
     files_in_form_data = "order[videos][]"
   }
+
+  if (document.getElementById("video_file").files.length != 0 || document.getElementById("more_video_file").files.length != 0)
+  {
+    formData.delete("order[images][]");
+  }
+  else
+  {
+    formData.delete("order[videos][]");
+  }
   length = more_file_length
   if (storedFiles.length > length)
   {
@@ -608,12 +610,12 @@ function hide_notice(type)
 
  function main_tabs()
  {
-  $("#alert_message").addClass('hide').removeClass('alert alert-success');
   $('.up-images').addClass('show').removeClass('hide');
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');
   $("#preview_video").addClass('hide').removeClass('show');
   document.getElementById("video_file").disabled = false;
+  document.getElementById("image_file").disabled = false;
   $('.gallery-right').addClass('hide').removeClass('show');
   $('.custom-check').removeClass('hide');
   $("#prev_checkbox").prop("checked", false);
@@ -644,6 +646,8 @@ function hide_notice(type)
 
   function delete_assets(index,product_no,order_id,product_id,asset_length,more_asset_length,asset_type)
   {
+    $("#alert_message").addClass('hide').removeClass('alert alert-success');
+    document.getElementsByTagName('a')[0].removeAttribute('href');
     if (!$('#loader').is(':visible'))
     {
       $.ajax({
@@ -654,6 +658,32 @@ function hide_notice(type)
         success: function(response){
           if (response.deleted == 'removed_all')
           {
+            assets = document.getElementById('preview').getElementsByClassName('relative')
+            assets_length = document.getElementById('image_file').files.length +  document.getElementById('more_image_file').files.length
+            if (assets.length == 0)
+            {
+              assets = document.getElementById('preview_video').getElementsByClassName('relative')
+              assets_length = document.getElementById('video_file').files.length +  document.getElementById('more_video_file').files.length
+            }
+            if (assets_length == 0)
+            {
+              assets_length = assets.length
+            }
+            if (assets.length > 0)
+            {
+              for (var i = 0; i < assets_length; i++)
+              {
+                if (i >= assets.length)
+                {
+                  i = 0
+                }
+                if (assets[i] == undefined)
+                {
+                  break;
+                }
+                assets[i].remove()
+              }
+            }
             main_tabs()
           }
           else if (response.asset_type.includes('more'))
