@@ -240,6 +240,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   }
   if (input.files[0].size > MaxSize)
   {
+    error_shown = true;
     document.getElementById("alert_message").innerHTML = error_msg;
     $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     hide_notice('error');
@@ -263,12 +264,14 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         if (product_size == 4)
         {
           alert(event.target.files[i].name + "size cannot be greater than 128MB.")
-          return false;
         }
         else
         {
           alert(event.target.files[i].name + "size cannot be greater than 512MB.")
-          return false;
+        }
+        if ($('#loader').is(':visible'))
+        {
+            $('#loader').hide()
         }
         return false;
       }
@@ -454,7 +457,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           video.autoplay = false;
           video.controls = true;
           video.muted = false;
-          console.log(i + response.assets_urls[i].name)
           video.className = 'right-color-image'
           spanElm.appendChild(video);
           var deleteImg = document.createElement('p');
@@ -536,20 +538,16 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   more_uploaded_files = document.getElementById("more_image_file").files
   more_file_length = more_uploaded_files.length
   files_in_form_data = "order[images][]"
-  if (document.getElementById("video_file").files.length != 0 && document.getElementById("more_video_file").files.length != 0)
+  if ((document.getElementById("video_file").files.length != 0 || $("#prev_checkbox").is(':checked')) && document.getElementById("more_video_file").files.length != 0)
   {
     uploaded_files = document.getElementById("video_file").files
     file_length = uploaded_files.length
     more_uploaded_files = document.getElementById("more_video_file").files
     more_file_length = more_uploaded_files.length
     files_in_form_data = "order[videos][]"
-  }
-
-  if (document.getElementById("video_file").files.length != 0 || document.getElementById("more_video_file").files.length != 0)
-  {
     formData.delete("order[images][]");
   }
-  else
+  else if ((document.getElementById("image_file").files.length != 0 || $("#prev_checkbox").is(':checked')) && document.getElementById("more_image_file").files.length != 0)
   {
     formData.delete("order[videos][]");
   }
@@ -665,6 +663,12 @@ function hide_notice(type)
               assets = document.getElementById('preview_video').getElementsByClassName('relative')
               assets_length = document.getElementById('video_file').files.length +  document.getElementById('more_video_file').files.length
             }
+            document.getElementById("image_file").value = ""
+            document.getElementById("more_image_file").value = ""
+            document.getElementById("video_file").value = ""
+            document.getElementById("more_video_file").value = ""
+            storedFiles = [];
+            more_files_count = 0
             if (assets_length == 0)
             {
               assets_length = assets.length
