@@ -273,10 +273,12 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         {
             $('#loader').hide()
         }
+        input.files = dt.files
         return false;
       }
       else 
       {
+        dt.items.add(input.files[i])
         error_shown = false;
         var vidCont = document.getElementById("preview_video");
         var divElm = document.createElement('div');
