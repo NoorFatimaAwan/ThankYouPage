@@ -1,83 +1,128 @@
 class OrdersController < ApplicationController
   require('zip')
+  require 'streamio-ffmpeg'
+  skip_before_action :verify_authenticity_token
 
   def index
-    @orders = Order.all.paginate(page: params[:page], per_page: 20)
+    @q = Order.ransack(params[:q])
+    @orders = @q.result(distinct: true).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
   end
 
   def new
     @order = Order.new
     @shop_id = Shop.find_by(shopify_domain: params[:domain])&.id
     @product_title = params[:product_title]
+    @variant_title = params[:variant_title] if params[:variant_title].present? && params[:variant_title] != "null"
     @product_image_url = params[:product_image_url]
-    @existing_order = Order.where("order_no =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_no], params[:product_id],params[:product_no],params[:product_title])
-    @first_product = params[:product_no] == "0" ? params[:product_title] == params[:first_product_title] ? false : true : true
+    @existing_order = Order.where("shop_order_id =?  and product_id = ? and product_no = ? and product_title = ?",params[:order_id], params[:product_id],params[:product_no],params[:product_title])
+    @first_product = params[:product_index].to_i == 1 ? false : true
+    @user_email = params[:user_email].present? ? params[:user_email] : nil
+    render layout: false
   end
 
   def create
     params[:order][:images].present? ? params[:order][:file_type] = 'image' : params[:order][:file_type] = 'video' 
     @order = Order.new(order_params)
     if params[:order][:parent_product_id].present? && params[:order][:prev_checkbox].present? &&  params[:order][:prev_checkbox] != "0"
-      @parent_product = Order.where("product_id= ? and order_no = ?", params[:order][:parent_product_id],params[:order][:order_no]&.to_i)
+      if params[:order][:product_no].to_i <= 0
+        @parent_product = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],((params[:product_length].to_i) - 1),params[:order][:parent_product_id])
+      elsif params[:order][:product_no].to_i > 0 
+        @parent_product = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order][:shop_order_id], params[:order][:variant_title],((params[:order][:product_no].to_i) - 1))
+      end
       @order.file_type = @parent_product&.last&.file_type
       if @parent_product.present? && @parent_product&.last&.images.attached? 
         @parent_product_files = @parent_product&.last&.images&.map(&:blob)
         @order&.images&.attach(@parent_product_files)
-      elsif @parent_product.present? && @parent_product&.last&.video.attached?
-        @parent_product_files = @parent_product&.last&.video&.blob
-        @order&.video&.attach(@parent_product_files)
+      elsif @parent_product.present? && @parent_product&.last&.videos.attached?
+        @parent_product_files = @parent_product&.last&.videos&.map(&:blob)
+        @order&.videos&.attach(@parent_product_files)
       end
     end
     total_image_size = 0 
+    total_video_size = 0
     if params[:order][:images].present?
       params[:order][:images].each do |image|
         total_image_size = total_image_size + image.size
       end
-    elsif params[:order][:video].present?
-      total_video_size = params[:order][:video].size > 4 * 1024 * 1024
+    elsif params[:order][:videos].present?
+      params[:order][:videos].each do |video|
+        total_video_size = total_video_size + video.size
+      end
     end
-    if total_image_size > 4 * 1024 * 1024 || total_video_size
+    if total_image_size > 4 * 1024 * 1024 || total_video_size > 4 * 1024 * 1024
       AssetUploadJob.perform_now(@order)
     else
       @order.save!
+    end
+    if (@order.videos.attached? && @order.prev_checkbox == false)
+      for i in 0..params[:order][:videos].count
+        video_path = ActiveStorage::Blob.service.path_for(@order.videos[i].key)
+        temp_file = "#{Rails.root}/testing#{i}.mp4"
+        system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
+        downloaded_video = open(temp_file)
+        @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
+        @order.videos[i].purge
+        downloaded_video.close
+        File.delete(temp_file)
+      end
+    end
+    @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
+    @order_count = @last_order.count
+    if @order_count > 1
+      @last_order.first.destroy
+    end
+    if @order.save!
+      @products_submitted = Order.where(shop_order_id: @order.shop_order_id).count
+      if @products_submitted == params[:total_products].to_i
+        @order.update(email_status: 'Completed')
+      end
+      if @order.email_status != 'Completed'
+        job = Sidekiq::Cron::Job.new(name: 'Reminder Email',args: [params[:user_email],@order.order_no,params[:user_name],params[:thank_you_page_url],@order.shop_order_id], cron: '0 12 * * *', class: 'SendReminderEmailJob')
+        job.save
+      end
+      render json: {status: :ok}
     end
     rescue ActiveRecord::RecordInvalid
     raise Errors::Invalid.new(@order.errors)
   end
 
-  def should_show
-    product_title_array = []
-    (0...params[:product_amount].to_i).each do |index|
-      product_title_array.push(params[:product_title]["#{index}"][:title].include? 'expressio')
+  def should_show  
+    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
+      $order_id_for_email = params[:order_id]
+      ReminderMailer.new_reminder(params[:user_email], params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!  
     end
-    @product_required = product_title_array.include?(false) ? false : true
-    render json: @product_required ,:callback => params[:callback]
   end
 
   def show
     @order = Order.find(params[:id])
     @images = @order.images if @order.images.attached?
-    @video = @order.video if @order.video.attached?
+    @videos = @order.videos if @order.videos.attached?
     @product_title = @order.product_title
-    @order_no = "Order #" + @order.order_no.to_s
+    @variant_title = @order.variant_title
+    @order_no = "Order/confirmation #" + @order.order_no.to_s
   end
 
   def preview_files
     if params[:checkbox_value] == 'true'
-      image_urls = []
-      @order = Order.last
+      assets_urls = []
+      assets_blobs = []
       parent_product_no = (params[:product_no].to_i - 1)
-      @parent_product_order = Order.where("product_id= ? and order_no = ? and product_no = ?",  params[:parent_product_id],params[:order_no],parent_product_no).last
-      if @parent_product_order == @order
-        @order.images.each do |image|
-          image_urls << url_for(image)
+      if params[:product_no].to_i <= 0
+        @parent_product_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],((params[:product_length].to_i) - 1),params[:parent_product_id]).last
+      elsif params[:product_no].to_i > 0
+        @parent_product_order = Order.where("shop_order_id = ? and variant_title = ? and product_no = ?",params[:order_id], params[:variant_title],parent_product_no).last
+      end
+      @parent_assets = @parent_product_order&.file_type == 'image' ? @parent_product_order&.images : @parent_product_order&.videos if @parent_product_order.present?
+      if @parent_assets&.attached?
+        @parent_assets&.each do |asset|
+          assets_urls << url_for(asset)
+          assets_blobs << asset.blob
         end
-        @video_url = url_for(@order.video) if @order.video.attached?
       else
-        error_message = 'Please submit the above files before checking check box.'
+        error_message = 'Please upload and submit assets on box above.'
       end
     end
-    render json: {video_url: @video_url, image_urls: image_urls, error_message: error_message}
+     render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order&.file_type,error_message: error_message, generic_error: @parent_product_order&.errors&.messages}
   end
 
   def download_assets  
@@ -88,32 +133,23 @@ class OrdersController < ApplicationController
       Zip::OutputStream.open(temp_file) { |zos| }
     
       Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
-        if @order.video.attached?
-          image_file = Tempfile.new("#{@order.video}")
-          File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
-            @order.video.download do |chunk|
-              file.write(chunk)
-            end
 
-            zipfile.add("#{@order.video.filename}", image_file.path)
-          end
+        @order_assets = @order.videos.attached? ? @order.videos : @order.images
+        if @order_assets.present?
 
-        elsif @order.images.attached?
-
-          @order.images.each do |image|
-            image_file = Tempfile.new("#{image}")
-            
-            File.open(image_file.path, 'w', encoding: 'ASCII-8BIT') do |file|
-              image.download do |chunk|
+          @order_assets.each do |asset|
+            file = Tempfile.new("#{asset}")
+            File.open(file.path, 'w', encoding: 'ASCII-8BIT') do |file|
+              asset.download do |chunk|
                 file.write(chunk)
               end
             end
       
-            zipfile.add("#{image.filename}", image_file.path)
+            zipfile.add("#{asset.filename}", file.path)
           end
         end
       end
-    
+
       zip_data = File.read(temp_file.path)
       send_data(zip_data, type: 'application/zip', disposition: 'attachment', filename: filename)
     ensure 
@@ -122,11 +158,49 @@ class OrdersController < ApplicationController
     end  
   end
 
+  def unsubscribe
+    @order = Order.where(shop_order_id: params[:id].to_i)&.last
+    @order&.update(email_status: 'unsubscribed')
+    if @order.present?
+      @msg = "You've unsubscribed from our mailing list. You won't receive any more mails"
+    else
+      @msg = "Please upload images/videos for your chocolate box (or boxes!) before unsubscribing"
+    end
+  end
+
+  def delete_assets
+    @order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order_id],params[:product_no],params[:product_id])&.last
+    if params[:asset_type] == "remove_all"        
+      destroyed = @order&.destroy
+      deleted = 'removed_all' if destroyed
+    end
+    file_index = 0
+    asset_index = params[:index].to_i
+    if @order.present?
+      @order_assets = @order&.file_type == 'image' ? @order&.images : @order&.videos
+      if params[:asset_type] == "uploaded_images" || params[:asset_type] == "uploaded_videos"
+        @order_assets&.last(params[:asset_length].to_i).map(&:blob).each_with_index do |blob,index|
+          if "#{blob.filename}" == params[:index]
+            file_index = index
+          end
+        end
+        @order_assets&.last(params[:asset_length].to_i)[file_index]&.purge
+      elsif params[:asset_type] == "more_uploaded_images" || params[:asset_type] == "more_uploaded_videos"
+        @order_assets&.first(params[:more_asset_length].to_i).map(&:blob).each_with_index do |blob,index|
+          if "#{blob.filename}" == params[:index]
+            file_index = index
+          end
+        end
+        @order_assets&.first(params[:more_asset_length].to_i)[file_index]&.purge
+      end
+    end
+    render json: {deleted: deleted,asset_type: params[:asset_type],index: params[:index].to_i}
+  end
 
   private
 
   def order_params
-    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no, :video, images: [])
+    params.fetch(:order).permit(:shop_id,:product_id,:file_type,:prev_checkbox,:parent_product_id,:product_title,:order_no,:product_no,:email_status,:variant_title,:shop_order_id, videos: [], images: [])
   end
 
 end

@@ -12,8 +12,10 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-  config.hosts << '77df-202-166-171-14.ngrok.io'
-  config.web_console.whitelisted_ips = '202.166.171.14'
+  config.hosts << '.ngrok.io'
+  config.hosts << 'fiddle.jshell.net'
+  config.hosts += ENV.fetch('FRONTEND', '*').split(',')
+  config.web_console.whitelisted_ips = '110.39.190.158'
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
@@ -75,4 +77,6 @@ Rails.application.configure do
     password: ENV["GMAIL_PASSWORD"]
   }
   config.action_mailer.default_url_options = { host: "localhost:3000"}
+
+  config.active_job.queue_adapter = :sidekiq
 end

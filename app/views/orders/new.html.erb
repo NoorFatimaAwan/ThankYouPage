@@ -4,24 +4,24 @@
 <head>
 	<title>furniture</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="	">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
 		integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
 		crossorigin="anonymous" />
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+    <%= javascript_include_tag 'application' %>
+    <%= stylesheet_link_tag    'application' %>
 </head>
 
-<body>
+<body style="overflow: hidden;">
 	<div class="main-page">
     <div class="product-component">
       <div class="product-list">
-        <div id="alert_message", class="">
+        <div id="alert_message", class="mb-2">
         </div>
-        <div class="pr-item d-flex justify-content-between align-items-center">
-          <div class="pr-item-left next-page-left">
-            <div class="d-flex">
+        <div class="pr-item d-flex justify-content-between">
+          <div class="pr-item-left border-padding">
+            <div class="pr-top-content d-flex">
               <div class="pr-small-img">
                 <% if  @product_image_url %>
                   <%= image_tag (@product_image_url) %>
@@ -29,112 +29,127 @@
               </div>
               <div>
                 <h4 class="product-name"><%= @product_title %></h4>
-                <h6 class="product-detail">Variable details</h6>
+                <h6 class="product-detail"><%= @variant_title %></h6>
               </div>
             </div>
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
               <% if @first_product.present? %>
                 <div class="custom-check">
-                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},#{params[:order_no].to_i}, #{params[:product_no].to_i})" %>
-                  <label class="contain">Fill in the info same as above</label>
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title]}',#{params[:order_id].to_i})" %>
+                  <label class="contain">Use same files as above</label>
                 </div>
               <% end %>
-              <div class="up-btns">
-                <%= f.label 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
-                <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images')" %>
-                <a href="" class="up-more remove-btn hide">Remove all</a>
-              </div>
-              <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "submit-btn upload-btn my-2" %>  
-              <%= f.file_field :video, accept: "video/*", id: "video_file" ,onchange: "loadVideo()" %>
-              <%= f.submit "Submit", class: "submit-btn", onclick: "submit_form()"%>
-              <%= image_tag('loader.gif', class: "loader hide")%>
+              <div class="desk-btn" >
+                <div class="up-btns">
+                  <%= f.label :images, 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
+                  <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})" %>
+                  <%= f.label 'Upload More', for: "more_video_file", id: "more_video_label" , class: "submit-btn upload-btn" %>  
+                  <%= f.file_field :videos, multiple: true, accept: "video/*", id: "more_video_file" ,onchange: "loadVideo(event,#{product_size(params[:product_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i},'more_uploaded_videos')" %>
+                  <a href="" class="up-more remove-btn hide" onclick="delete_assets('',<%= params[:product_no].to_i %>,<%= params[:order_id].to_i %>,<%= params[:product_id].to_i %>,'','','remove_all')">Remove all</a>
+                </div>
+                <%= f.submit "Send for customization", id: "submit_button", class: "submit-btn hide", onclick: "submit_form(event,'#{params[:order_no]}','#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}','#{params[:thank_you_page_url]}',#{params[:order_id].to_i},#{params[:total_products].to_i},#{params[:product_index]},#{params[:product_length]});"%>
+              </div>  
+              <%= image_tag('loading.gif', id: "loader")%>
               <%= f.hidden_field :shop_id , value: @shop_id %>
               <%= f.hidden_field :product_id , value: params[:product_id].to_i %>
               <%= f.hidden_field :file_type , value: "" %>
               <%= f.hidden_field :product_no , value: params[:product_no] %>
-              <%= f.hidden_field :order_no , value: params[:order_no].to_i %>
+              <%= f.hidden_field :order_no , value: params[:order_no] %>
               <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
               <%= f.hidden_field :product_title , value: params[:product_title] %>
+              <%= f.hidden_field :variant_title , value: params[:variant_title] %>
+              <%= f.hidden_field :shop_order_id , value: params[:order_id].to_i %>
+              <%= f.hidden_field :email_status , value: 'Pending' %>
         </div>
             <% if !@existing_order&.last&.present? %>
               <div class="pr-item-right d-flex justify-content-end">
-                <div id="img_tab", class="up-images mr-5">
+                <div class="right-border"></div>
+                <div id="img_tab", class="up-images mr-5" ,data-toggle="tooltip", data-placement="top", title="* Upload as many images as you’d like!
+                * Images in portrait format (longer left to right) fills the expressio screen, but portrait images will work too!
+                * Want a specific order of images? Title the images in alphabetical order and you’ll be all set!
+                * We’ll upload your images into a smooth slide show and ship it out within 2 days!">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'uploaded_images')"  %>
+                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})"  %>
                       <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
                     </div>
                   </div>
                   <div class="img-inner text-center">
-                    <div class="icon-top-border">
-                      <%= image_tag('image_logo.svg', class: "inner-icon")%>
+                    <div>
+                        <div class="icon-top-border">
+                        <%= image_tag('image_logo.svg', class: "inner-icon")%>
+                        </div>
+                        <p class="up-image-text">Upload Images</p>
                     </div>
-                    <p class="up-image-text">Upload Images</p>
-                    <p class="uplaod-upto-text">up to 1896 Photos </p>
-                    <p class="image-cal-text">960 x 540,270 kb each</p>
+                    <div >
+                      <p class="uplaod-upto-text">up to 1896 Photos </p>
+                      <p class="image-cal-text">960 x 540,270 kb each</p>
+                    </div>
                   </div>
                 </div>
-                <div id="video_tab", class="up-images up-video">
+                <div id="video_tab", class="up-images up-video",data-toggle="tooltip", data-placement="top", title="Upload one or more videos. While you can upload a video of up to about 30 minutes long, we suggest just a couple minutes of almost any length – as much as 30 minutes if you’d like!">
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :video, id: "video_file", accept: "video/*", class: "custom-file-input" ,onchange: "loadVideo(#{product_size(params[:product_title])})" %>
+                      <%= f.file_field :videos, multiple: true, id: "video_file", accept: "video/*", class: "custom-file-input" ,onchange: "loadVideo(event,#{product_size(params[:product_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i}, 'uploaded_videos')" %>
                       <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
                     </div>
                   </div>
                   <div class="img-inner text-center">
-                    <div class="icon-top-border light-border">
-                      <%= image_tag('image_logo.svg', class: "inner-icon")%>
+                    <div>
+                      <div class="icon-top-border light-border">
+                        <%= image_tag('image_logo.svg', class: "inner-icon")%>
+                      </div>
+                      <p class="up-image-text">Upload videos</p>
                     </div>
-                    <p class="up-image-text">Upload video</p>
-                    <p class="uplaod-upto-text">up to 1896 Photos </p>
-                    <p class="image-cal-text">960 x 540,270 kb each</p>
+                    <div >
+                      <p class="uplaod-upto-text">up  to  512  Mb </p>
+                      <p class="image-cal-text">720p(HD),30  Min</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            <% end %>
-            <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
-              <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
+              <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
                 <ul class="gallery-list">
-                  <% (0...@existing_order.last.images&.count).each do |image| %>
-                    <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image", id: "uploaded_images")%>
-                  <% end %>
+                  <div id="preview"></div>
+                  <div id="preview_video", class="hide"></div>
+                  <%= image_tag('cross_icon.svg', class: "hide", id: "image_cross") %>
                 </ul>
               </div>
             <% end %>
-            <% if @existing_order&.last&.video.present? && @existing_order&.last&.video&.attached? %>
-              <%= video_tag(url_for(@existing_order&.last&.video), controls: '', style: "width: 200px;height: 150px;margin-bottom: 65px;") %>
-            <% end %>
-            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll hide">
+          <% end %>
+          <% if @existing_order&.last&.images.present? && @existing_order&.last&.images&.attached? %>
+            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
               <ul class="gallery-list">
-                <div id="preview"></div>
-                <%= image_tag('cross_icon.svg', class: "hide", id: "image_cross") %>
+                <% (0...@existing_order.last.images&.count).each do |image| %>
+                  <%= image_tag(@existing_order&.last&.images[image], class: "right-color-image", id: "uploaded_images")%>
+                <% end %>
               </ul>
             </div>
-            <div>
-              <div id="preview_video"></div>
-              <%= image_tag('cross_icon.svg', class: "cross-single hide", onclick: "remove_video()")%>
+          <% end %>
+          <% if @existing_order&.last&.videos.present? && @existing_order&.last&.videos&.attached? %>
+            <div class="gallery-right pl-3 g-scrol-bar g-righth-scroll">
+                <ul class="gallery-list">
+                  <% (0...@existing_order.last.videos&.count).each do |video| %>
+                    <%= video_tag(url_for(@existing_order&.last&.videos[video]), controls: '', class: "right-color-image") %>
+                  <% end %>
+                </ul>
             </div>
           <% end %>
           <div class="separater"></div>
         </div>
       </div>
-      <hr id="divider">
     </div>
 	</div>
-
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js"></script>
-	<script src="js/bootstrap.bundle.min.js"></script>
-
 
 
 </body>
 
 </html>
+
+

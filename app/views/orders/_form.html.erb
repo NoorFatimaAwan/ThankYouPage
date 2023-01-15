@@ -1,38 +1,58 @@
-<div id="orders"><br></div>
-<nav class="navbar bg-light">
-  <div class="container-fluid">
-    <span class="navbar-text">
-      List of all Orders
-    </span>
-  </div>
-</nav>   
+<div class="orders-header">
+    
+      <span class="navbar-text">
+        List of all Orders
+      </span>
+  <%= search_form_for @q, url: :orders, class: "d-flex flex-wrap"  do |form| %>
+    <div class="search-field relative">
+      <%= form.text_field :order_no_eq, {id: 'search_field',include_blank: true, onkeyup: "cross_show();" }  %>
+      <span>
+        <%= link_to 'x', orders_path, class: "cross-search hide" %>
+      </span>
+    </div>
+    <%= form.submit class: "btn btn-primary search-button" %>
+  <% end %>
+</div>
 <div class="datail-table">
   <table class="table table-hover">
     <thead>
       <tr>
-        <th  scope="col">Order #</th>
+        <th  scope="col">Order/Confirmation #</th>
         <th  scope="col">Title</th>
         <th  scope="col">Asset Type</th>
         <th  scope="col">Asset</th>
+        <th  scope="col">Email Status</th>
         <th  scope="col" class="text-center">Action</th>
       </tr>
     </thead>
     <tbody>
-      <% orders.each_with_index do |order,index| %>
-        <tr class="js-tr">
+      <% orders.each do |order| %>
+        <tr>
           <th scope="row"><%= order.order_no %></th>
           <td> <%= order.product_title %> </td>
           <td> <%= order.file_type %> </td>
           <% if order.images.attached? %>
             <td class="product-img"><%= image_tag(order.images.first.blob, size: "100x100")%></td>
-          <% elsif order.video.attached? %>
-            <td class="product-img"><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+          <% elsif order.videos.attached? %>
+            <td class="product-img"><%= video_tag(url_for(order.videos.first.blob), controls: '', size: "100x100") %></td>
+          <% else %>
+            <td> No Assets </td>
           <% end %>
+          <td> <%= Order.where("order_no = ?", order.order_no).first.email_status %> </td>
           <td class="text-center">
             <%= link_to "Show Details", order_path(order.id), class: "link-tag" %>    
           </td>
         </tr>
       <% end %>
     </tbody>
-</table>
-<%= will_paginate orders %>
+  </table>
+</div>
+<% if orders.empty? %>
+  <div class="no-order-text">
+    <p> No orders to show </p>
+  </div>
+<% end %>
+
+<div class="digg_pagination">
+  <%= will_paginate orders %>
+</div>

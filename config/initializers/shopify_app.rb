@@ -20,7 +20,7 @@ ShopifyApp.configure do |config|
     raise('Missing SHOPIFY_API_SECRET. See https://github.com/Shopify/shopify_app#requirements') unless config.secret
   end
   config.scripttags = [
-    { event: 'onload', src: "#{ENV['SHOPIFY_APP_HOST']}/returns/img_vid.js?version='#{Time.now.to_i.to_s}" }
+    { event: 'onload', src: "#{ENV['SHOPIFY_APP_HOST']}/returns/img_vid.js" }
   ]
 end
 
