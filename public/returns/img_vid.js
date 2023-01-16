@@ -7,7 +7,7 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
     const substring = 'expressio'
     let total_products = 0
     for(let x = 0; x < Shopify.checkout.line_items.length; x++){
-      variant_titles.push((Shopify.checkout.line_items[x].title).includes(substring))
+      variant_titles.push((Shopify.checkout.line_items[x].title.toLowerCase()).includes(substring))
       total_products = total_products + Shopify.checkout.line_items[x].quantity
     }
     if (variant_titles.every(Boolean))
