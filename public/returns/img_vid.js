@@ -33,7 +33,7 @@ var loadingSpinner = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:
               question_container.setAttribute("id","question_container")
               question_body.setAttribute("style","position: relative;border-radius: 4px; margin-top: 30px;overflow:hidden;" )
               question_container.setAttribute("style","width: 100%;min-height: 170px;overflow:hidden;");
-              parameters = `user_email=${Shopify.checkout.email}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&user_name=${Shopify.checkout.billing_address.first_name}&thank_you_page_url=${window.location.href}&order_id=${Shopify.checkout.order_id}`
+              parameters = `user_email=${Shopify.checkout.email}&order_no=${document.getElementsByClassName('os-order-number')[0].innerText.trim().split("#")[1]}&user_name=${Shopify.checkout.billing_address.first_name}&thank_you_page_url=${window.location.href}&order_id=${Shopify.checkout.order_id}&total_products=${total_products}`
               question_container.setAttribute("data", `${host_url}/orders/should_show?${parameters}`)
               document.getElementsByClassName('os-header__heading')[0].after(question_body)
               let body = document.createElement("body")

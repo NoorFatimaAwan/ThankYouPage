@@ -1,8 +1,8 @@
 var host_url = "https://mcacao.phaedrasolutions.com"
 var storedFiles = [];
 var storedVideoFiles = [];
-var deleted_upload_files = 0;
-var deleted_more_upload_files = 0;
+var deleted_upload_files = -1;
+var deleted_more_upload_files = -1;
 var image_blob_file = [];
 var error_shown = true;
 var more_files_count = 0;
@@ -148,6 +148,7 @@ document.addEventListener('change', function(e) {
       }
       else
       {
+        dt.items.add(event.target.files[i])
         error_shown = false;
         var imgCont = document.getElementById("preview");
         var divElm = document.createElement('div');
@@ -174,22 +175,40 @@ document.addEventListener('change', function(e) {
         deleteImg.onclick = function() {
           this.parentNode.remove();
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('output','')
-          image_file_length = image_file.length
-          image_more_file_length = more_image_file.length
+          image_file_length = dt.files.length
+          image_more_file_length = dt.files.length
+          index_to_remove = this.parentElement.id.replace('rowdiv','')
+          index_to_remove = Number(index_to_remove)
           if (image_type.includes('more'))
           {
-            if (deleted_more_upload_files > 0)
+            if (deleted_more_upload_files >= 0 && index_to_remove > deleted_more_upload_files)
             {
-              image_more_file_length = more_image_file.length - deleted_more_upload_files
+              index_to_remove = index_to_remove - deleted_more_upload_files
+            }
+            else if (index_to_remove < deleted_more_upload_files)
+            {
+              index_to_remove = deleted_more_upload_files - index_to_remove
             }
           }
-          else if (deleted_upload_files > 0)
+          else if (deleted_upload_files >= 0  && index_to_remove > deleted_upload_files)
           {
-            image_file_length = image_file.length - deleted_upload_files
+            index_to_remove = index_to_remove - deleted_upload_files
           }
+          else if (index_to_remove < deleted_upload_files)
+          {
+            index_to_remove = deleted_upload_files - index_to_remove
+          }
+          if (input.files.length <= index_to_remove)
+          {
+            index_to_remove = 0 
+          }
+          dt.items.remove(index_to_remove)
+          input.files = dt.files
           delete_assets(index,product_no,order_id,product_id,image_file_length,image_more_file_length,image_type)
           if (document.getElementById('preview').getElementsByClassName('relative').length == 0 ) 
           {
+            deleted_upload_files = -1;
+            deleted_more_upload_files = -1;
             main_tabs();
           }
         };
@@ -278,7 +297,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       }
       else 
       {
-        dt.items.add(input.files[i])
+        dt.items.add(event.target.files[i])
         error_shown = false;
         var vidCont = document.getElementById("preview_video");
         var divElm = document.createElement('div');
@@ -308,22 +327,40 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         {
           this.parentNode.remove();
           index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-          video_file_length = video_file.length
-          video_more_file_length = more_video_file.length
-          if (video_type.includes('more'))
+          video_file_length = dt.files.length
+          video_more_file_length = dt.files.length
+          index_to_remove = this.parentElement.id.replace('rowdiv','')
+          index_to_remove = Number(index_to_remove)
+          if (image_type.includes('more'))
           {
-            if (deleted_more_upload_files > 0)
+            if (deleted_more_upload_files >= 0 && index_to_remove > deleted_more_upload_files)
             {
-              video_more_file_length = more_video_file.length - deleted_more_upload_files
+              index_to_remove = index_to_remove - deleted_more_upload_files
+            }
+            else if (index_to_remove < deleted_more_upload_files)
+            {
+              index_to_remove = deleted_more_upload_files - index_to_remove
             }
           }
-          else if (deleted_upload_files > 0)
+          else if (deleted_upload_files >= 0  && index_to_remove > deleted_upload_files)
           {
-            video_file_length = video_file.length - deleted_upload_files
+            index_to_remove = index_to_remove - deleted_upload_files
           }
+          else if (index_to_remove < deleted_upload_files)
+          {
+            index_to_remove = deleted_upload_files - index_to_remove
+          }
+          if (input.files.length <= index_to_remove)
+          {
+            index_to_remove = 0 
+          }
+          dt.items.remove(index_to_remove)
+          input.files = dt.files          
           delete_assets(index,product_no,order_id,product_id,video_file_length,video_more_file_length,video_type)
           if (document.getElementById('preview_video').getElementsByClassName('relative').length == 0 ) 
           {
+            deleted_upload_files = -1;
+            deleted_more_upload_files = -1;
             main_tabs();
           }
         };
@@ -354,7 +391,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
       } 
     }
   }
-  
+
  }
  function info_checkbox(parent_product_id, product_id, order_no, product_no, first_product_title, product_title,product_length,variant_title,order_id){
   checkbox_value = $("#prev_checkbox").is(':checked')
@@ -671,6 +708,8 @@ function hide_notice(type)
             document.getElementById("more_video_file").value = ""
             storedFiles = [];
             more_files_count = 0
+            deleted_upload_files = -1;
+            deleted_more_upload_files = -1;
             if (assets_length == 0)
             {
               assets_length = assets.length
@@ -694,11 +733,11 @@ function hide_notice(type)
           }
           else if (response.asset_type.includes('more'))
           {
-            deleted_more_upload_files += 1;
+            deleted_more_upload_files = response.file_index;
           }
           else
           {
-            deleted_upload_files += 1;
+            deleted_upload_files = response.file_index;
           } 
         },
         error: function(response)

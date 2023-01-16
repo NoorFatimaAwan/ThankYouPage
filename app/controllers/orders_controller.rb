@@ -86,8 +86,9 @@ class OrdersController < ApplicationController
     raise Errors::Invalid.new(@order.errors)
   end
 
-  def should_show  
-    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
+  def should_show
+    @products_submitted = Order.where(shop_order_id: params[:order_id].to_i).count
+    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id] && @products_submitted == 0
       $order_id_for_email = params[:order_id]
       ReminderMailer.new_reminder(params[:user_email], params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!  
     end
@@ -194,7 +195,7 @@ class OrdersController < ApplicationController
         @order_assets&.first(params[:more_asset_length].to_i)[file_index]&.purge
       end
     end
-    render json: {deleted: deleted,asset_type: params[:asset_type],index: params[:index].to_i}
+    render json: {deleted: deleted,asset_type: params[:asset_type],file_index: file_index}
   end
 
   private
