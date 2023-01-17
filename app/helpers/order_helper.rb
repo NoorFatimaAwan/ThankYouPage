@@ -4,6 +4,8 @@ module OrderHelper
       return 6
     elsif param&.include? "8 Pieces"
       return 4
+    else
+      return 0
     end
   end
 
