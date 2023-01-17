@@ -50,12 +50,12 @@ class OrdersController < ApplicationController
       end
     end
     if total_image_size > 4 * 1024 * 1024 || total_video_size > 4 * 1024 * 1024
-      AssetUploadJob.perform_now(@order)
+      AssetUploadJob.perform_now(@order,params[:order][:videos]&.count) if @order.present? && params[:order].present? && params[:order][:videos].present?
     else
       @order.save!
-    end
-    if (@order&.videos.attached? && @order&.prev_checkbox == false)
-      ConvertPortraitToLandscapeJob.perform_now(@order,params[:order][:videos]&.count) if params[:order].present? && params[:order][:videos].present?
+      if (@order&.videos.attached? && @order&.prev_checkbox == false)
+        ConvertPortraitToLandscapeJob.perform_now(@order,params[:order][:videos]&.count) if @order.present? && params[:order].present? && params[:order][:videos].present?
+      end  
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
     @order_count = @last_order.count
