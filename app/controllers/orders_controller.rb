@@ -50,10 +50,12 @@ class OrdersController < ApplicationController
       end
     end
     if total_image_size > 4 * 1024 * 1024 || total_video_size > 4 * 1024 * 1024
+      puts params[:order][:videos]&.count
       AssetUploadJob.perform_now(@order,params[:order][:videos]&.count) if @order.present? && params[:order].present? && params[:order][:videos].present?
     else
       @order.save!
       if (@order&.videos.attached? && @order&.prev_checkbox == false)
+        puts params[:order][:videos]&.count
         ConvertPortraitToLandscapeJob.perform_now(@order,params[:order][:videos]&.count) if @order.present? && params[:order].present? && params[:order][:videos].present?
       end  
     end
