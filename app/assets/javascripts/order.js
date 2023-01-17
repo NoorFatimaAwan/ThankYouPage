@@ -594,6 +594,13 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   if (storedFiles.length > length)
   {
     for(var i= 0, len=(storedFiles.length) ; i<len; i++) {
+      if (uploaded_files.length != 1 && more_uploaded_files.length != 1 && storedFiles.length > 1)
+      {
+        if (more_uploaded_files[0] == storedFiles[i])
+        {
+          storedFiles.splice(i,(storedFiles.length - i))
+        }  
+      }
       if (more_uploaded_files[0] != storedFiles[i] && storedFiles[i] != undefined)
       {
         formData.append(files_in_form_data, storedFiles[i]);
