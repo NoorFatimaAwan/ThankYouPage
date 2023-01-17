@@ -3,7 +3,7 @@ class ConvertPortraitToLandscapeJob < ApplicationJob
 
   def perform(order,video_count)
     if order.present? && video_count > 0
-      for index in 0..video_count do
+      video_count.times do |index|
         video_path = ActiveStorage::Blob.service.path_for(order&.videos[index]&.key)
         temp_file = "#{Rails.root}/testing#{index}.mp4"
         system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{index}.mp4'")
