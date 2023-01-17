@@ -59,11 +59,13 @@ class OrdersController < ApplicationController
         video_path = ActiveStorage::Blob.service.path_for(@order.videos[i].key)
         temp_file = "#{Rails.root}/testing#{i}.mp4"
         system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
-        downloaded_video = open(temp_file)
-        @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
-        @order.videos[i].purge
-        downloaded_video.close
-        File.delete(temp_file)
+        if (File.exists?(temp_file))
+          downloaded_video = open(temp_file)
+          @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
+          @order.videos[i].purge
+          downloaded_video.close
+          File.delete(temp_file)  
+        end
       end
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
