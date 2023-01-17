@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "https://27c5-202-166-171-14.ngrok.io",'*', %r{\Ahttps://[a-z0-9-]+stupefied-noyce-1a3cb4\.netlify\.app\z},
+    origins "https://d723-202-166-171-14.ngrok.io",'*', %r{\Ahttps://[a-z0-9-]+stupefied-noyce-1a3cb4\.netlify\.app\z},
             %r{\Ahttps://[a-z0-9-]+\.assistalong\.com\z},
             /localhost:3000/,
             "https://image-video-shop.myshopify.com"

@@ -331,7 +331,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           video_more_file_length = dt.files.length
           index_to_remove = this.parentElement.id.replace('rowdiv','')
           index_to_remove = Number(index_to_remove)
-          if (image_type.includes('more'))
+          if (video_type.includes('more'))
           {
             if (deleted_more_upload_files >= 0 && index_to_remove > deleted_more_upload_files)
             {
