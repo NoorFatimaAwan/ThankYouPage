@@ -56,7 +56,6 @@ class OrdersController < ApplicationController
     end
     if (@order.videos.attached? && @order.prev_checkbox == false)
       for i in 0..params[:order][:videos].count
-        debugger
         video_path = ActiveStorage::Blob.service.path_for(@order&.videos[i]&.key)
         temp_file = "#{Rails.root}/testing#{i}.mp4"
         system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
