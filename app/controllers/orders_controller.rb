@@ -54,19 +54,8 @@ class OrdersController < ApplicationController
     else
       @order.save!
     end
-    if (@order.videos.attached? && @order.prev_checkbox == false)
-      for i in 0..params[:order][:videos].count
-        video_path = ActiveStorage::Blob.service.path_for(@order&.videos[i]&.key)
-        temp_file = "#{Rails.root}/testing#{i}.mp4"
-        system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
-        if (File.exists?(temp_file))
-          downloaded_video = open(temp_file)
-          @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
-          @order.videos[i].purge
-          downloaded_video.close
-          File.delete(temp_file)  
-        end
-      end
+    if (@order&.videos.attached? && @order&.prev_checkbox == false)
+      ConvertPortraitToLandscapeJob.perform_now(@order,params[:order][:videos]&.count) if params[:order].present? && params[:order][:videos].present?
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
     @order_count = @last_order.count
