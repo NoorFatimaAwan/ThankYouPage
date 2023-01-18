@@ -35,7 +35,7 @@
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
               <% if @first_product.present? %>
                 <div class="custom-check">
-                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title]}',#{params[:order_id].to_i})" %>
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title].tr("'", '')}',#{params[:order_id].to_i})" %>
                   <label class="contain">Use same files as above</label>
                 </div>
               <% end %>
@@ -57,7 +57,7 @@
               <%= f.hidden_field :order_no , value: params[:order_no] %>
               <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
               <%= f.hidden_field :product_title , value: params[:product_title] %>
-              <%= f.hidden_field :variant_title , value: params[:variant_title] %>
+              <%= f.hidden_field :variant_title , value: params[:variant_title].tr("'", '') %>
               <%= f.hidden_field :shop_order_id , value: params[:order_id].to_i %>
               <%= f.hidden_field :email_status , value: 'Pending' %>
         </div>

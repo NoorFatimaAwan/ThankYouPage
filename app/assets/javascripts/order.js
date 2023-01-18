@@ -515,10 +515,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
           {
             this.parentNode.remove();
             index = this.parentElement.getElementsByClassName('right-color-image')[0].id.replace('uploaded_video','')
-            if (deleted_upload_files > 0)
-            {
-              index -=1
-            }
             delete_assets(index,product_no,order_id,product_id,document.getElementById('video_file').files.length,document.getElementById('more_video_file').files.length,'uploaded_videos')    
             if (document.getElementById('preview_video').getElementsByClassName('relative').length == 0 ) 
             {
@@ -725,7 +721,7 @@ function hide_notice(type)
             more_files_count = 0
             deleted_upload_files = -1;
             deleted_more_upload_files = -1;
-            if (assets_length == 0)
+            if ($("#prev_checkbox").is(':checked'))
             {
               assets_length = assets.length
             }
@@ -744,7 +740,10 @@ function hide_notice(type)
                 assets[i].remove()
               }
             }
-            main_tabs()
+            if (assets.length == 0)
+            {
+              main_tabs()
+            }
           }
           else if (response.asset_type.includes('more'))
           {
