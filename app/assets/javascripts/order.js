@@ -143,6 +143,11 @@ document.addEventListener('change', function(e) {
       {
         document.getElementById("alert_message").innerHTML = "Total images size cannot be greater than 512MB.";
         $("#alert_message").addClass('alert alert-danger').removeClass('hide success-message');
+        if ($('#loader').is(':visible'))
+        {
+          $('#loader').hide()
+        }
+        input.files = dt.files
         hide_notice('error');
         return false;
       }
@@ -263,7 +268,10 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     document.getElementById("alert_message").innerHTML = error_msg;
     $("#alert_message").addClass('alert alert-danger').removeClass('hide alert-success');
     hide_notice('error');
-    main_tabs();
+    if (document.getElementById('preview_video').getElementsByClassName('relative').length == 0)
+    {
+      main_tabs();
+    }
     return false;
   }
   $('.gallery-right').addClass('show').removeClass('hide');
