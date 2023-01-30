@@ -190,6 +190,19 @@ class OrdersController < ApplicationController
     render json: {deleted: deleted,asset_type: params[:asset_type],file_index: file_index}
   end
 
+  def remove_script
+    shop = Shop.find_by_shopify_domain(params[:shop_domain])
+    session = ShopifyAPI::Session.new(domain: shop.shopify_domain, token: shop.shopify_token, api_version: shop.api_version)
+      ShopifyAPI::Base.activate_session(session)
+    if params[:toggle] == "false" && ShopifyAPI::ScriptTag.last.present?
+      ShopifyAPI::ScriptTag.last&.destroy
+    elsif params[:toggle] == "true" && ShopifyAPI::ScriptTag.last.nil?
+      script_tag = ShopifyAPI::ScriptTag.create(event:'onload', src:"https://mcacao.phaedrasolutions.com/returns/img_vid.js")
+      script_tag.save      
+    end
+    render json: {script_tag_removed: ShopifyAPI::ScriptTag.all.empty?}
+  end
+
   private
 
   def order_params

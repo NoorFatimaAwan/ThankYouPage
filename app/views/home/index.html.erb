@@ -45,6 +45,6 @@
     </script>
   </head>
   <body>
-    <%= render :partial => 'orders/form', :locals => {orders: @orders } %>
+    <%= render :partial => 'orders/form', :locals => {orders: @orders, shop_domain: @shop_origin } %>
   </body>
 </html>

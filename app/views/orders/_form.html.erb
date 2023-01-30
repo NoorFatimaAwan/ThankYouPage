@@ -11,6 +11,12 @@
       </span>
     </div>
     <%= form.submit class: "btn btn-primary search-button" %>
+    <div class="toggle-button">
+      <label class="switch" ,data-toggle="tooltip", data-placement="top", title="For enabling and disabling app">abc
+        <input type="checkbox" id="togBtn" onchange="add_remove_script('<%=shop_domain%>');">
+        <span class="slider round"></span>
+      </label>
+    </div>
   <% end %>
 </div>
 <div class="datail-table">
