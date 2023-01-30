@@ -35,16 +35,16 @@
             <%= form_with scope: :order, url: orders_path, id: "uploadForm", local: true do |f| %>
               <% if @first_product.present? %>
                 <div class="custom-check">
-                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title]}',#{params[:order_id].to_i})" %>
+                  <%= f.check_box :prev_checkbox, id: "prev_checkbox",checked: false, class: "checkmark", onchange: "info_checkbox(#{params[:parent_product_id].to_i}, #{params[:product_id].to_i},'#{params[:order_no]}', #{params[:product_no].to_i}, '#{params[:first_product_title]}', '#{params[:product_title]}', #{params[:product_length]},'#{params[:variant_title].tr("'", '')}',#{params[:order_id].to_i})" %>
                   <label class="contain">Use same files as above</label>
                 </div>
               <% end %>
               <div class="desk-btn" >
                 <div class="up-btns">
                   <%= f.label :images, 'Upload More', for: "more_image_file", id: "image_label", class: "up-more hide"%>  
-                  <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'more_uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})" %>
+                  <%= f.file_field :images, multiple: true, accept: "image/*", id: "more_image_file",class: "up-more hide", onchange: "loadImages(event,#{product_size(params[:variant_title])}, 'more_uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})" %>
                   <%= f.label 'Upload More', for: "more_video_file", id: "more_video_label" , class: "submit-btn upload-btn" %>  
-                  <%= f.file_field :videos, multiple: true, accept: "video/*", id: "more_video_file" ,onchange: "loadVideo(event,#{product_size(params[:product_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i},'more_uploaded_videos')" %>
+                  <%= f.file_field :videos, multiple: true, accept: "video/*", id: "more_video_file" ,onchange: "loadVideo(event,#{product_size(params[:variant_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i},'more_uploaded_videos')" %>
                   <a href="" class="up-more remove-btn hide" onclick="delete_assets('',<%= params[:product_no].to_i %>,<%= params[:order_id].to_i %>,<%= params[:product_id].to_i %>,'','','remove_all')">Remove all</a>
                 </div>
                 <%= f.submit "Send for customization", id: "submit_button", class: "submit-btn hide", onclick: "submit_form(event,'#{params[:order_no]}','#{user_email(params[:user_email])}', '#{params[:product_image_url]}','#{params[:user_name]}','#{params[:thank_you_page_url]}',#{params[:order_id].to_i},#{params[:total_products].to_i},#{params[:product_index]},#{params[:product_length]});"%>
@@ -57,7 +57,7 @@
               <%= f.hidden_field :order_no , value: params[:order_no] %>
               <%= f.hidden_field :parent_product_id , value: params[:parent_product_id].present? ? params[:parent_product_id] : nil %>
               <%= f.hidden_field :product_title , value: params[:product_title] %>
-              <%= f.hidden_field :variant_title , value: params[:variant_title] %>
+              <%= f.hidden_field :variant_title , value: params[:variant_title].tr("'", '') %>
               <%= f.hidden_field :shop_order_id , value: params[:order_id].to_i %>
               <%= f.hidden_field :email_status , value: 'Pending' %>
         </div>
@@ -73,7 +73,7 @@
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:product_title])}, 'uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})"  %>
+                      <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:variant_title])}, 'uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})"  %>
                       <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
                     </div>
                   </div>
@@ -96,7 +96,7 @@
                       <span class="input-group-text">Upload</span>
                     </div>
                     <div class="custom-file">
-                      <%= f.file_field :videos, multiple: true, id: "video_file", accept: "video/*", class: "custom-file-input" ,onchange: "loadVideo(event,#{product_size(params[:product_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i}, 'uploaded_videos')" %>
+                      <%= f.file_field :videos, multiple: true, id: "video_file", accept: "video/*", class: "custom-file-input" ,onchange: "loadVideo(event,#{product_size(params[:variant_title])},#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i}, 'uploaded_videos')" %>
                       <%= f.label 'Upload', for: "video_file", id: "video_label" , class: "custom-file-label" %>  
                     </div>
                   </div>

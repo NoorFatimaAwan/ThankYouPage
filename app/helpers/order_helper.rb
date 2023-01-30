@@ -1,9 +1,11 @@
 module OrderHelper
   def product_size(param)
-    if param&.include? "6"
+    if param&.downcase&.include? "16 pieces"
       return 6
-    elsif param&.include? "4"
+    elsif param&.downcase&.include? "8 pieces"
       return 4
+    else
+      return 0
     end
   end
 

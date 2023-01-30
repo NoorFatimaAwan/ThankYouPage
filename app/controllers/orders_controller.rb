@@ -50,21 +50,13 @@ class OrdersController < ApplicationController
       end
     end
     if total_image_size > 4 * 1024 * 1024 || total_video_size > 4 * 1024 * 1024
-      AssetUploadJob.perform_now(@order)
+      AssetUploadJob.perform_now(@order) if @order.present?
     else
       @order.save!
-    end
-    if (@order.videos.attached? && @order.prev_checkbox == false)
-      for i in 0..params[:order][:videos].count
-        video_path = ActiveStorage::Blob.service.path_for(@order.videos[i].key)
-        temp_file = "#{Rails.root}/testing#{i}.mp4"
-        system( "ffmpeg -i '#{video_path}' -c copy -aspect 16:9 'testing#{i}.mp4'")
-        downloaded_video = open(temp_file)
-        @order.videos.attach(io: downloaded_video  , filename: "#{@order.videos[i].filename}")
-        @order.videos[i].purge
-        downloaded_video.close
-        File.delete(temp_file)
-      end
+      if (@order&.videos.attached? && @order&.prev_checkbox == false)
+        video_count = @order&.videos&.count
+        ConvertPortraitToLandscapeJob.perform_now(@order,video_count) if @order.present?
+      end  
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
     @order_count = @last_order.count
@@ -86,8 +78,9 @@ class OrdersController < ApplicationController
     raise Errors::Invalid.new(@order.errors)
   end
 
-  def should_show  
-    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id]
+  def should_show
+    @products_submitted = Order.where(shop_order_id: params[:order_id].to_i).count
+    if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id] && @products_submitted == 0
       $order_id_for_email = params[:order_id]
       ReminderMailer.new_reminder(params[:user_email], params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!  
     end
@@ -194,7 +187,7 @@ class OrdersController < ApplicationController
         @order_assets&.first(params[:more_asset_length].to_i)[file_index]&.purge
       end
     end
-    render json: {deleted: deleted,asset_type: params[:asset_type],index: params[:index].to_i}
+    render json: {deleted: deleted,asset_type: params[:asset_type],file_index: file_index}
   end
 
   private
