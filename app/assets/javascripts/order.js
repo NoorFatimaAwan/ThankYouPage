@@ -761,22 +761,3 @@ function hide_notice(type)
       });  
     }
   }
-
-  function add_remove_script(shop_domain)
-  {
-    fetch(`${host_url}/orders/remove_script?toggle=${document.getElementById('togBtn').checked}&shop_domain=${shop_domain}`)
-      .then((response) => response.json())
-        .then((result) => {
-          if (result.script_tag_removed)
-          {
-            alert('App is disabled');
-          }
-          else
-          {
-            alert('App is enabled');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-      });
-  }

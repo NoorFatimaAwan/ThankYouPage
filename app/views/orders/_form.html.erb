@@ -14,7 +14,7 @@
     <% if shop_domain.present? %>
       <div class="toggle-button">
         <label class="switch" ,data-toggle="tooltip", data-placement="top", title="For enabling and disabling app">
-          <input type="checkbox" id="togBtn" checked onchange="add_remove_script('<%=shop_domain%>');">
+          <input type="checkbox" id="togBtn" onchange="add_remove_script('<%=shop_domain%>');">
           <span class="slider round"></span>
         </label>
       </div>
@@ -64,3 +64,33 @@
 <div class="digg_pagination">
   <%= will_paginate orders %>
 </div>
+<script>
+$(document).ready(function(){
+  script_check_box = "<%=script_check_box%>"
+  document.getElementById('togBtn').setAttribute("checked","checked")
+  if (script_check_box == "false")
+  {
+    document.getElementById('togBtn').removeAttribute("checked")
+  }
+})
+  function add_remove_script(shop_domain)
+  {
+    fetch(`${host_url}/orders/remove_script?toggle=${document.getElementById('togBtn').checked}&shop_domain=${shop_domain}`)
+      .then((response) => response.json())
+        .then((result) => {
+          if (result.script_tag_removed)
+          {
+            document.getElementById('togBtn').value = "off"
+            alert('App is disabled');
+          }
+          else
+          {
+            document.getElementById('togBtn').value = "on"
+            alert('App is enabled');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+      });
+  }
+</script>

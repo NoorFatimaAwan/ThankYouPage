@@ -195,10 +195,12 @@ class OrdersController < ApplicationController
     session = ShopifyAPI::Session.new(domain: shop.shopify_domain, token: shop.shopify_token, api_version: shop.api_version)
       ShopifyAPI::Base.activate_session(session)
     if params[:toggle] == "false" && ShopifyAPI::ScriptTag.last.present?
+      shop.update(script_check_box: false)
       ShopifyAPI::ScriptTag.last&.destroy
     elsif params[:toggle] == "true" && ShopifyAPI::ScriptTag.last.nil?
-      script_tag = ShopifyAPI::ScriptTag.create(event:'onload', src:"https://mcacao.phaedrasolutions.com/returns/img_vid.js")
-      script_tag.save      
+      shop.update(script_check_box: true)
+      script_tag = ShopifyAPI::ScriptTag.create(event:'onload', src:"https://b9a6-110-39-190-158.in.ngrok.io/returns/img_vid.js")
+      script_tag.save  
     end
     render json: {script_tag_removed: ShopifyAPI::ScriptTag.all.empty?}
   end

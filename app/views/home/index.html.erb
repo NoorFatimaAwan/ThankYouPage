@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
       href="https://unpkg.com/@shopify/polaris@4.25.0/styles.min.css"
@@ -45,6 +46,6 @@
     </script>
   </head>
   <body>
-    <%= render :partial => 'orders/form', :locals => {orders: @orders, shop_domain: @shop_origin } %>
+    <%= render :partial => 'orders/form', :locals => {orders: @orders, shop_domain: @shop_origin,script_check_box: @script_check_box } %>
   </body>
 </html>
