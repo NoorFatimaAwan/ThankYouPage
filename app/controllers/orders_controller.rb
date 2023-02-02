@@ -219,9 +219,7 @@ class OrdersController < ApplicationController
     if params[:show_response] == 'true'
       @shop_enabled_app_products = @shop&.enabled_app_products
       @product_with_enabled_app = @shop_enabled_app_products&.any? {|x| params[:products_in_order]&.include?(x) }
-      @shop_enabled_app_variants = @shop&.enabled_app_variants
-      @variants_with_enabled_app = @shop_enabled_app_variants&.any? {|x| params[:variants_in_order]&.include?(x) }
-      @enabled = @product_with_enabled_app && @variants_with_enabled_app
+      @enabled = @shop_enabled_app_products.empty? ? nil : @product_with_enabled_app
       render json: @enabled,:callback => params[:callback]  
     else
       @shop.update_attributes(enabled_app_products: params[:product_titles], enabled_app_variants: params[:variant_titles])
