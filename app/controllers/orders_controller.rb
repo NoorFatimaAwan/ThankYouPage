@@ -6,6 +6,13 @@ class OrdersController < ApplicationController
   def index
     @q = Order.ransack(params[:q])
     @orders = @q.result(distinct: true).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
+    @shop_domain = params[:shop_domain]
+    @shop = Shop.find_by_shopify_domain(params[:shop_domain])
+    @script_check_box = @shop.script_check_box
+    session = ShopifyAPI::Session.new(domain: @shop.shopify_domain, token: @shop.shopify_token, api_version: @shop.api_version)
+    ShopifyAPI::Base.activate_session(session)
+    @products = ShopifyAPI::Product.find(:all, params: { limit: 10 })
+    @variants = @products.map(&:variants)
   end
 
   def new
@@ -79,7 +86,8 @@ class OrdersController < ApplicationController
   end
 
   def should_show
-    @products_submitted = Order.where(shop_order_id: params[:order_id].to_i).count
+    @order = Order.where(shop_order_id: params[:order_id].to_i)
+    @products_submitted = @order.count
     if !params[:thank_you_page_url]&.split('?')[1]&.include?('open_with_mail') && $order_id_for_email != params[:order_id] && @products_submitted == 0
       $order_id_for_email = params[:order_id]
       ReminderMailer.new_reminder(params[:user_email], params[:order_no], params[:user_name], params[:thank_you_page_url],params[:order_id],true).deliver_now!  
@@ -93,6 +101,7 @@ class OrdersController < ApplicationController
     @product_title = @order.product_title
     @variant_title = @order.variant_title
     @order_no = "Order/confirmation #" + @order.order_no.to_s
+    @shop = params[:shop_domain]
   end
 
   def preview_files
@@ -203,6 +212,20 @@ class OrdersController < ApplicationController
       script_tag.save  
     end
     render json: {script_tag_removed: ShopifyAPI::ScriptTag.all.empty?}
+  end
+
+  def products_choosen
+    @shop = Shop.find_by_shopify_domain(params[:shop_domain])
+    if params[:show_response] == 'true'
+      @shop_enabled_app_products = @shop&.enabled_app_products
+      @product_with_enabled_app = @shop_enabled_app_products&.any? {|x| params[:products_in_order]&.include?(x) }
+      @shop_enabled_app_variants = @shop&.enabled_app_variants
+      @variants_with_enabled_app = @shop_enabled_app_variants&.any? {|x| params[:variants_in_order]&.include?(x) }
+      @enabled = @product_with_enabled_app && @variants_with_enabled_app
+      render json: @enabled,:callback => params[:callback]  
+    else
+      @shop.update_attributes(enabled_app_products: params[:product_titles], enabled_app_variants: params[:variant_titles])
+    end
   end
 
   private

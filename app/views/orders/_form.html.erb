@@ -1,3 +1,7 @@
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
 <div class="orders-header">
     
       <span class="navbar-text">
@@ -20,6 +24,18 @@
       </div>
     <% end %>
   <% end %>
+  <div class="form-group">
+    <label class="control-label" for="tags">Products:</label>
+    <%= form_with(url: "/orders/products_choosen", method: :get, local: true) do |f| %>
+        <%= select_tag 'product_titles[]', options_for_select(products.map { |p| [p.title, p.title] }, shop.enabled_app_products), multiple: true, size: 10, class: "form-control select2-multi" %>
+        <label class="control-label" for="tags">Variants:</label>
+        <%= select_tag 'variant_titles[]', options_for_select( variants.map{|v| [v.map{|v1| v1.title},v.map{|v1| v1.title}]}.flatten.uniq, shop.enabled_app_variants), multiple: true, size: 10, class: "form-control select2-multi" %>
+        <%= hidden_field_tag 'shop_domain', shop_domain  %>
+        <%= hidden_field_tag 'show_response', false  %>
+        <%= submit_tag "Submit" %>
+    <% end %>
+  </div>
+
 </div>
 <div class="datail-table">
   <table class="table table-hover">
@@ -48,7 +64,7 @@
           <% end %>
           <td> <%= Order.where("order_no = ?", order.order_no).first.email_status %> </td>
           <td class="text-center">
-            <%= link_to "Show Details", order_path(order.id), class: "link-tag" %>    
+            <%= link_to "Show Details", order_path(order.id,shop_domain: shop_domain), class: "link-tag" %>    
           </td>
         </tr>
       <% end %>
@@ -72,6 +88,7 @@ $(document).ready(function(){
   {
     document.getElementById('togBtn').removeAttribute("checked")
   }
+  $('.select2-multi').select2();
 })
   function add_remove_script(shop_domain)
   {

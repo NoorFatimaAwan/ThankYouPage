@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   get '/products', :to => 'products#index'
   get '/products', :to => 'products#show'
+  get '/orders/products_choosen', :to => "orders#products_choosen"
   get '/orders/should_show', :to => "orders#should_show"
   get '/orders/preview_files', :to => "orders#preview_files"
   post '/orders/download_assets', :to => "orders#download_assets"

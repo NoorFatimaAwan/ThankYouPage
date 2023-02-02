@@ -1,1 +1,12 @@
-<%= render :partial => 'form', :locals => {orders: @orders, shop_domain: "",script_check_box: "" } %>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+
+<%= render :partial => 'form', :locals => {orders: @orders, shop_domain: @shop_domain,script_check_box: @script_check_box,products: @products, variants: @variants, shop: @shop } %>
+
+<script>
+    $(document).ready(function(){
+      $('.select2-multi').select2();
+    })
+</script>
+
