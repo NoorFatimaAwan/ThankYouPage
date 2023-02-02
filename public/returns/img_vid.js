@@ -59,7 +59,7 @@ function products_enabled() {
       dataType: "jsonp",
       responseType:'application/json', 
       success: function(response){
-        if (response)
+        if (response == true || response == null)
         {
           document.getElementById('main-header').innerHTML = "Hi " + Shopify.checkout.billing_address.first_name + "!"
           if (document.getElementsByClassName('content-box__row--no-padding')[0] != undefined)
