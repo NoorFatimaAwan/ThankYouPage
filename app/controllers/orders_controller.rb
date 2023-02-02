@@ -222,7 +222,9 @@ class OrdersController < ApplicationController
       @enabled = @shop_enabled_app_products.empty? ? nil : @product_with_enabled_app
       render json: @enabled,:callback => params[:callback]  
     else
-      @shop.update_attributes(enabled_app_products: params[:product_titles], enabled_app_variants: params[:variant_titles])
+      product_titles = params[:product_titles].split(',')
+      @shop.update(enabled_app_products: product_titles)
+      redirect_to request.referer
     end
   end
 

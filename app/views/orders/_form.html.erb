@@ -27,10 +27,7 @@
   <div class="form-group">
     <label class="control-label" for="tags">Products:</label>
     <%= form_with(url: "/orders/products_choosen", method: :get, local: true) do |f| %>
-        <%= select_tag 'product_titles[]', options_for_select(products.map { |p| [p.title, p.title] }, shop.enabled_app_products), multiple: true, size: 10, class: "form-control select2-multi" %>
-        <%= hidden_field_tag 'shop_domain', shop_domain  %>
-        <%= hidden_field_tag 'show_response', false  %>
-        <%= submit_tag "Submit", class: "btn btn-primary listing-page-submit" %>
+      <%= select_tag 'product_titles[]', options_for_select(products.map { |p| [p.title, p.title] }, shop.enabled_app_products), multiple: true, size: 10, id: "selected_tags",onchange: "remove_tag()", class: "form-control select2-multi" %>
     <% end %>
   </div>
 
@@ -90,7 +87,10 @@ $(document).ready(function(){
 })
   function add_remove_script(shop_domain)
   {
-    fetch(`${host_url}/orders/remove_script?toggle=${document.getElementById('togBtn').checked}&shop_domain=${shop_domain}`)
+    let text = "Are you sure?";
+    if (confirm(text) == true) 
+    {
+      fetch(`${host_url}/orders/remove_script?toggle=${document.getElementById('togBtn').checked}&shop_domain=${shop_domain}`)
       .then((response) => response.json())
         .then((result) => {
           if (result.script_tag_removed)
@@ -106,6 +106,32 @@ $(document).ready(function(){
         })
         .catch((error) => {
           console.error('Error:', error);
+      });
+    } 
+    else 
+    {
+      if (document.getElementById('togBtn').checked)
+      {
+        $('#togBtn').prop('checked',false);
+      }
+      else
+      {
+        $('#togBtn').prop('checked',true);
+      }
+      console.log("You canceled!");
+    }
+  }
+  function remove_tag()
+  {
+    shop_domain = "<%=shop_domain%>"
+    product_titles = $("#selected_tags").val()
+    fetch(`${host_url}/orders/products_choosen?product_titles=${product_titles}&shop_domain=${shop_domain}&show_response=false`)
+      .then((response) => response.json())
+        .then((result) => {
+          console.log('Success');
+        })
+        .catch((error) => {
+          console.log('Error');
       });
   }
 </script>
