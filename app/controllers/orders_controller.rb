@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
     @script_check_box = @shop.script_check_box
     session = ShopifyAPI::Session.new(domain: @shop.shopify_domain, token: @shop.shopify_token, api_version: @shop.api_version)
     ShopifyAPI::Base.activate_session(session)
-    @products = ShopifyAPI::Product.find(:all, params: { limit: 10 })
+    @products = ShopifyAPI::Product.find(:all)
     @variants = @products.map(&:variants)
   end
 
