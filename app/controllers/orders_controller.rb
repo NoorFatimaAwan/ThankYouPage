@@ -218,7 +218,7 @@ class OrdersController < ApplicationController
     @shop = Shop.find_by_shopify_domain(params[:shop_domain])
     if params[:show_response] == 'true'
       @shop_enabled_app_products = @shop&.enabled_app_products
-      @product_with_enabled_app = @shop_enabled_app_products&.any? {|x| params[:products_in_order]&.include?(x) }
+      @product_with_enabled_app = params[:products_in_order]&.all? {|x| @shop_enabled_app_products&.include?(x) }
       @enabled = @shop_enabled_app_products.empty? ? nil : @product_with_enabled_app
       render json: @enabled,:callback => params[:callback]  
     else
