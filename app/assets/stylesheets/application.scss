@@ -474,9 +474,10 @@ input[type=file]{
 		display: none;
 	}
 	.img-inner {
-		zoom: .8;
 		width: 100%;
-	}
+		transform: scale(0.6);
+		transform-origin: top;
+    }
 	.custom-check {
 		position: inherit;
 		margin-top: 26px;

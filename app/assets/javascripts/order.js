@@ -7,8 +7,20 @@ var image_blob_file = [];
 var error_shown = true;
 var more_files_count = 0;
 $(document).ready(function () {
-  if (!($('#img_tab').hasClass('up-images')))
+  if (document.getElementById('uploaded_images') != null || document.getElementById('uploaded_videos') != null)
   {
+    $('.gallery-right').addClass('show').removeClass('hide');
+    $('.right-border').addClass('hide').removeClass('show');
+    $('.up-images').addClass('hide').removeClass('show');
+    if (document.getElementById('uploaded_videos') != null)
+    {
+      $('.upload-btn').addClass('show').removeClass('hide');
+    }
+    else
+    {
+      $('.up-more').addClass('show').removeClass('hide');
+    }
+    $('.remove-btn').addClass('show').removeClass('hide');
     if (document.getElementById('prev_checkbox') != null)
     {
       document.getElementById('prev_checkbox').remove();
@@ -23,6 +35,10 @@ $(document).ready(function () {
     {
       $(".pr-item-left").addClass('next-page-left').removeClass('border-padding');
     }
+  }
+  else
+  {
+    $('.up-images').addClass('show').removeClass('hide');
   } 
   if ($('#search_field').val() != '')
   {
@@ -581,7 +597,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   more_uploaded_files = document.getElementById("more_image_file").files
   more_file_length = more_uploaded_files.length
   files_in_form_data = "order[images][]"
-  if ((document.getElementById("video_file").files.length != 0 || $("#prev_checkbox").is(':checked')) && document.getElementById("more_video_file").files.length != 0)
+  if ((document.getElementById("video_file").files.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_video_file").files.length != 0)
   {
     uploaded_files = document.getElementById("video_file").files
     file_length = uploaded_files.length
@@ -590,7 +606,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     files_in_form_data = "order[videos][]"
     formData.delete("order[images][]");
   }
-  else if ((document.getElementById("image_file").files.length != 0 || $("#prev_checkbox").is(':checked')) && document.getElementById("more_image_file").files.length != 0)
+  else if ((document.getElementById("image_file").files.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_image_file").files.length != 0)
   {
     formData.delete("order[videos][]");
   }
@@ -642,6 +658,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     formData.append('total_products', total_products)
     formData.append('product_index', product_index)
     formData.append('product_length', product_length)
+    formData.append('file_length', file_length)
   }
   xhr.send(formData);
  }
@@ -658,6 +675,7 @@ function hide_notice(type)
 
  function main_tabs()
  {
+  $('.upload-btn').addClass('hide').removeClass('show');
   $('.up-images').addClass('show').removeClass('hide');
   $('.up-more').addClass('hide').removeClass('show');
   $('.remove-btn').addClass('hide').removeClass('show');
@@ -713,6 +731,20 @@ function hide_notice(type)
               assets = document.getElementById('preview_video').getElementsByClassName('relative')
               assets_length = document.getElementById('video_file').files.length +  document.getElementById('more_video_file').files.length
             }
+            else if (document.getElementsByClassName('existing-videos').length != 0)
+            {
+              var assets = [];
+              assets = Array.prototype.concat.apply(assets, document.getElementsByClassName('existing-videos'));
+              assets = Array.prototype.concat.apply(assets, document.getElementById('preview_video').getElementsByClassName('relative'));
+              assets_length = assets.length 
+            }
+            else if (document.getElementsByClassName('existing-images').length != 0)
+            {
+              var assets = [];
+              assets = Array.prototype.concat.apply(assets, document.getElementsByClassName('existing-images'));
+              assets = Array.prototype.concat.apply(assets, document.getElementById('preview').getElementsByClassName('relative'));
+              assets_length = assets.length 
+            }
             document.getElementById("image_file").value = ""
             document.getElementById("more_image_file").value = ""
             document.getElementById("video_file").value = ""
@@ -738,6 +770,10 @@ function hide_notice(type)
                   break;
                 }
                 assets[i].remove()
+                if (document.getElementsByClassName('existing-images').length != 0 || document.getElementsByClassName('existing-videos').length != 0)
+                {
+                  array.splice(i, 1)
+                }
               }
             }
             if (assets.length == 0)

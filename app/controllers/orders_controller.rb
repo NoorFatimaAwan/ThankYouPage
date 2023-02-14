@@ -68,6 +68,10 @@ class OrdersController < ApplicationController
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
     @order_count = @last_order.count
     if @order_count > 1
+      if params[:file_length].to_i == 0 && !@last_order.last.prev_checkbox
+        @last_order.last.images&.attach(@last_order.first.images&.map(&:blob)) if params[:order][:file_type] == 'image'
+        @last_order.last.videos&.attach(@last_order.first.videos&.map(&:blob)) if params[:order][:file_type] == 'video'
+      end
       @last_order.first.destroy
     end
     if @order.save!
