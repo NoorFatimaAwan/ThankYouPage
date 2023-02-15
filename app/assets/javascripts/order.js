@@ -770,9 +770,9 @@ function hide_notice(type)
                   break;
                 }
                 assets[i].remove()
-                if (document.getElementsByClassName('existing-images').length != 0 || document.getElementsByClassName('existing-videos').length != 0)
+                if (Array.isArray(assets) && assets.length != 0)
                 {
-                  array.splice(i, 1)
+                  assets.splice(i, 1)
                 }
               }
             }
