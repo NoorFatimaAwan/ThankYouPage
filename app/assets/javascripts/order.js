@@ -726,7 +726,7 @@ function hide_notice(type)
           {
             assets = document.getElementById('preview').getElementsByClassName('relative')
             assets_length = document.getElementById('image_file').files.length +  document.getElementById('more_image_file').files.length
-            if (assets.length == 0)
+            if (assets.length == 0 && document.getElementsByClassName('existing-videos').length == 0)
             {
               assets = document.getElementById('preview_video').getElementsByClassName('relative')
               assets_length = document.getElementById('video_file').files.length +  document.getElementById('more_video_file').files.length
