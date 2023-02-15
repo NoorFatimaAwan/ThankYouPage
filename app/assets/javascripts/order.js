@@ -239,6 +239,10 @@ document.addEventListener('change', function(e) {
         $('.custom-check').addClass('hide').removeClass('show');
         $('.up-images').addClass('hide').removeClass('show');
         $('.gallery-right').addClass('show').removeClass('hide');
+        if (i > 4)
+        {
+          $('.gallery-list').css("height","200px");
+        }
         document.getElementById("video_file").disabled = true;
         if (navigator.userAgent.match(/android|iphone|kindle|ipad/i) != null)
         {
@@ -392,6 +396,10 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
         divElm.appendChild(spanElm);
         divElm.appendChild(deleteImg);
         vidCont.appendChild(divElm);
+        if (i > 4)
+        {
+          $('.gallery-list').css("height","200px");
+        }
         document.getElementById("image_file").disabled = true;
         $('.up-images').addClass('hide').removeClass('show');
         $('.custom-check').addClass('hide').removeClass('show');
