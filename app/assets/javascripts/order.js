@@ -278,7 +278,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     MaxSize = 128 * 1000 * 1000
     error_msg = input.files[0].name + " is too big. Maximum size should be 128MB."
   }
-  if (input.files[0].size > MaxSize)
+  if (input.files[0].size > MaxSize && document.getElementById('uploaded_videos') == null)
   {
     error_shown = true;
     document.getElementById("alert_message").innerHTML = error_msg;
