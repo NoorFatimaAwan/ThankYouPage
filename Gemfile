@@ -86,3 +86,5 @@ gem 'ransack'
 gem 'data_migrate'
 
 gem 'streamio-ffmpeg'
+
+gem 'mini_exiftool', '<2.0.0'

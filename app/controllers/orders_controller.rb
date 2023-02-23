@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   require('zip')
   require 'streamio-ffmpeg'
+  require 'mini_exiftool'
   skip_before_action :verify_authenticity_token
 
   def index
