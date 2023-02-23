@@ -9,11 +9,13 @@ class OrdersController < ApplicationController
     @orders = @q.result(distinct: true).order(created_at: :desc).paginate(page: params[:page], per_page: 20)
     @shop_domain = params[:shop_domain]
     @shop = Shop.find_by_shopify_domain(params[:shop_domain])
-    @script_check_box = @shop.script_check_box
-    session = ShopifyAPI::Session.new(domain: @shop.shopify_domain, token: @shop.shopify_token, api_version: @shop.api_version)
-    ShopifyAPI::Base.activate_session(session)
-    @products = ShopifyAPI::Product.find(:all, params: { limit: 100 })
-    @variants = @products.map(&:variants)
+    if @shop.present?
+      @script_check_box = @shop.script_check_box
+      session = ShopifyAPI::Session.new(domain: @shop.shopify_domain, token: @shop.shopify_token, api_version: @shop.api_version)
+      ShopifyAPI::Base.activate_session(session)
+      @products = ShopifyAPI::Product.find(:all, params: { limit: 100 })
+      @variants = @products.map(&:variants)
+    end
   end
 
   def new

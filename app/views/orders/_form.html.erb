@@ -24,12 +24,14 @@
       </div>
     <% end %>
   <% end %>
-  <div class="form-group">
-    <label class="control-label" for="tags">Products:</label>
-    <%= form_with(url: "/orders/products_choosen", method: :get, local: true) do |f| %>
-      <%= select_tag 'product_titles[]', options_for_select(products.map { |p| [p.title, p.title] }, shop.enabled_app_products), multiple: true, size: 10, id: "selected_tags",onchange: "remove_tag()", class: "form-control select2-multi" %>
-    <% end %>
-  </div>
+  <% if products.present? %>
+    <div class="form-group">
+      <label class="control-label" for="tags">Products:</label>
+      <%= form_with(url: "/orders/products_choosen", method: :get, local: true) do |f| %>
+        <%= select_tag 'product_titles[]', options_for_select(products.map { |p| [p.title, p.title] }, shop.enabled_app_products), multiple: true, size: 10, id: "selected_tags",onchange: "remove_tag()", class: "form-control select2-multi" %>
+      <% end %>
+    </div>
+  <% end %>
 
 </div>
 <div class="datail-table">
