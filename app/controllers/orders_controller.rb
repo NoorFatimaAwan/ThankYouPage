@@ -137,12 +137,11 @@ class OrdersController < ApplicationController
   def download_assets  
     filename = 'my_assets.zip'
     temp_file = Tempfile.new(filename)
-    temp_file_path = File.expand_path(temp_file)
     @order = Order.find(params[:order_id])
     begin
       Zip::OutputStream.open(temp_file) { |zos| }
 
-      Zip::File.open(temp_file_path, Zip::File::CREATE) do |zipfile|
+      Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
 
         @order_assets = @order.videos.attached? ? @order.videos : @order.images
         if @order_assets.present?
@@ -160,7 +159,7 @@ class OrdersController < ApplicationController
         end
       end
 
-      zip_data = File.read(temp_file_path)
+      zip_data = File.read(temp_file.path)
       send_data(zip_data, type: 'application/zip', disposition: 'attachment', filename: filename)
     ensure 
       temp_file.close
