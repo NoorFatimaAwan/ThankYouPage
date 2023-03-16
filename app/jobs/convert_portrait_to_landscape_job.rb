@@ -10,7 +10,7 @@ class ConvertPortraitToLandscapeJob < ApplicationJob
         width = video_data&.imagewidth
         if video_data&.imageheight > video_data&.imagewidth || (video_data&.rotation == 90 || video_data&.rotation == 270) 
           temp_file = "#{Rails.root}/testing#{index}.mp4"
-          system(`ffmpeg -i "#{video_path}" -filter_complex "[0:v]scale=ih*16/9:-1,boxblur=luma_radius='min(h\,w)/20':luma_power=1:chroma_radius='min(cw\,ch)/20':chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16" "testing#{index}.mp4"`)
+          system(`ffmpeg -i "#{video_path}" -lavfi "color=color=black@.5:size=270x360:d=1[dark];[0:v]crop=270:360[blurbase];    [blurbase]boxblur=luma_radius='min(h,w)/20':luma_power=1:chroma_radius='min(cw,ch)/20':chroma_power=1[blurred];  [blurred][dark]overlay[darkened]; [darkened]scale=720:700[bg];    [0:v]scale=-1:700[fg]; [bg][fg]overlay=(W-w)/2:(H-h)/2" "testing#{index}.mp4"`)
           if (File.exists?(temp_file))
             downloaded_video = open(temp_file)
             order.videos.attach(io: downloaded_video  , filename: "#{order&.videos[index]&.filename}")
