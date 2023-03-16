@@ -88,3 +88,7 @@ gem 'data_migrate'
 gem 'streamio-ffmpeg'
 
 gem 'mini_exiftool', '<2.0.0'
+
+gem 'delayed_job_active_record'
+
+gem "daemons"

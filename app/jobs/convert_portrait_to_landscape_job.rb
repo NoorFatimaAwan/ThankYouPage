@@ -1,5 +1,5 @@
-class ConvertPortraitToLandscapeJob < ApplicationJob
-  queue_as :default
+class ConvertPortraitToLandscapeJob < ActiveJob::Base
+  #queue_as :default
 
   def perform(order,video_count)
     if order.present? && video_count > 0
@@ -10,7 +10,7 @@ class ConvertPortraitToLandscapeJob < ApplicationJob
         width = video_data&.imagewidth
         if video_data&.imageheight > video_data&.imagewidth || (video_data&.rotation == 90 || video_data&.rotation == 270) 
           temp_file = "#{Rails.root}/testing#{index}.mp4"
-          system(`ffmpeg -i "#{video_path}" -filter_complex "[0:v]scale=ih*#{height}/#{width}:-1,boxblur=luma_radius='min(h\,w)/20':luma_power=1:chroma_radius='min(cw\,ch)/20':chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*#{width}/#{height}" "testing#{index}.mp4"`)
+          system(`ffmpeg -i "#{video_path}" -filter_complex "[0:v]scale=ih*#{height}/#{width}:-1,boxblur=luma_radius='min(h\,w)/20':luma_power=1:chroma_radius='min(cw\,ch)/20':chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16" "testing#{index}.mp4"`)
           if (File.exists?(temp_file))
             downloaded_video = open(temp_file)
             order.videos.attach(io: downloaded_video  , filename: "#{order&.videos[index]&.filename}")

@@ -65,7 +65,7 @@ class OrdersController < ApplicationController
       @order.save!
       if (@order&.videos.attached? && @order&.prev_checkbox == false)
         video_count = @order&.videos&.count
-        ConvertPortraitToLandscapeJob.perform_now(@order,video_count) if @order.present?
+        Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(@order,video_count) if @order.present?
       end  
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
