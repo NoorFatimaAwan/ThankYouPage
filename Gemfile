@@ -92,5 +92,3 @@ gem 'mini_exiftool', '<2.0.0'
 gem 'delayed_job_active_record'
 
 gem "daemons"
-
-gem 'open-uri'

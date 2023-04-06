@@ -641,8 +641,12 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   xhr.onload = function(e) {
     spinner.hide();
     if(this.status == 200) {
-      document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+      document.getElementById("alert_message").innerHTML = 'Please wait, your videos are being processed.';
       $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
+      setTimeout(function(){
+        document.getElementById("alert_message").innerHTML = 'Submitted Successfully';
+        $("#alert_message").addClass('alert alert-success').removeClass('hide alert-danger');
+      }, 20000);
     }
     else
     {

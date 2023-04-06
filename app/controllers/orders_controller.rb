@@ -2,7 +2,6 @@ class OrdersController < ApplicationController
   require('zip')
   require 'streamio-ffmpeg'
   require 'mini_exiftool'
-  require 'open-uri'
   skip_before_action :verify_authenticity_token
 
   def index
@@ -143,23 +142,16 @@ class OrdersController < ApplicationController
       Zip::OutputStream.open(temp_file) { |zos| }
 
       Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
-
         @order_assets = @order.videos.attached? ? @order.videos : @order.images
         if @order_assets.present?
 
           @order_assets.each do |asset|
-            file = Tempfile.new("#{asset}")
-            File.open(file.path, 'w', encoding: 'ASCII-8BIT') do |file|
-              asset.download do |chunk|
-                file.write(chunk)
-              end
-            end
-      
-            zipfile.add("#{asset.filename}", file.path)
+            file = Tempfile.new("#{SecureRandom.hex}.mp4")
+            file = file.set_encoding("ASCII-8BIT")
+            zipfile.get_output_stream("#{asset.filename}") { |f| f.write(asset.download) }
           end
         end
       end
-
       zip_data = File.read(temp_file.path)
       send_data(zip_data, type: 'application/zip', disposition: 'attachment', filename: filename)
     ensure 
