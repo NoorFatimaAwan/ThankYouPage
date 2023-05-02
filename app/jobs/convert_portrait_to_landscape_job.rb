@@ -9,7 +9,7 @@ class ConvertPortraitToLandscapeJob < ActiveJob::Base
         height = video_data&.imageheight
         width = video_data&.imagewidth
         testing_file = "#{Rails.root}/testing#{index}.mp4"
-        dimensions = order&.variant_title&.downcase&.include?("16 pieces") ? "1280:720" : "854:480"
+        dimensions = order&.variant_title&.downcase&.include?("8 pieces") ? "854:480" : "1280:720"
         if video_data&.imageheight > video_data&.imagewidth || (video_data&.rotation == 90 || video_data&.rotation == 270) 
           temp_file = "#{Rails.root}/temp#{index}.mp4"
           system(`ffmpeg -i  "#{video_path}" -filter_complex "[0:v]scale=ih*16/9:-1,boxblur=luma_radius='min(h\,w)/20':luma_power=1:chroma_radius='min(cw\,ch)/20':chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16" "temp#{index}.mp4"`)
