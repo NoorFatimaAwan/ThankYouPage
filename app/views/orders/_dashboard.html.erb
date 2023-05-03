@@ -26,7 +26,7 @@
       <% if order.images.attached? %>
         <td ><%= image_tag(order.images.first.blob, size: "100x100")%></td>
       <% elsif order.video.attached? %>
-        <td ><%= video_tag(url_for(order.video), controls: '', size: "100x100") %></td>
+        <td ><%= video_tag(url_for(order.video) + "?t=" + Time.zone.now.to_datetime.to_s, controls: '', size: "100x100") %></td>
       <% end %>
       <td id="table"></td>
     </tr>
