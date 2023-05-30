@@ -63,9 +63,10 @@ class OrdersController < ApplicationController
       AssetUploadJob.perform_now(@order) if @order.present?
     else
       @order.save!
-      if (@order&.videos.attached? && @order&.prev_checkbox == false)
-        video_count = @order&.videos&.count
-        Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(@order,video_count) if @order.present?
+      @asset = @order.file_type == 'image' ? @order&.images : @order&.videos
+      if (@asset.attached? && @order&.prev_checkbox != true)
+        asset_count = @asset&.count
+        Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(@order,asset_count) if @order.present?
       end  
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])

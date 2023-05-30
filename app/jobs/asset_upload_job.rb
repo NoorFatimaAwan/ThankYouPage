@@ -3,8 +3,9 @@ class AssetUploadJob < ApplicationJob
 
   def perform(order)
     if order.save!
-      video_count = order&.videos&.count
-      Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(order,video_count) if order.present? && video_count > 0
+      asset = = order.file_type == 'image' ? order&.images : order&.videos
+      asset_count = asset&.count
+      Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(order,asset_count) if order.present? && video_count > 0
     end
   end
 end
