@@ -17,7 +17,7 @@ class ConvertPortraitToLandscapeJob < ActiveJob::Base
             temp_file = "#{Rails.root}/temp#{index}.#{filetypeextension}"
             system(`ffmpeg -i  "#{asset_path}" -filter_complex "[0:v]scale=ih*16/9:-1,boxblur=luma_radius='min(h\,w)/20':luma_power=1:chroma_radius='min(cw\,ch)/20':chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16" "#{temp_file}"`)
             system(`ffmpeg -i "#{temp_file}" -vf "scale=#{dimensions}:force_original_aspect_ratio=decrease,pad=#{dimensions}:(ow-iw)/2:(oh-ih)/2" "#{testing_file}"`)
-            File.delete(temp_file) if File.exists?(temp_file)
+            File.delete(temp_file) if File.exists?(temp_file) && !temp_file.nil?
           else 
             system(`ffmpeg -i "#{asset_path}" -vf "scale=#{dimensions}:force_original_aspect_ratio=decrease,pad=#{dimensions}:(ow-iw)/2:(oh-ih)/2" "#{testing_file}"`)
           end
@@ -30,7 +30,7 @@ class ConvertPortraitToLandscapeJob < ActiveJob::Base
           system(`ffmpeg -i "#{temp_file}"  "#{testing_file}"`)
           name = "#{asset[index]&.filename}"
           filename = name.split('.')[0] + ".jpg"
-          File.delete(temp_file) if File.exists?(temp_file)
+          File.delete(temp_file) if File.exists?(temp_file) && !temp_file.nil?
         end
         if (File.exists?(testing_file))
           downloaded_video = open(testing_file)
