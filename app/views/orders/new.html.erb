@@ -8,9 +8,14 @@
 		integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
 		crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    
-    <%= javascript_include_tag 'application' %>
-    <%= stylesheet_link_tag    'application' %>
+    <% begin %>
+      <%= javascript_include_tag 'application' %>
+      <%= stylesheet_link_tag    'application' %>
+    <% rescue %>
+      <script>
+        window.location.replace "#{user_session_url()}"
+      </script>
+    <% end %>
 </head>
 
 <body style="overflow: hidden;">
@@ -68,9 +73,9 @@
               * Want a specific order of images? Title the images in alphabetical order and you’ll be all set!
               * We’ll upload your images into a smooth slide show and ship it out within 2 days!">
                 <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">Upload</span>
-                  </div>
+                  # <div class="input-group-prepend">
+                  #   <span class="input-group-text">Upload</span>
+                  # </div>
                   <div class="custom-file">
                     <%= f.file_field :images, multiple: true, accept: "image/*", id: "image_file", class: "custom-file-input", onchange: "loadImages(event,#{product_size(params[:variant_title])}, 'uploaded_images',#{params[:product_no].to_i},#{params[:order_id].to_i},#{params[:product_id].to_i})"  %>
                     <%= f.label 'Upload Images', for: "image_file", id: "image_label", class: "custom-file-label"%>  
