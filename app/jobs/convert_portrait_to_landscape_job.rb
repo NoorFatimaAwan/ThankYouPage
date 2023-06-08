@@ -2,10 +2,6 @@ class ConvertPortraitToLandscapeJob < ActiveJob::Base
   #queue_as :default
 
   def perform(order,asset_count)
-    puts "Conversion"
-    puts order
-    puts asset_count
-    puts "========"
     if order.present? && asset_count > 0
       asset_count.times do |index|
         asset = order.file_type == 'image' ? order&.images : order&.videos
