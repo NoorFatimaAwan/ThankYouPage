@@ -1,5 +1,4 @@
 class OrdersController < ApplicationController
-  require('zip')
   require 'streamio-ffmpeg'
   require 'mini_exiftool'
   skip_before_action :verify_authenticity_token
@@ -136,6 +135,7 @@ class OrdersController < ApplicationController
   end
 
   def download_assets  
+    require 'zip'
     filename = 'my_assets.zip'
     temp_file = Tempfile.new(filename)
     @order = Order.find(params[:order_id])
