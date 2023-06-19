@@ -605,7 +605,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
   more_uploaded_files = document.getElementById("more_image_file").files
   more_file_length = more_uploaded_files.length
   files_in_form_data = "order[images][]"
-  if ((document.getElementById("video_file").files.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_video_file").files.length != 0)
+  if ((document.getElementById("video_file").files.length != 0 || storedFiles.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_video_file").files.length != 0)
   {
     uploaded_files = document.getElementById("video_file").files
     file_length = uploaded_files.length
@@ -614,7 +614,7 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     files_in_form_data = "order[videos][]"
     formData.delete("order[images][]");
   }
-  else if ((document.getElementById("image_file").files.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_image_file").files.length != 0)
+  else if ((document.getElementById("image_file").files.length != 0 || storedFiles.length != 0 || $("#prev_checkbox").is(':checked') || thank_you_page_url.split('?')[1] == 'open_with_mail') && document.getElementById("more_image_file").files.length != 0)
   {
     formData.delete("order[videos][]");
   }
