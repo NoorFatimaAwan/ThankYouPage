@@ -1,7 +1,7 @@
 class ConvertPortraitToLandscapeJob < ActiveJob::Base
   #queue_as :default
 
-  def perform(order,asset_count)
+  def perform(order,asset_count,user_email)
     if order.present? && asset_count > 0
       asset_count.times do |index|
         asset = order.file_type == 'image' ? order&.images : order&.videos
@@ -37,9 +37,10 @@ class ConvertPortraitToLandscapeJob < ActiveJob::Base
           asset.attach(io: downloaded_video  , filename: filename)
           asset[index].purge
           downloaded_video.close
-          File.delete(testing_file) 
+          File.delete(testing_file)
         end
       end
     end
+    Delayed::Job.enqueue InformClientJob.new(user_email,order) 
   end
 end

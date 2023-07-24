@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   require 'streamio-ffmpeg'
   require 'mini_exiftool'
+  require 'open3'
   skip_before_action :verify_authenticity_token
 
   def index
@@ -58,14 +59,15 @@ class OrdersController < ApplicationController
         total_video_size = total_video_size + video.size
       end
     end
+    user_email = params[:user_email] if params[:user_email].present?
     if total_image_size > 4 * 1024 * 1024 || total_video_size > 4 * 1024 * 1024
-      AssetUploadJob.perform_now(@order) if @order.present?
+      AssetUploadJob.perform_now(@order,user_email) if @order.present?
     else
       @order.save!
       @asset = @order.file_type == 'image' ? @order&.images : @order&.videos
       if (@asset.attached? && @order&.prev_checkbox != true)
         asset_count = @asset&.count
-        Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(@order,asset_count) if @order.present?
+        Delayed::Job.enqueue ConvertPortraitToLandscapeJob.new(@order,asset_count,user_email) if @order.present?
       end  
     end
     @last_order = Order.where("shop_order_id = ? and product_no = ? and product_id = ?", params[:order][:shop_order_id],params[:order][:product_no],params[:order][:product_id])
@@ -134,7 +136,7 @@ class OrdersController < ApplicationController
      render json: {assets_urls: assets_urls,assets_blobs: assets_blobs,file_type: @parent_product_order&.file_type,error_message: error_message, generic_error: @parent_product_order&.errors&.messages}
   end
 
-  def download_assets  
+  def download_assets 
     require 'zip'
     filename = 'my_assets.zip'
     temp_file = Tempfile.new(filename)
