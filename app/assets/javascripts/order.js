@@ -668,7 +668,6 @@ function loadVideo(event,product_size,product_no,order_id,product_id,video_type)
     formData.append('product_length', product_length)
     formData.append('file_length', file_length)
   }
-  console.log(Array.from(formData))
   xhr.send(formData);
  }
 

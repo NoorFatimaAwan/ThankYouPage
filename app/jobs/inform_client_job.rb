@@ -3,6 +3,6 @@ class InformClientJob < ApplicationJob
 
   def perform(user_email,order)
     # Do something later
-    InformMailer.inform_client(user_email).deliver_now!
+    InformMailer.inform_client(user_email,order).deliver_now!
   end
 end
